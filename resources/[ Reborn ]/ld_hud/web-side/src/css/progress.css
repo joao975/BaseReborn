@@ -1,0 +1,84 @@
+body {
+    background-color: transparent;
+    font-family: 'Montserrat', sans-serif;
+}
+
+#body {
+    display: none;
+    user-select: none;
+    overflow: hidden;
+}
+
+#outerdivprogress {
+    position: absolute;
+    right: -20px;
+    bottom: 240px;
+    width: 90px;
+    height: 90px;
+    display: flex;
+    font-size: 20px;
+    align-items: center;
+    border-radius: 100%;
+    flex-direction: column;
+    justify-content: center;
+    transform: translate(-50%, 0);
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    zoom: 0.8;
+}
+
+#outerdivprogress span {
+    font-family: 'Montserrat', sans-serif;
+    color: #fff;
+    filter: drop-shadow(0px 0px 5px rgba(255, 255, 255, 0.452));
+}
+
+#outerdivprogress::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    border-radius: 100%;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), transparent);
+}
+
+#svg circle {
+    position: absolute;
+    stroke-width: .5em;
+    stroke: transparent;
+    stroke-dashoffset: 0;
+}
+
+#svg #bar {
+    stroke: rgb(87, 87, 87);
+
+}
+
+#svg #fill {
+    stroke: #fcfcfc;
+
+}
+
+#cont {
+    position: absolute;
+    zoom: .476;
+    left: -6px;
+    width: 20px;
+    height: 20px;
+    top: 175.0px;
+    border-radius: 100%;
+    transform: rotate(-90deg);
+}
+
+#outerdivprogress b {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#outerdivprogress b img {
+    max-width: 35%;
+}

@@ -1,0 +1,5 @@
+RegisterNUICallback('onClose', function(data, cb)
+    SetNuiFocus(false, false)
+    SendNUIMessage({ action = "hideMenu" })
+    vRP.removeObjects()
+end)

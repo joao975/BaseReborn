@@ -1,0 +1,1214 @@
+ESX.Players = {}
+ESX.Jobs = {}
+ESX.Items = {}
+Core = {}
+Core.UsableItemsCallbacks = {}
+Core.ServerCallbacks = {}
+Core.TimeoutCount = -1
+Core.CancelledTimeouts = {}
+Core.RegisteredCommands = {}
+Core.Pickups = {}
+Core.PickupId = 0
+Core.PlayerFunctionOverrides = {}
+allJobs = Reborn.groups()
+
+AddEventHandler('esx:getSharedObject', function(cb)
+    cb(ESX)
+end)
+
+exports('getSharedObject', function()
+    return ESX
+end)
+
+RegisterServerEvent('esx:clientLog')
+AddEventHandler('esx:clientLog', function(msg)
+    if Config.EnableDebug then
+        print(('[^2TRACE^7] %s^7'):format(msg))
+    end
+end)
+
+RegisterServerEvent('esx:triggerServerCallback')
+AddEventHandler('esx:triggerServerCallback', function(name, requestId, ...)
+    local playerId = source
+
+    ESX.TriggerServerCallback(name, requestId, playerId, function(...)
+        TriggerClientEvent('esx:serverCallback', playerId, requestId, ...)
+    end, ...)
+end)
+
+function ESX.Trace(msg)
+    if Config.EnableDebug then
+      print(('[^2TRACE^7] %s^7'):format(msg))
+    end
+end
+  
+function ESX.SetTimeout(msec, cb)
+    local id = Core.TimeoutCount + 1
+
+    SetTimeout(msec, function()
+        if Core.CancelledTimeouts[id] then
+            Core.CancelledTimeouts[id] = nil
+        else
+            cb()
+        end
+    end)
+
+    Core.TimeoutCount = id
+
+    return id
+end
+  
+function ESX.RegisterCommand(name, group, cb, allowConsole, suggestion)
+    if type(name) == 'table' then
+        for k, v in ipairs(name) do
+            ESX.RegisterCommand(v, group, cb, allowConsole, suggestion)
+        end
+    
+        return
+    end
+  
+    if Core.RegisteredCommands[name] then
+        print(('[^3WARNING^7] Command ^5"%s" ^7already registered, overriding command'):format(name))
+    
+        if Core.RegisteredCommands[name].suggestion then
+            TriggerClientEvent('chat:removeSuggestion', -1, ('/%s'):format(name))
+        end
+    end
+  
+    if suggestion then
+        if not suggestion.arguments then
+            suggestion.arguments = {}
+        end
+        if not suggestion.help then
+            suggestion.help = ''
+        end
+    
+        TriggerClientEvent('chat:addSuggestion', -1, ('/%s'):format(name), suggestion.help, suggestion.arguments)
+    end
+  
+    Core.RegisteredCommands[name] = {group = group, cb = cb, allowConsole = allowConsole, suggestion = suggestion}
+  
+    RegisterCommand(name, function(playerId, args, rawCommand)
+      local command = Core.RegisteredCommands[name]
+  
+      if not command.allowConsole and playerId == 0 then
+        print(('[^3WARNING^7] ^5%s'):format(_U('commanderror_console')))
+      else
+        local xPlayer, error = ESX.Players[playerId], nil
+  
+        if command.suggestion then
+          if command.suggestion.validate then
+            if #args ~= #command.suggestion.arguments then
+              error = _U('commanderror_argumentmismatch', #args, #command.suggestion.arguments)
+            end
+          end
+  
+          if not error and command.suggestion.arguments then
+            local newArgs = {}
+  
+            for k, v in ipairs(command.suggestion.arguments) do
+              if v.type then
+                if v.type == 'number' then
+                  local newArg = tonumber(args[k])
+  
+                  if newArg then
+                    newArgs[v.name] = newArg
+                  else
+                    error = _U('commanderror_argumentmismatch_number', k)
+                  end
+                elseif v.type == 'player' or v.type == 'playerId' then
+                  local targetPlayer = tonumber(args[k])
+  
+                  if args[k] == 'me' then
+                    targetPlayer = playerId
+                  end
+  
+                  if targetPlayer then
+                    local xTargetPlayer = ESX.GetPlayerFromId(targetPlayer)
+  
+                    if xTargetPlayer then
+                      if v.type == 'player' then
+                        newArgs[v.name] = xTargetPlayer
+                      else
+                        newArgs[v.name] = targetPlayer
+                      end
+                    else
+                      error = _U('commanderror_invalidplayerid')
+                    end
+                  else
+                    error = _U('commanderror_argumentmismatch_number', k)
+                  end
+                elseif v.type == 'string' then
+                  newArgs[v.name] = args[k]
+                elseif v.type == 'item' then
+                  if ESX.Items[args[k]] then
+                    newArgs[v.name] = args[k]
+                  else
+                    error = _U('commanderror_invaliditem')
+                  end
+                elseif v.type == 'weapon' then
+                  if ESX.GetWeapon(args[k]) then
+                    newArgs[v.name] = string.upper(args[k])
+                  else
+                    error = _U('commanderror_invalidweapon')
+                  end
+                elseif v.type == 'any' then
+                  newArgs[v.name] = args[k]
+                end
+              end
+  
+              if v.validate == false then
+                error = nil
+              end
+  
+              if error then
+                break
+              end
+            end
+  
+            args = newArgs
+          end
+        end
+  
+        if error then
+          if playerId == 0 then
+            print(('[^3WARNING^7] %s^7'):format(error))
+          else
+            xPlayer.showNotification(error)
+          end
+        else
+          cb(xPlayer or false, args, function(msg)
+            if playerId == 0 then
+              print(('[^3WARNING^7] %s^7'):format(msg))
+            else
+              xPlayer.showNotification(msg)
+            end
+          end)
+        end
+      end
+    end, true)
+  
+    if type(group) == 'table' then
+        for k, v in ipairs(group) do
+            ExecuteCommand(('add_ace group.%s command.%s allow'):format(v, name))
+        end
+    else
+        ExecuteCommand(('add_ace group.%s command.%s allow'):format(group, name))
+    end
+end
+  
+function ESX.ClearTimeout(id)
+    Core.CancelledTimeouts[id] = true
+end
+  
+function ESX.RegisterServerCallback(name, cb)
+    Core.ServerCallbacks[name] = cb
+end
+  
+function ESX.TriggerServerCallback(name, requestId, source, cb, ...)
+    if Core.ServerCallbacks[name] then
+        Core.ServerCallbacks[name](source, cb, ...)
+    else
+        print(('[^3WARNING^7] Server callback ^5"%s"^0 does not exist. ^1Please Check The Server File for Errors!'):format(name))
+    end
+end
+  
+function Core.SavePlayer(xPlayer, cb)
+    if cb then
+        cb()
+    end
+end
+
+function Core.SavePlayers(cb)
+    if type(cb) == 'function' then
+        cb()
+    end
+end
+  
+function ESX.GetPlayers()
+    local sources = {}
+  
+    for k, v in pairs(ESX.Players) do
+        sources[#sources + 1] = k
+    end
+  
+    return sources
+end
+  
+function ESX.GetExtendedPlayers(key, val)
+    local xPlayers = {}
+    for k, v in pairs(ESX.Players) do
+        if key then
+            if (key == 'job' and v.job.name == val) or v[key] == val then
+                xPlayers[#xPlayers + 1] = v
+            end
+        else
+            xPlayers[#xPlayers + 1] = v
+        end
+    end
+    return xPlayers
+end
+  
+function ESX.GetPlayerFromId(source)
+    return ESX.Players[tonumber(source)]
+end
+  
+function ESX.GetPlayerFromIdentifier(identifier)
+    for k, v in pairs(ESX.Players) do
+        if v.identifier == identifier then
+            return v
+        end
+    end
+end
+  
+function ESX.GetIdentifier(playerId)
+    for k, v in ipairs(GetPlayerIdentifiers(playerId)) do
+        if string.match(v, 'license:') then
+            local identifier = string.gsub(v, 'license:', '')
+            return identifier
+        end
+    end
+end
+
+function ESX.RefreshJobs()
+  local items = Reborn.itemList()
+  for k, v in pairs(items) do
+      ESX.Items[k] = {label = v.name, weight = v.weight, rare = v.type, canRemove = true}
+  end
+
+  while not next(ESX.Items) do
+      Wait(0)
+  end
+
+  local Jobs = {}
+  local allJobs = Reborn.groups()
+
+  for k, v in pairs(allJobs) do
+    Jobs[k] = v
+    Jobs[k].label = v._config and v._config.gtype or k
+    Jobs[k].name = k
+    Jobs[k].grades = { ['0'] = {grade = 0, label = v._config and v._config.gtype or k, salary = v._config and v._config.salary or 0, skin_male = {}, skin_female = {}} }
+  end
+  
+  if Jobs then
+    ESX.Jobs = Jobs
+  end
+  ESX.Jobs['unemployed'] = {label = 'Unemployed', name = "Unemployed", grades = {['0'] = {grade = 0, label = 'Unemployed', salary = 200, skin_male = {}, skin_female = {}}}}
+end
+
+function ESX.RegisterUsableItem(item, cb)
+    Core.UsableItemsCallbacks[item] = cb
+end
+
+function ESX.UseItem(source, item, ...)
+    if ESX.Items[item] then
+        local itemCallback = Core.UsableItemsCallbacks[item]
+    
+        if itemCallback then
+            local success, result = pcall(itemCallback, source, item, ...)
+    
+            if not success then
+            return result and print(result) or
+                    print(('[^3WARNING^7] An error occured when using item ^5"%s"^7! This was not caused by ESX.'):format(item))
+            end
+        end
+    --[[ else
+        print(('[^3WARNING^7] Item ^5"%s"^7 was used but does not exist!'):format(item)) ]]
+    end
+end
+  
+function ESX.RegisterPlayerFunctionOverrides(index, overrides)
+    Core.PlayerFunctionOverrides[index] = overrides
+end
+  
+function ESX.SetPlayerFunctionOverride(index)
+    if not index or not Core.PlayerFunctionOverrides[index] then
+        return print('[^3WARNING^7] No valid index provided.')
+    end
+  
+    Config.PlayerFunctionOverride = index
+end
+  
+function ESX.GetItemLabel(item)
+    if ESX.Items[item] then
+        return ESX.Items[item].label
+    else
+        print('[^3WARNING^7] Attemting to get invalid Item -> ' .. item)
+    end
+end
+  
+function ESX.GetJobs()
+    return ESX.Jobs
+end
+  
+function ESX.GetUsableItems()
+    local Usables = {}
+    for k in pairs(Core.UsableItemsCallbacks) do
+        Usables[k] = true
+    end
+    return Usables
+end
+  
+function ESX.CreatePickup(type, name, count, label, playerId, components, tintIndex)
+    local pickupId = (Core.PickupId == 65635 and 0 or Core.PickupId + 1)
+    local xPlayer = ESX.Players[playerId]
+    local coords = xPlayer.getCoords()
+  
+    Core.Pickups[pickupId] = {type = type, name = name, count = count, label = label, coords = coords}
+  
+    if type == 'item_weapon' then
+        Core.Pickups[pickupId].components = components
+        Core.Pickups[pickupId].tintIndex = tintIndex
+    end
+  
+    TriggerClientEvent('esx:createPickup', -1, pickupId, label, coords, type, name, components, tintIndex)
+    Core.PickupId = pickupId
+end
+  
+function ESX.DoesJobExist(job, grade)
+    grade = tostring(grade)
+    if job and grade then
+        if ESX.Jobs[job] and ESX.Jobs[job].grades[grade] then
+            return true
+        end
+    end
+  
+    return false
+end
+  
+function Core.IsPlayerAdmin(playerId)
+    if (IsPlayerAceAllowed(playerId, 'command') or GetConvar('sv_lan', '') == 'true') and true or false then
+        return true
+    end
+  
+    local xPlayer = ESX.Players[playerId]
+  
+    if xPlayer then
+        if xPlayer.group == 'admin' then
+            return true
+        end
+    end
+    return false
+end
+
+------------------------------------------------------------------------------------------------------------------------
+
+local newPlayer = 'INSERT INTO `users` SET `accounts` = ?, `identifier` = ?, `group` = ?'
+local loadPlayer = 'SELECT * FROM `vrp_users` WHERE id = ?'
+
+RegisterNetEvent('esx:onPlayerJoined')
+AddEventHandler('esx:onPlayerJoined', function()
+  local _source = source
+  while not next(ESX.Jobs) do
+    Wait(50)
+  end
+  if not ESX.Players[_source] then
+    onPlayerJoined(_source)
+  end
+end)
+
+function onPlayerJoined(playerId)
+  local identifier = ESX.GetIdentifier(playerId)
+  if identifier then
+    if ESX.GetPlayerFromIdentifier(identifier) then
+      DropPlayer(playerId,
+        ('there was an error loading your character!\nError code: identifier-active-ingame\n\nThis error is caused by a player on this server who has the same identifier as you have. Make sure you are not playing on the same Rockstar account.\n\nYour Rockstar identifier: %s'):format(
+          identifier))
+    else
+      --local result = MySQL.scalar.await('SELECT 1 FROM users WHERE identifier = ?', {identifier})
+      --if result then
+      loadESXPlayer(identifier, playerId, false)
+      --[[ else
+        createESXPlayer(identifier, playerId)
+      end ]]
+    end
+  else
+    DropPlayer(playerId,
+      'there was an error loading your character!\nError code: identifier-missing-ingame\n\nThe cause of this error is not known, your identifier could not be found. Please come back later or report this problem to the server administration team.')
+  end
+end
+
+--[[ function createESXPlayer(identifier, playerId, data)
+  local accounts = {}
+
+  for account, money in pairs(Config.StartingAccountMoney) do
+    accounts[account] = money
+  end
+
+  if Core.IsPlayerAdmin(playerId) then
+    print(('^2[INFO] ^0 Player ^5%s ^0Has been granted admin permissions via ^5Ace Perms.^7'):format(playerId))
+    defaultGroup = "admin"
+  else
+    defaultGroup = "user"
+  end
+
+  if not Config.Multichar then
+    MySQL.prepare(newPlayer, {json.encode(accounts), identifier, defaultGroup}, function()
+      loadESXPlayer(identifier, playerId, true)
+    end)
+  else
+    MySQL.prepare(newPlayer,
+      {json.encode(accounts), identifier, defaultGroup, data.firstname, data.lastname, data.dateofbirth, data.sex, data.height}, function()
+        loadESXPlayer(identifier, playerId, true)
+      end)
+  end
+end ]]
+
+if not Config.Multichar then
+  AddEventHandler('playerConnecting', function(name, setCallback, deferrals)
+    deferrals.defer()
+    local playerId = source
+    local identifier = ESX.GetIdentifier(playerId)
+
+    if identifier then
+      if ESX.GetPlayerFromIdentifier(identifier) then
+        deferrals.done(
+          ('There was an error loading your character!\nError code: identifier-active\n\nThis error is caused by a player on this server who has the same identifier as you have. Make sure you are not playing on the same account.\n\nYour identifier: %s'):format(
+            identifier))
+      else
+        deferrals.done()
+      end
+    else
+      deferrals.done(
+        'There was an error loading your character!\nError code: identifier-missing\n\nThe cause of this error is not known, your identifier could not be found. Please come back later or report this problem to the server administration team.')
+    end
+  end)
+end
+
+function loadESXPlayer(identifier, playerId, isNew)
+  local userData = {accounts = {}, inventory = {}, job = {}, loadout = {}, playerName = GetPlayerName(playerId), weight = 0}
+  local user_id = nil
+  while not user_id do
+    user_id = vRP.getUserId(playerId)
+    Wait(100)
+  end
+  local result = vRP.query("vRP/get_vrp_users", { id = user_id })
+  local myJob = nil
+  local user_groups = vRP.getUserGroups(user_id)
+  
+  for k,v in pairs(user_groups) do
+    local kgroup = allJobs[k]
+    if kgroup then
+        if kgroup._config and kgroup._config.gtype and kgroup._config.gtype == "job" then
+          myJob = k
+          break
+        end
+    end
+  end
+  local job, grade, jobObject, gradeObject = myJob, '0'
+  
+  -- Accounts
+  local foundAccounts, foundItems = {}, {}
+  foundAccounts['bank'] = vRP.getBank(user_id)
+  foundAccounts['money'] = vRP.getInventoryItemAmount(user_id, "dollars")
+  foundAccounts['cash'] = vRP.getInventoryItemAmount(user_id, "dollars")
+  foundAccounts['black_money'] = vRP.getInventoryItemAmount(user_id, "dollars2")
+
+  for account, data in pairs(Config.Accounts) do
+    if data.round == nil then
+      data.round = true
+    end
+    local index = #userData.accounts + 1
+    userData.accounts[index] = {
+      name = account, 
+      money = foundAccounts[account] or 0,
+      label = data.label, 
+      round = data.round,
+      index = index
+    }
+  end
+
+  -- Job
+  if ESX.DoesJobExist(job, grade) then
+    jobObject, gradeObject = ESX.Jobs[job], ESX.Jobs[job].grades[grade]
+  else
+    --print(('[^3WARNING^7] Ignoring invalid job for %s [job: %s, grade: %s]'):format(identifier, job, grade))
+    job, grade = 'unemployed', '0'
+    jobObject, gradeObject = ESX.Jobs[job], ESX.Jobs[job] and ESX.Jobs[job].grades and ESX.Jobs[job].grades[grade]
+  end
+
+  userData.job.id = jobObject.id
+  userData.job.name = jobObject.name
+  userData.job.label = jobObject.label
+
+  userData.job.grade = tonumber(grade)
+  userData.job.grade_name = gradeObject.name
+  userData.job.grade_label = gradeObject.label
+  userData.job.grade_salary = gradeObject.salary
+
+  userData.job.skin_male = {}
+  userData.job.skin_female = {}
+
+  if gradeObject.skin_male then
+    userData.job.skin_male = type(gradeObject.skin_male) == "string" and json.decode(gradeObject.skin_male) or gradeObject.skin_male
+  end
+  if gradeObject.skin_female then
+    userData.job.skin_female = type(gradeObject.skin_female) == "string" and json.decode(gradeObject.skin_female) or gradeObject.skin_female
+  end
+  -- Inventory
+  result.inventory = vRP.getInventory(user_id)
+  if result.inventory then
+    local inventory = type(result.inventory) == "string" and json.decode(result.inventory) or result.inventory
+
+    for k, v in pairs(inventory) do
+      local item = ESX.Items[v.item] or ESX.Items[k] 
+
+      if item then
+        foundItems[v.item] = v.amount or v.count
+        table.insert(userData.inventory,
+          {name = v.item, count = v.amount, label = item.label, weight = item.weight, usable = Core.UsableItemsCallbacks[v.item] ~= nil, rare = item.rare,
+            canRemove = item.canRemove})
+      else
+        print(('[^3WARNING^7] Ignoring invalid item "%s" for "%s"'):format(v.item, identifier))
+      end
+
+    end
+  end
+
+  --[[ for name, item in pairs(ESX.Items) do
+    local count = foundItems[name] or 0
+    if count > 0 then
+      userData.weight = userData.weight + (item.weight * count)
+    end
+
+    table.insert(userData.inventory,
+      {name = name, count = count, label = item.label, weight = item.weight, usable = Core.UsableItemsCallbacks[name] ~= nil, rare = item.rare,
+        canRemove = item.canRemove})
+  end ]]
+
+  --[[ table.sort(userData.inventory, function(a, b)
+    return a.label < b.label
+  end) ]]
+
+  -- Group
+  result.group = vRP.getUserGroupByType(user_id,"job")
+  if result.group then
+    if result.group == "superadmin" then
+      userData.group = "admin"
+      print("[^3WARNING^7] Superadmin detected, setting group to admin")
+    else
+      userData.group = result.group
+    end
+  else
+    userData.group = 'user'
+  end
+
+  -- Loadout
+  if result.loadout and result.loadout ~= '' then
+    local loadout = json.decode(result.loadout)
+
+    for name, weapon in pairs(loadout) do
+      local label = ESX.GetWeaponLabel(name)
+
+      if label then
+        if not weapon.components then
+          weapon.components = {}
+        end
+        if not weapon.tintIndex then
+          weapon.tintIndex = 0
+        end
+
+        table.insert(userData.loadout,
+          {name = name, ammo = weapon.ammo, label = label, components = weapon.components, tintIndex = weapon.tintIndex})
+      end
+    end
+  end
+
+  local data = vRP.getUserDataTable(user_id)
+
+  -- Position
+  result.position = data.position
+  if result.position and result.position ~= '' then
+    userData.coords = result.position
+  else
+    print('[^3WARNING^7] Column ^5"position"^0 in ^5"users"^0 table is missing required default value. Using backup coords, fix your database.')
+    userData.coords = {x = -269.4, y = -955.3, z = 31.2, heading = 205.8}
+  end
+  -- Skin
+  if data.skin == -1667301416 then
+    userData.sex = 'f'
+  else
+    userData.sex = 'm'
+  end
+  if result.skin and result.skin ~= '' then
+    userData.skin = json.decode(result.skin)
+  else
+    if userData.sex == 'f' then
+      userData.skin = {sex = 1}
+    else
+      userData.skin = {sex = 0}
+    end
+  end
+
+  -- Identity
+  if result.name and result.name ~= '' then
+    userData.firstname = result.name
+    userData.lastname = result.name2
+    userData.playerName = userData.firstname .. ' ' .. userData.lastname
+    if result.dateofbirth then
+      userData.dateofbirth = result.dateofbirth
+    end
+    if result.sex then
+      userData.sex = result.sex
+    end
+    if result.height then
+      userData.height = result.height
+    end
+  end
+
+  local xPlayer = Reborn.CreateExtendedPlayer(playerId, identifier, userData.group, userData.accounts, userData.inventory, userData.weight, userData.job,
+    userData.loadout, userData.playerName, userData.coords, user_id)
+  ESX.Players[playerId] = xPlayer
+
+  if userData.firstname then
+    xPlayer.set('firstName', userData.firstname)
+    xPlayer.set('lastName', userData.lastname)
+    if userData.dateofbirth then
+      xPlayer.set('dateofbirth', userData.dateofbirth)
+    end
+    if userData.sex then
+      xPlayer.set('sex', userData.sex)
+    end
+    if userData.height then
+      xPlayer.set('height', userData.height)
+    end
+  end
+
+  TriggerEvent('esx:playerLoaded', playerId, xPlayer, isNew)
+
+  xPlayer.triggerEvent('esx:playerLoaded',
+    {
+      accounts = xPlayer.getAccounts(), 
+      coords = xPlayer.getCoords(), 
+      identifier = xPlayer.getIdentifier(), 
+      inventory = xPlayer.getInventory(),
+      job = xPlayer.getJob(), 
+      loadout = xPlayer.getLoadout(), 
+      maxWeight = xPlayer.getMaxWeight(), 
+      money = xPlayer.getMoney(),
+      sex = xPlayer.get("sex") or "m",
+      dead = false
+    }, isNew,
+    userData.skin)
+
+  xPlayer.triggerEvent('esx:createMissingPickups', Core.Pickups)
+
+  xPlayer.triggerEvent('esx:registerSuggestions', Core.RegisteredCommands)
+  -- print(('[^2INFO^0] Player ^5"%s" ^0has connected to the server. ID: ^5%s^7'):format(xPlayer.getName(), playerId))
+end
+
+AddEventHandler('playerDropped', function(reason)
+  local playerId = source
+  local xPlayer = ESX.GetPlayerFromId(playerId)
+
+  if xPlayer then
+    TriggerEvent('esx:playerDropped', playerId, reason)
+
+    Core.SavePlayer(xPlayer, function()
+      ESX.Players[playerId] = nil
+    end)
+  end
+end)
+
+AddEventHandler('esx:playerLogout', function(playerId, cb)
+  local xPlayer = ESX.GetPlayerFromId(playerId)
+  if xPlayer then
+    TriggerEvent('esx:playerDropped', playerId)
+
+    Core.SavePlayer(xPlayer, function()
+      ESX.Players[playerId] = nil
+      if cb then
+        cb()
+      end
+    end)
+  end
+  TriggerClientEvent("esx:onPlayerLogout", playerId)
+end)
+
+RegisterNetEvent('esx:updateCoords')
+AddEventHandler('esx:updateCoords', function()
+  local source = source
+  local xPlayer = ESX.GetPlayerFromId(source)
+
+  if xPlayer then
+    xPlayer.updateCoords()
+  end
+end)
+
+
+RegisterNetEvent('esx:updateWeaponAmmo')
+AddEventHandler('esx:updateWeaponAmmo', function(weaponName, ammoCount)
+  local xPlayer = ESX.GetPlayerFromId(source)
+
+  if xPlayer then
+    xPlayer.updateWeaponAmmo(weaponName, ammoCount)
+  end
+end)
+
+RegisterNetEvent('esx:giveInventoryItem')
+AddEventHandler('esx:giveInventoryItem', function(target, type, itemName, itemCount)
+  local playerId = source
+  local sourceXPlayer = ESX.GetPlayerFromId(playerId)
+  local targetXPlayer = ESX.GetPlayerFromId(target)
+  local distance = #(GetEntityCoords(GetPlayerPed(playerId)) - GetEntityCoords(GetPlayerPed(target)))
+  if not sourceXPlayer or not targetXPlayer or distance > Config.DistanceGive then
+    print("[WARNING] Player Detected Cheating: " .. GetPlayerName(playerId))
+    return
+  end
+
+  if type == 'item_standard' then
+    local sourceItem = sourceXPlayer.getInventoryItem(itemName)
+
+    if itemCount > 0 and sourceItem.count >= itemCount then
+      if targetXPlayer.canCarryItem(itemName, itemCount) then
+        sourceXPlayer.removeInventoryItem(itemName, itemCount)
+        targetXPlayer.addInventoryItem(itemName, itemCount)
+
+        sourceXPlayer.showNotification(_U('gave_item', itemCount, sourceItem.label, targetXPlayer.name))
+        targetXPlayer.showNotification(_U('received_item', itemCount, sourceItem.label, sourceXPlayer.name))
+      else
+        sourceXPlayer.showNotification(_U('ex_inv_lim', targetXPlayer.name))
+      end
+    else
+      sourceXPlayer.showNotification(_U('imp_invalid_quantity'))
+    end
+  elseif type == 'item_account' then
+    if itemCount > 0 and sourceXPlayer.getAccount(itemName).money >= itemCount then
+      sourceXPlayer.removeAccountMoney(itemName, itemCount, "Gave to " .. targetXPlayer.name)
+      targetXPlayer.addAccountMoney(itemName, itemCount, "Received from " .. sourceXPlayer.name)
+
+      sourceXPlayer.showNotification(_U('gave_account_money', ESX.Math.GroupDigits(itemCount), Config.Accounts[itemName].label, targetXPlayer.name))
+      targetXPlayer.showNotification(_U('received_account_money', ESX.Math.GroupDigits(itemCount), Config.Accounts[itemName].label,
+        sourceXPlayer.name))
+    else
+      sourceXPlayer.showNotification(_U('imp_invalid_amount'))
+    end
+  elseif type == 'item_weapon' then
+    if sourceXPlayer.hasWeapon(itemName) then
+      local weaponLabel = ESX.GetWeaponLabel(itemName)
+      if not targetXPlayer.hasWeapon(itemName) then
+        local _, weapon = sourceXPlayer.getWeapon(itemName)
+        local _, weaponObject = ESX.GetWeapon(itemName)
+        itemCount = weapon.ammo
+        local weaponComponents = ESX.Table.Clone(weapon.components)
+        local weaponTint = weapon.tintIndex
+        if weaponTint then
+          targetXPlayer.setWeaponTint(itemName, weaponTint)
+        end
+        if weaponComponents then
+          for k, v in pairs(weaponComponents) do
+            targetXPlayer.addWeaponComponent(itemName, v)
+          end
+        end
+        sourceXPlayer.removeWeapon(itemName)
+        targetXPlayer.addWeapon(itemName, itemCount)
+
+        if weaponObject.ammo and itemCount > 0 then
+          local ammoLabel = weaponObject.ammo.label
+          sourceXPlayer.showNotification(_U('gave_weapon_withammo', weaponLabel, itemCount, ammoLabel, targetXPlayer.name))
+          targetXPlayer.showNotification(_U('received_weapon_withammo', weaponLabel, itemCount, ammoLabel, sourceXPlayer.name))
+        else
+          sourceXPlayer.showNotification(_U('gave_weapon', weaponLabel, targetXPlayer.name))
+          targetXPlayer.showNotification(_U('received_weapon', weaponLabel, sourceXPlayer.name))
+        end
+      else
+        sourceXPlayer.showNotification(_U('gave_weapon_hasalready', targetXPlayer.name, weaponLabel))
+        targetXPlayer.showNotification(_U('received_weapon_hasalready', sourceXPlayer.name, weaponLabel))
+      end
+    end
+  elseif type == 'item_ammo' then
+    if sourceXPlayer.hasWeapon(itemName) then
+      local weaponNum, weapon = sourceXPlayer.getWeapon(itemName)
+
+      if targetXPlayer.hasWeapon(itemName) then
+        local _, weaponObject = ESX.GetWeapon(itemName)
+
+        if weaponObject.ammo then
+          local ammoLabel = weaponObject.ammo.label
+
+          if weapon.ammo >= itemCount then
+            sourceXPlayer.removeWeaponAmmo(itemName, itemCount)
+            targetXPlayer.addWeaponAmmo(itemName, itemCount)
+
+            sourceXPlayer.showNotification(_U('gave_weapon_ammo', itemCount, ammoLabel, weapon.label, targetXPlayer.name))
+            targetXPlayer.showNotification(_U('received_weapon_ammo', itemCount, ammoLabel, weapon.label, sourceXPlayer.name))
+          end
+        end
+      else
+        sourceXPlayer.showNotification(_U('gave_weapon_noweapon', targetXPlayer.name))
+        targetXPlayer.showNotification(_U('received_weapon_noweapon', sourceXPlayer.name, weapon.label))
+      end
+    end
+  end
+end)
+
+RegisterNetEvent('esx:removeInventoryItem')
+AddEventHandler('esx:removeInventoryItem', function(type, itemName, itemCount)
+  local playerId = source
+  local xPlayer = ESX.GetPlayerFromId(playerId)
+
+  if type == 'item_standard' then
+    if itemCount == nil or itemCount < 1 then
+      xPlayer.showNotification(_U('imp_invalid_quantity'))
+    else
+      local xItem = xPlayer.getInventoryItem(itemName)
+
+      if (itemCount > xItem.count or xItem.count < 1) then
+        xPlayer.showNotification(_U('imp_invalid_quantity'))
+      else
+        xPlayer.removeInventoryItem(itemName, itemCount)
+        local pickupLabel = ('%s [%s]'):format(xItem.label, itemCount)
+        ESX.CreatePickup('item_standard', itemName, itemCount, pickupLabel, playerId)
+        xPlayer.showNotification(_U('threw_standard', itemCount, xItem.label))
+      end
+    end
+  elseif type == 'item_account' then
+    if itemCount == nil or itemCount < 1 then
+      xPlayer.showNotification(_U('imp_invalid_amount'))
+    else
+      local account = xPlayer.getAccount(itemName)
+
+      if (itemCount > account.money or account.money < 1) then
+        xPlayer.showNotification(_U('imp_invalid_amount'))
+      else
+        xPlayer.removeAccountMoney(itemName, itemCount, "Threw away")
+        local pickupLabel = ('%s [%s]'):format(account.label, _U('locale_currency', ESX.Math.GroupDigits(itemCount)))
+        ESX.CreatePickup('item_account', itemName, itemCount, pickupLabel, playerId)
+        xPlayer.showNotification(_U('threw_account', ESX.Math.GroupDigits(itemCount), string.lower(account.label)))
+      end
+    end
+  elseif type == 'item_weapon' then
+    itemName = string.upper(itemName)
+
+    if xPlayer.hasWeapon(itemName) then
+      local _, weapon = xPlayer.getWeapon(itemName)
+      local _, weaponObject = ESX.GetWeapon(itemName)
+      local components, pickupLabel = ESX.Table.Clone(weapon.components)
+      xPlayer.removeWeapon(itemName)
+
+      if weaponObject.ammo and weapon.ammo > 0 then
+        local ammoLabel = weaponObject.ammo.label
+        pickupLabel = ('%s [%s %s]'):format(weapon.label, weapon.ammo, ammoLabel)
+        xPlayer.showNotification(_U('threw_weapon_ammo', weapon.label, weapon.ammo, ammoLabel))
+      else
+        pickupLabel = ('%s'):format(weapon.label)
+        xPlayer.showNotification(_U('threw_weapon', weapon.label))
+      end
+
+      ESX.CreatePickup('item_weapon', itemName, weapon.ammo, pickupLabel, playerId, components, weapon.tintIndex)
+    end
+  end
+end)
+
+RegisterNetEvent('esx:useItem')
+AddEventHandler('esx:useItem', function(itemName)
+  local source = source
+  local xPlayer = ESX.GetPlayerFromId(source)
+  local count = xPlayer.getInventoryItem(itemName).count
+
+  if count > 0 then
+    ESX.UseItem(source, itemName)
+  else
+    xPlayer.showNotification(_U('act_imp'))
+  end
+end)
+
+RegisterNetEvent('esx:onPickup')
+AddEventHandler('esx:onPickup', function(pickupId)
+  local pickup, xPlayer, success = Core.Pickups[pickupId], ESX.GetPlayerFromId(source)
+
+  if pickup then
+    if pickup.type == 'item_standard' then
+      if xPlayer.canCarryItem(pickup.name, pickup.count) then
+        xPlayer.addInventoryItem(pickup.name, pickup.count)
+        success = true
+      else
+        xPlayer.showNotification(_U('threw_cannot_pickup'))
+      end
+    elseif pickup.type == 'item_account' then
+      success = true
+      xPlayer.addAccountMoney(pickup.name, pickup.count, "Picked up")
+    elseif pickup.type == 'item_weapon' then
+      if xPlayer.hasWeapon(pickup.name) then
+        xPlayer.showNotification(_U('threw_weapon_already'))
+      else
+        success = true
+        xPlayer.addWeapon(pickup.name, pickup.count)
+        xPlayer.setWeaponTint(pickup.name, pickup.tintIndex)
+
+        for k, v in ipairs(pickup.components) do
+          xPlayer.addWeaponComponent(pickup.name, v)
+        end
+      end
+    end
+
+    if success then
+      Core.Pickups[pickupId] = nil
+      TriggerClientEvent('esx:removePickup', -1, pickupId)
+    end
+  end
+end)
+
+ESX.RegisterServerCallback('esx:getPlayerData', function(source, cb)
+  local xPlayer = ESX.GetPlayerFromId(source)
+
+  cb({identifier = xPlayer.identifier, accounts = xPlayer.getAccounts(), inventory = xPlayer.getInventory(), job = xPlayer.getJob(),
+      loadout = xPlayer.getLoadout(), money = xPlayer.getMoney(), position = xPlayer.getCoords(true)})
+end)
+
+ESX.RegisterServerCallback('esx:isUserAdmin', function(source, cb)
+  cb(Core.IsPlayerAdmin(source))
+end)
+
+ESX.RegisterServerCallback('esx:getOtherPlayerData', function(source, cb, target)
+  local xPlayer = ESX.GetPlayerFromId(target)
+
+  cb({identifier = xPlayer.identifier, accounts = xPlayer.getAccounts(), inventory = xPlayer.getInventory(), job = xPlayer.getJob(),
+      loadout = xPlayer.getLoadout(), money = xPlayer.getMoney(), position = xPlayer.getCoords(true)})
+end)
+
+ESX.RegisterServerCallback('esx:getPlayerNames', function(source, cb, players)
+  players[source] = nil
+
+  for playerId, v in pairs(players) do
+    local xPlayer = ESX.GetPlayerFromId(playerId)
+
+    if xPlayer then
+      players[playerId] = xPlayer.getName()
+    else
+      players[playerId] = nil
+    end
+  end
+
+  cb(players)
+end)
+
+AddEventHandler('txAdmin:events:scheduledRestart', function(eventData)
+  if eventData.secondsRemaining == 60 then
+    CreateThread(function()
+      Wait(50000)
+      Core.SavePlayers()
+    end)
+  end
+end)
+
+AddEventHandler('txAdmin:events:serverShuttingDown', function()
+  Core.SavePlayers()
+end)
+
+function _U(str, ...) -- Translate string first char uppercase
+	return tostring(str:gsub("^%l", string.upper))
+end
+
+ESX.OneSync = {}
+
+---@class vector3
+---@field x number
+---@field y number
+---@field z number
+
+local function getNearbyPlayers(source, closest, distance, ignore)
+	local result = {}
+	local count = 0
+	if not distance then distance = 100 end
+	if type(source) == 'number' then
+		source = GetPlayerPed(source)
+
+		if not source then
+			error("Received invalid first argument (source); should be playerId or vector3 coordinates")
+		end
+
+		source = GetEntityCoords(GetPlayerPed(source))
+	end
+
+	for _, xPlayer in pairs(ESX.Players) do
+		if not ignore or not ignore[xPlayer.source] then
+			local entity = GetPlayerPed(xPlayer.source)
+			local coords = GetEntityCoords(entity)
+
+			if not closest then
+				local dist = #(source - coords)
+				if dist <= distance then
+					count = count + 1
+					result[count] = {id = xPlayer.source, ped = NetworkGetNetworkIdFromEntity(entity), coords = coords, dist = dist}
+				end
+			else
+				local dist = #(source - coords)
+				if dist <= (result.dist or distance) then
+					result = {id = xPlayer.source, ped = NetworkGetNetworkIdFromEntity(entity), coords = coords, dist = dist}
+				end
+			end
+		end
+	end
+
+	return result
+end
+
+---@param source vector3|number playerId or vector3 coordinates
+---@param maxDistance number
+---@param ignore table playerIds to ignore, where the key is playerId and value is true
+function ESX.OneSync.GetPlayersInArea(source, maxDistance, ignore)
+	return getNearbyPlayers(source, false, maxDistance, ignore)
+end
+
+---@param source vector3|number playerId or vector3 coordinates
+---@param maxDistance number
+---@param ignore table playerIds to ignore, where the key is playerId and value is true
+function ESX.OneSync.GetClosestPlayer(source, maxDistance, ignore)
+	return getNearbyPlayers(source, true, maxDistance, ignore)
+end
+
+---@param model number|string
+---@param coords vector3|table
+---@param heading number
+---@param cb function
+function ESX.OneSync.SpawnVehicle(model, coords, heading, autoMobile, cb)
+		if type(model) == 'string' then model = joaat(model) end
+		local vector = type(coords) == "vector3" and coords or vec(coords.x, coords.y, coords.z)
+		if type(autoMobile) ~= 'boolean' then
+			return
+		end
+		CreateThread(function()
+		local Entity = autoMobile and Citizen.InvokeNative(`CREATE_AUTOMOBILE`, model, coords.x, coords.y, coords.z, heading) or CreateVehicle(model, coords, heading, true, true)
+		while not DoesEntityExist(Entity) do
+			Wait(0)
+		end
+		local netID = NetworkGetNetworkIdFromEntity(Entity)
+		cb(netID)
+	end)
+end
+
+---@param model number|string
+---@param coords vector3|table
+---@param heading number
+---@param cb function
+function ESX.OneSync.SpawnObject(model, coords, heading, cb)
+	if type(model) == 'string' then model = joaat(model) end
+	local vector = type(coords) == "vector3" and coords or vec(coords.x, coords.y, coords.z)
+	CreateThread(function()
+		local entity = CreateObject(model, coords, true, true)
+		while not DoesEntityExist(entity) do Wait(50) end
+		SetEntityHeading(entity, heading)
+		cb(NetworkGetNetworkIdFromEntity(entity))
+	end)
+end
+
+---@param model number|string
+---@param coords vector3|table
+---@param heading number
+---@param cb function
+function ESX.OneSync.SpawnPed(model, coords, heading, cb)
+	if type(model) == 'string' then model = joaat(model) end
+	CreateThread(function()
+		local entity = CreatePed(0, model, coords.x, coords.y, coords.z, heading, true, true)
+		while not DoesEntityExist(entity) do Wait(50) end
+		return entity
+	end)
+end
+
+---@param model number|string
+---@param vehicle number entityId
+---@param seat number
+---@param cb function
+function ESX.OneSync.SpawnPedInVehicle(model, vehicle, seat, cb)
+	if type(model) == 'string' then model = joaat(model) end
+	CreateThread(function()
+		local entity = CreatePedInsideVehicle(vehicle, 1, model, seat, true, true)
+		while not DoesEntityExist(entity) do Wait(50) end
+		return entity
+	end)
+end
+
+local function getNearbyEntities(entities, coords, modelFilter, maxDistance, isPed)
+	local nearbyEntities = {}
+	coords = type(coords) == 'number' and GetEntityCoords(GetPlayerPed(coords)) or vector3(coords.x, coords.y, coords.z)
+	for _, entity in pairs(entities) do
+		if not isPed or (isPed and not IsPedAPlayer(entity)) then
+			if not modelFilter or modelFilter[GetEntityModel(entity)] then
+				local entityCoords = GetEntityCoords(entity)
+				if not maxDistance or #(coords - entityCoords) <= maxDistance then
+					nearbyEntities[#nearbyEntities+1] = NetworkGetNetworkIdFromEntity(entity)
+				end
+			end
+		end
+	end
+
+	return nearbyEntities
+end
+
+---@param coords vector3
+---@param maxDistance number
+---@param modelFilter table models to ignore, where the key is the model hash and the value is true
+---@return table
+function ESX.OneSync.GetPedsInArea(coords, maxDistance, modelFilter)
+	return getNearbyEntities(GetAllPeds(), coords, modelFilter, maxDistance, true)
+end
+
+---@param coords vector3
+---@param maxDistance number
+---@param modelFilter table models to ignore, where the key is the model hash and the value is true
+---@return table
+function ESX.OneSync.GetObjectsInArea(coords, maxDistance, modelFilter)
+	return getNearbyEntities(GetAllObjects(), coords, modelFilter, maxDistance)
+end
+
+---@param coords vector3
+---@param maxDistance number
+---@param modelFilter table models to ignore, where the key is the model hash and the value is true
+---@return table
+function ESX.OneSync.GetVehiclesInArea(coords, maxDistance, modelFilter, cb)
+	return getNearbyEntities(GetAllVehicles(), coords, modelFilter, maxDistance)
+end
+
+local function getClosestEntity(entities, coords, modelFilter, isPed)
+	local distance, closestEntity, closestCoords = maxDistance or 100, nil, nil
+	coords = type(coords) == 'number' and GetEntityCoords(GetPlayerPed(coords)) or vector3(coords.x, coords.y, coords.z)
+
+	for _, entity in pairs(entities) do
+		if not isPed or (isPed and not IsPedAPlayer(entity)) then
+			if not modelFilter or modelFilter[GetEntityModel(entity)] then
+				local entityCoords = GetEntityCoords(entity)
+				local dist = #(coords - entityCoords)
+				if dist < distance then
+					closestEntity, distance, closestCoords = entity, dist, entityCoords
+				end
+			end
+		end
+	end
+	return NetworkGetNetworkIdFromEntity(closestEntity), distance, closestCoords
+end
+
+---@param coords vector3
+---@param modelFilter table models to ignore, where the key is the model hash and the value is true
+---@return number entityId, number distance, vector3 coords
+function ESX.OneSync.GetClosestPed(coords, modelFilter)
+	return getClosestEntity(GetAllPeds(), coords, modelFilter, true)
+end
+
+---@param coords vector3
+---@param modelFilter table models to ignore, where the key is the model hash and the value is true
+---@return number entityId, number distance, vector3 coords
+function ESX.OneSync.GetClosestObject(coords, modelFilter)
+	return getClosestEntity(GetAllObjects(), coords, modelFilter)
+end
+
+---@param coords vector3
+---@param modelFilter table models to ignore, where the key is the model hash and the value is true
+---@return number entityId, number distance, vector3 coords
+function ESX.OneSync.GetClosestVehicle(coords, modelFilter)
+	return getClosestEntity(GetAllVehicles(), coords, modelFilter)
+end
+
+ESX.RegisterServerCallback("esx:Onesync:SpawnVehicle", function(source, cb, model, coords, heading, autoMobile)
+	ESX.OneSync.SpawnVehicle(model, coords, heading, autoMobile, cb)
+end)
+
+ESX.RegisterServerCallback("esx:Onesync:SpawnObject", function(source, cb, model, coords, heading)
+	ESX.OneSync.SpawnObject(model, coords, heading, cb)
+end)
+
+-- for k,v in pairs(ESX.OneSync) do
+-- 	ESX.RegisterServerCallback("esx:Onesync:"..k, function(source, cb, ...)
+-- 		cb(v(...))
+-- 	end)
+-- end

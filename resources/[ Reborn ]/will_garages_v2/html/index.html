@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garage</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="nui://game/ui/jquery.js" type="text/javascript"></script>
+    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+</head>
+<body>
+    <div class="joinMenu">
+      <h3 class="priceyesbutton" style="text-align:center">GARAGEM</h3>
+      <img id="garageimg" src="./images/luxe.png" alt="Garagem" srcset="">
+      <div>
+        <input type="number" id="inputGarage" placeholder="Passaporte">
+        <button id="submitMenu">Entrar</button>
+      </div>
+    </div>
+    <div class="vehicleOptionMenu">
+      <ul class="vehicleOptions">
+        <li class="veh-option" data-veh="zentorno">
+          <h3>Zentorno</h3>
+          <img src="./vehicleimage/Adder.png" alt="">
+          <p>Selecionar</p>
+        </li>
+        <li class="veh-option" data-veh="t20">          
+          <h3>T20</h3>
+          <img src="./vehicleimage/T20.png" alt="">
+          <p>Selecionar</p>
+        </li>
+      </ul>
+      <button id="veh-option-button">Confirmar</button>
+    </div>
+    <div class="container" style="display:none">
+      <div class="backgorund-shadow"></div>
+        <div class="cargaragetext">
+          <img src="./images/garagetext.png" alt="">
+        </div>
+        <div style="display:none" class="notify">TEST Notify!</div>
+        <div class="fuelbar">
+          <img src="./images/fueltank.png" alt="">
+          <h1>GASOLINA</h1>
+          <h2 class="fuellevel"></h2>
+        </div>
+        <div class="priceyes" style="display:none">
+          <h4>TEM CERTEZA?</h4>
+          <h2 class="pricebutton" >SIM</h2>
+          <h3 class="priceyesbutton">NÃO</h3>  
+          <img src="./images/yesno.png" alt="">
+        </div>
+        <div class="transferyes" style="display:none">
+          <h4>TEM CERTEZA?</h4>
+          <h2>SIM</h2>
+          <h3 class="transferyescar">NÃO</h3>  
+          <img src="./images/yesno.png" alt="">
+        </div>
+        <div class="sellprice">
+          <h2>PREÇO</h2>
+          <h3 class="vehicleprice"></h3>
+          <h4 class="sellpricecar">VENDER</h4>
+          <img src="./images/sellprice.png" alt="">
+        </div> 
+        <div class="transfer">
+          <h2>TRANSFERIR PARA</h2>
+          <input id="transfer" type="number" placeholder="ID">
+          <h3 class="transfertovehicle">TRANSFERIR</h3>
+          <img src="./images/transfer.png" alt="">
+        </div> 
+        <div class="platepng">
+          <h1>NÚMERO DA PLACA</h1>
+          <h2 class="platevehicle"></h2>
+          <img src="./images/plate.png" alt="">
+        </div>
+        <div class="enginepng">
+          <h1>MOTOR</h1>
+          <h2 class="damagevehicle"></h2>
+          <img src="./images/engine.png" alt="">
+        </div>
+        <div class="windowpng">
+          <h1>LATARIA</h1>
+          <h2 class="bodyhealth"></h2>
+          <img src="./images/window.png" alt="">
+        </div>
+        <div class="parkpng">
+          <h1>STATUS</h1>
+          <h2 class="stored"></h2>
+          <img class="vehiclestoredpng" src="./images/park.png" alt="">
+        </div>
+        <div class="delNearVeh">
+          <h1>GUARDAR VEICULO PROXIMO</h1>
+        </div>
+        <div class="searchbox">
+          <input id="searchvehicle" type="text" name="" id=""  placeholder="Procurar carro">
+        </div>
+        <div class="closebutton">
+          <h2>Sair</h2>
+          <img class="closeimg" src="./images/close.png" alt="">
+        </div>
+        <div class="selectedvehicle"></div>
+    </div>
+  <script src="script.js"></script>
+</body>
+</html>

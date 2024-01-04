@@ -1,0 +1,360 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,500;1,200&display=swap');
+body {
+	margin: 0;
+	width: 100%;
+	padding: 0px;
+	height: 100vh;
+	overflow: hidden;
+	background-size: cover;
+	background-color: transparent;
+}
+
+audio:not([controls]) {
+  display: none;
+  height: 0;
+}
+
+[hidden] {
+  display: none;
+}
+
+/**************************
+
+    VARIAVEIS DE CORES
+
+**************************/
+
+
+/**************************
+===========================
+**************************/
+
+* {
+	user-select: none;
+	text-decoration: none;
+	box-sizing: border-box;
+	font-family: 'Montserrat', sans-serif, !important;
+}
+
+
+.background {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	border: 4px solid rgb(255, 255, 255);
+	border-radius: 4rem;
+	width: 70%;
+	height: 70%;
+	z-index: -1;
+}
+
+.bg-img {
+	width: 100%;
+	border-radius: 4rem;
+	height: 100%;
+	background-image: url("https://cdn.discordapp.com/attachments/815987015245889616/1141072257100296354/image.png");
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.init-painel, .vehs-painel {
+	top: 20vh;
+}
+
+.vehicle-infos {
+	top: 10vh;
+}
+
+.categories {
+	padding: 8px;
+	max-height: 50vh;
+	overflow: auto;
+}
+
+.content-border {
+	--s: 50px; /* the size on the corner */
+	--t: 4px;  /* the thickness of the border */
+	--g: 10px; /* the gap between the border and image */
+  
+  padding: calc(var(--g) + var(--t));
+  outline: var(--t) solid #c4c4c4; /* the color here */
+  outline-offset: calc(-1*var(--t));
+  -webkit-mask:
+    conic-gradient(at var(--s) var(--s),#0000 75%,#000 0)
+    0 0/calc(100% - var(--s)) calc(100% - var(--s)),
+    linear-gradient(#000 0 0) content-box;
+}
+
+.vehcategory, .veh-info {
+	border: 1px solid rgba(163, 163, 163, 0.5);
+	background: rgba(255, 255, 255, 0.15);
+	backdrop-filter: blur(20px);
+	max-height: 150px;
+}
+
+.vehcategory:hover, .freecam:hover {
+	cursor: pointer;
+	background: rgba(255, 255, 255, 0.5);
+}
+
+.button-back, .button-order, .button-test-drive, .button-rent {
+	border: 1px solid rgba(163, 163, 163, 0.5);
+	backdrop-filter: blur(20px);
+	height: 50px;
+}
+
+.button-order {
+	background: rgba(0, 255, 0, 0.15);
+}
+
+.button-back {
+	background: rgba(255, 0, 0, 0.15);
+}
+
+.button-test-drive {
+	background: rgba(0, 0, 255, 0.15);
+}
+
+.button-rent {
+	background: rgba(255, 255, 0, 0.15);
+}
+
+.button-back:hover {
+	cursor: pointer;
+	background: rgba(255, 0, 0, 0.5);
+}
+
+.button-order:hover {
+	cursor: pointer;
+	background: rgba(0, 255, 0, 0.5);
+}
+
+.button-rent:hover {
+	cursor: pointer;
+	background: rgba(255, 255, 0, 0.5);
+}
+
+.button-test-drive:hover {
+	cursor: pointer;
+	background: rgba(0, 0, 255, 0.5);
+}
+
+.veh-data {
+	height: 100%;
+	width: 80px;
+	background: rgba(255, 255, 255, 0.5);
+}
+
+.vehName {
+	clear: both;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.categoryimg {
+	width: 60px;
+	height: 60px;
+}
+
+.vehicles {
+	height: 50vh;
+	overflow: auto;
+}
+
+.vehicleimage {
+	width: 90%;
+	margin: 10px;
+	/* padding: 10px; */
+}
+
+.image-info {
+	width: 200px;
+	/* margin: 0; */
+}
+
+.backArrow {
+	margin: 0;
+	width: 10%;
+	left: -120px;
+}
+
+#choose-color {
+	width:15vw;
+}
+
+.choose-color-circle {
+	/* border-radius:50%; */
+	border:2px solid rgba(255,255,255,1);
+	width:1.5vw;
+	height:1.5vw;
+	transition:0.3s;
+	margin:0.5vw;
+	float:left;
+	transition:0.2s;
+}
+
+.choose-color-circle:hover {
+	transform:scale(1.2);
+	cursor:pointer;
+}
+
+#white {
+	background:rgba(255,255,255,1);
+}
+
+#black {
+	background:rgba(0,0,0,1);
+}
+
+#grey {
+	background:rgba(120,120,120,1);
+}
+
+#yellow {
+	background:rgba(255,200,50,1);
+}
+
+#green {
+	background:rgba(115,190,30,1);
+}
+
+#blue {
+	background:rgba(95,145,255,1);
+}
+
+#red {
+	background:rgba(255,50,50,1);
+}
+
+#purple {
+	background:rgba(225,50,255,1);
+}
+
+#petrol {
+	background:rgba(30,215,120,1);
+}
+
+#cyan {
+	background:rgba(50,215,255,1);
+}
+
+#orange {
+	background:rgba(255,135,15,1);
+}
+
+#dark-blue {
+	background:rgba(50,50,255,1);
+}
+
+.test-drive {
+	display: none;
+}
+
+.actived {
+	text-decoration: 2px underline;
+	background-color: rgb(51 65 85);
+}
+
+/**************************
+
+    FINISHNOTIFY DA NUI
+
+**************************/
+
+@keyframes dash {
+	50% {
+		stroke-dashoffset: 0;
+	}
+	100% {
+		stroke-dashoffset: -130;
+	}
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	87% {
+		transform: rotate(920deg);
+	}
+	100% {
+		border-color: #ffff;
+		transform: rotate(900deg);
+	}
+}
+
+@keyframes mark {
+	0% {
+		opacity: 0;
+	}
+	81% {
+		transform: rotate(20deg);
+	}
+	90% {
+		transform: rotate(0deg);
+	}
+	100% {
+		opacity: 1;
+		background-color: #ffff;
+	}
+}
+
+/**************************
+
+    HOME DA NUI
+
+**************************/
+
+@keyframes dash {
+	50% {
+		stroke-dashoffset: 0;
+	}
+	100% {
+		stroke-dashoffset: -130;
+	}
+}
+
+.progress {
+	position: absolute;
+	top: 5%;
+	left: 5%;
+}
+
+.progress.progress--thin {
+	left: auto;
+	right: 5%;
+}
+
+@keyframes stroke {
+	100% {
+		stroke-dashoffset: 0;
+	}
+}
+
+@keyframes scale {
+	0%,
+	100% {
+		transform: none;
+	}
+	50% {
+		transform: scale3d(1.1, 1.1, 1);
+	}
+}
+
+@keyframes fillsuccess {
+	100% {
+		box-shadow: inset 0px 0px 0px 75px #00C851;
+	}
+}
+
+@keyframes fillerror {
+	100% {
+		box-shadow: inset 0px 0px 0px 75px #ff4444;
+	}
+}
+
+::-webkit-scrollbar {height: 10px;width: 3px;}
+::-webkit-scrollbar-thumb {border: 0;outline: none;background: #fff;}
+::-webkit-scrollbar-track {background: rgba(0, 0, 0, 0.391);}
