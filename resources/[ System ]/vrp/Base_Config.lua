@@ -50,6 +50,7 @@ Reborn.first_login = function()
             ['sandwich'] = 3,
             ['dollars'] = 10000,
         },
+
         ['Spawn'] = { x = -1036.84, y = -2734.79, z = 13.76 },
         ['Groups'] = {
             --[id] = { 'grupos' }
