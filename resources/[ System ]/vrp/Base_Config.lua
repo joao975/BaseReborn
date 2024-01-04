@@ -12,7 +12,7 @@ Reborn.license = function()
     return {
         ['ip'] = "http://localhost/",
         ['porta'] = "30120",
-        ['license'] = "2728f6532998e06dd45405e113a7c40cdd4553cc2134fd252f3c7983572942622e991f1c7975fadc4857607dc738d50632f5"
+        ['license'] = "Sua licença aqui!"
     }
 end
 
