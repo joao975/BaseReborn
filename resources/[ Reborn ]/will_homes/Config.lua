@@ -7,17 +7,15 @@ Tunnel = module("vrp","lib/Tunnel")
 
 Config = {}
 
-Config.base = "creative"
+Config.base = "creative"            -- vrpex // creative // summerz // cn
 
-Config.SellTax = 10
+Config.SellTax = 10                 -- Taxa de venda
 
-Config.showBlips = true
+Config.taxTime = 7                  -- Dias para pagar taxa de casa
 
-Config.taxTime = 7
+Config.delHomeTime = 5              -- Dias para casa ficar sem dono (Se não pagar a taxa)
 
-Config.delHomeTime = 7
-
-Config.houseTaxes = function(id)
+Config.houseTaxes = function(id)    -- Preço das taxas
     local house = Config.Houses[id]
     local price = house.price * 1/10
     if price > 100000 then
@@ -26,11 +24,13 @@ Config.houseTaxes = function(id)
     return price
 end
 
-Config.targetScript = true
+Config.showBlips = true             -- Mostrar blips
+
+Config.debug = false                -- Debug para auxiliar em erros
 
 Config.Aparts = {
     ["apartment1"] = {
-        out = vector3(265.98,-1007.61,-101.0),
+        out = vector3(266.06,-1006.85,-100.78),
         chest = vector3(265.9,-999.42,-99.0),
     },
     ["apartment2"] = {

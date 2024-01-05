@@ -10,7 +10,6 @@ ui_page "nui/index.html"
 client_scripts {
 	"@vrp/lib/utils.lua",
 	'Config.lua',
-	'Homes.lua',
 	'client/*'
 }
 
@@ -20,7 +19,7 @@ server_scripts {
 	'Homes.lua',
 	'server/*',
 }
-
+ 
 files {
 	"nui/index.html",
 	"nui/fonts/*.ttf",

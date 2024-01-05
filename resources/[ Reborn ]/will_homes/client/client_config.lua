@@ -1,7 +1,5 @@
 vRP = Proxy.getInterface("vRP")
 
-Blips = {}
-
 Theme = {
     modern = {interiorId = 227841,  ipl = "apa_v_mp_h_01_c"},
     moody = {interiorId = 228609, ipl = "apa_v_mp_h_02_c"},
@@ -48,11 +46,12 @@ theftCoords = {
 
 openChest = function(id)
     local vault = vSERVER.getVault(id)
-    local house = GetHouseFromId(id)
+    local house = Houses[id]
     if house and not visitMode then
         TriggerServerEvent('ld-inv:Server:OpenInventory','chest:'..house.name,{isHouse=true,slots=24,weight=vault},house.name)
         TriggerServerEvent('will_inventory:server:openInventory', 'chest_'..house.name, "storage_case")
         TriggerEvent("homes:openVault", house.name,vault)
+        TriggerEvent("vrp_chest:homes", house.name,vault)
         TriggerServerEvent("dpn:openHouseChest", { chestName = house.name, slots = 30, size = vault })
     end
 end
@@ -94,25 +93,8 @@ Draw3DText = function(x, y, z, tipo, data)
     end
 end
 
-DrawText3D = function (x, y, z, text)
-    SetTextScale(0.35, 0.35)
-    SetTextFont(4)
-    SetTextProportional(1)
-    SetTextColour(255, 255, 255, 215)
-    SetTextEntry("STRING")
-    SetTextCentre(true)
-    AddTextComponentString(text)
-    SetDrawOrigin(x,y,z, 0)
-    DrawText(0.0, 0.0)
-    ClearDrawOrigin()
-end
-
-formatNumber = function(n)
-    return tostring(math.floor(n)):reverse():gsub("(%d%d%d)","%1,"):gsub(",(%-?)$","%1"):reverse()
-end
-
-Citizen.CreateThread(function()
-    Citizen.Wait(1000)
+CreateThread(function()
+    Wait(1000)
     for k,v in pairs(Theme) do
         if IsIplActive(Theme[k].ipl) then 
             RemoveIpl(Theme[k].ipl)
@@ -123,12 +105,12 @@ Citizen.CreateThread(function()
 end)
 
 function startThread()
-    DoScreenFadeIn(500)
+    print(#Houses)
     CreateThread(function()
         Wait(1000)
         if not Config.targetScript then
 
-            Citizen.CreateThread(function()
+            CreateThread(function()
                 while true do 
                     local sleepThread = 1500
                     for k,v in pairs(Houses) do
@@ -140,13 +122,13 @@ function startThread()
                             while dist < 2.0 do
                                 dist = #(v.coords.house_in - GetEntityCoords(PlayerPedId()))
                                 sleepThread = 4
-                                if v.owner == "" then 
+                                if v.owner == 0 then 
                                     Draw3DText(v.coords.house_in.x, v.coords.house_in.y, v.coords.house_in.z + 0.2, "venda",v)
                                     if dist < 1.40 and IsControlJustPressed(0, 38) then 
                                         joinHouse(k, "Ninguem")
                                         Wait(1000)
                                     end
-                                elseif parseInt(v.owner) == LocalOwner then
+                                elseif v.owner == LocalOwner then
                                     Draw3DText(v.coords.house_in.x, v.coords.house_in.y, v.coords.house_in.z + 0.2, "entrar",v)
                                     if dist < 1.40 and IsControlJustPressed(0, 38) then 
                                         joinHouse(k, "Sua casa")
@@ -163,7 +145,7 @@ function startThread()
                                         end
                                     end
                                 end
-                                Citizen.Wait(sleepThread)
+                                Wait(sleepThread)
                             end
                         end
 
@@ -178,7 +160,7 @@ function startThread()
                                     exitHouse(k)
                                     Wait(1000)
                                 end
-                                Citizen.Wait(sleepThread)
+                                Wait(sleepThread)
                             end
                         end
 
@@ -192,7 +174,7 @@ function startThread()
                                     openChest(CurId)
                                     Wait(1000)
                                 end
-                                Citizen.Wait(sleepThread)
+                                Wait(sleepThread)
                             end
                         end
                         
@@ -208,13 +190,13 @@ function startThread()
                                             manage(CurId)
                                             Wait(1000)
                                         end
-                                        Citizen.Wait(sleepThread)
+                                        Wait(sleepThread)
                                     end
                                 end
                             end
                         end
                     end
-                    Citizen.Wait(sleepThread)
+                    Wait(sleepThread)
                 end
             end)
 
@@ -234,8 +216,8 @@ function startThread()
                         end
                     end
                 end
-                if v.owner == "" or label == "Entrar" then
-                    exports["target"]:AddCircleZone("join"..v.name,v.coords.house_in,1.75,{
+                if v.owner == 0 or label == "Entrar" then
+                    exports["target"]:AddCircleZone("join"..v.name,v.coords.house_in,0.75,{
                         name = v.name,
                         heading = 3374176
                     },{
@@ -252,7 +234,7 @@ function startThread()
                     })
                 end
 
-                exports["target"]:AddCircleZone("exit"..v.name,v.coords.house_out,1.75,{
+                exports["target"]:AddCircleZone("exit"..v.name,v.coords.house_out,0.75,{
                     name = v.name,
                     heading = 3374176
                 },{
@@ -304,7 +286,7 @@ function startThread()
     end)
 end
 
-Citizen.CreateThread(function()
+CreateThread(function()
 	while true do
 		local timeDistance = 999
 		if robberyMode then
@@ -329,21 +311,15 @@ Citizen.CreateThread(function()
 								timeDistance = 1
 								DrawText3D(x,y,z,"~g~E~w~   VASCULHAR")
 								if IsControlJustPressed(1,38) then
-									if k == "LOCKER" then
-										local safeCracking = exports["Safelocker"]:createSafe(3)
-										if safeCracking then
-											vSERVER.paymentTheft("LOCKER")
-										end
-										homesTheft["theftCoords"][k] = true
-									else
-										vRP.playAnim(false,{"amb@prop_human_parking_meter@female@idle_a","idle_a_female"},true)
-										local taskBar = exports["taskbar"]:taskHomes()
-										if taskBar then
-											vSERVER.paymentTheft("MOBILE")
-											homesTheft["theftCoords"][k] = true
-										end
-										vRP.removeObjects()
-									end
+                                    vRP.playAnim(false,{"amb@prop_human_parking_meter@female@idle_a","idle_a_female"},true)
+                                    local taskBar = exports["taskbar"]:taskHomes()
+                                    if taskBar then
+                                        vSERVER.paymentTheft("MOBILE")
+                                        homesTheft["theftCoords"][k] = true
+                                    end
+                                    async(function()
+                                        vRP.removeObjects()
+                                    end)
 								end
 							end
 						end
@@ -351,7 +327,7 @@ Citizen.CreateThread(function()
 				end
 			end
 		end
-		Citizen.Wait(timeDistance)
+		Wait(timeDistance)
 	end
 end)
 
@@ -381,4 +357,21 @@ function will.nearestPlayers(vDistance)
 		end
 	end
 	return r
+end
+
+DrawText3D = function (x, y, z, text)
+    SetTextScale(0.35, 0.35)
+    SetTextFont(4)
+    SetTextProportional(1)
+    SetTextColour(255, 255, 255, 215)
+    SetTextEntry("STRING")
+    SetTextCentre(true)
+    AddTextComponentString(text)
+    SetDrawOrigin(x,y,z, 0)
+    DrawText(0.0, 0.0)
+    ClearDrawOrigin()
+end
+
+formatNumber = function(n)
+    return tostring(math.floor(n)):reverse():gsub("(%d%d%d)","%1,"):gsub(",(%-?)$","%1"):reverse()
 end

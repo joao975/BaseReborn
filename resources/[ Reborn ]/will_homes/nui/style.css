@@ -184,11 +184,11 @@
     border-bottom-right-radius: 15ch;
 }
 
-.buttons {
+.buttons, .tax-button {
     display: inline-flex;
 }
 
-.buttons a {
+.buttons a, .tax-button a {
     text-align: center;
     background: #3663d4;
     color: white;
@@ -208,7 +208,7 @@
     transition: .6s;
 }
 
-.buttons a:hover {
+.buttons a:hover, .tax-button a:hover {
     background: #fff;
     color: #3663d4;
     box-shadow: 0px 0px 10px #fff;
@@ -281,7 +281,6 @@ body {margin:0;overflow: hidden;}
     background: #255eda;
     color: black;
     margin:0;
-    border-radius: 15px 0 15px 0;
 }
 
 .plylst {
@@ -289,7 +288,6 @@ body {margin:0;overflow: hidden;}
     height: 90%;
     background: #00000080;
     overflow-y: auto;
-    border-radius: 0 0 15px 15px;
 }
 
 .pl {
@@ -615,14 +613,6 @@ w {
     float: unset!important;
     margin-right: unset!important;
     line-height: unset!important;
-}
-
-#transfer-user {
-    width: 75px;
-    height: 40px;
-    box-shadow: 0px 0px 18px 1px black;
-    border-radius: 15px;
-    border: 2px solid #ffffffad;
 }
 
 
