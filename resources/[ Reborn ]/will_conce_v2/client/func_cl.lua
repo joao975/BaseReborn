@@ -1,3 +1,5 @@
+-- BLIP
+
 function mBMarker(vector, sizex, sizey, sizez, src, id)
     if not HasStreamedTextureDictLoaded(src) then
         RequestStreamedTextureDict(src, true)

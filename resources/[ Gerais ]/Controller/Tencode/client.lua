@@ -112,9 +112,11 @@ end)
 -- TENCODE
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterCommand("enterTencodes",function(source,args,rawCommand)
-	SetNuiFocus(true,true)
-	SetCursorLocation(0.5,0.9)
-	SendNUIMessage({ tencode = true })
+	if LocalPlayer["state"]["Police"] then
+		SetNuiFocus(true,true)
+		SetCursorLocation(0.5,0.9)
+		SendNUIMessage({ tencode = true })
+	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- KEYMAPPING
