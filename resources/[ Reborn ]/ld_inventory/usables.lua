@@ -771,7 +771,7 @@ func.useItem = function(itemName,ramount)
 					TriggerClientEvent("will_spray:removeClosestSpray",source)
 				end
 			end
-
+ 
 			if itemName == "GADGET_PARACHUTE" or item == "parachute" then
 				active[user_id] = 10
 				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
