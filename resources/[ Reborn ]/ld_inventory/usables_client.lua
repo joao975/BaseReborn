@@ -27,8 +27,8 @@ end
 
 function vCU.parachuteColors()
 	--AddPlayerWeapon(PlayerPedId(),"GADGET_PARACHUTE",1,false,true)
-	vRP.giveWeapons({["GADGET_PARACHUTE"] = { ammo = 1 }})
-	--GiveWeaponToPed(PlayerPedId(),GetHashKey("GADGET_PARACHUTE"),1,false,true)
+	-- vRP.giveWeapons({["GADGET_PARACHUTE"] = { ammo = 1 }})
+	GiveWeaponToPed(PlayerPedId(),GetHashKey("GADGET_PARACHUTE"),1,false,true)
 	SetPedParachuteTintIndex(PlayerPedId(),math.random(7))
 end
 
@@ -463,3 +463,35 @@ function RCCar.AttachPlayer(toggle)
 		StopAnimTask(ped,"move_strafe@stealth","idle",1.0)
 	end
 end ]]
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- THREADBUTTONS
+-----------------------------------------------------------------------------------------------------------------------------------------
+local blockButtons = false
+function vCU.blockButtons(status)
+	blockButtons = status
+end
+
+Citizen.CreateThread(function()
+	while true do
+		local timeDistance = 500
+		if blockButtons then
+			timeDistance = 4
+			DisableControlAction(1,73,true)
+			DisableControlAction(1,75,true)
+			DisableControlAction(1,29,true)
+			DisableControlAction(1,47,true)
+			DisableControlAction(1,105,true)
+			DisableControlAction(1,187,true)
+			DisableControlAction(1,189,true)
+			DisableControlAction(1,190,true)
+			DisableControlAction(1,188,true)
+			DisableControlAction(1,311,true)
+			DisableControlAction(1,245,true)
+			DisableControlAction(1,257,true)
+			DisableControlAction(1,288,true)
+			--DisableControlAction(1,37,true)
+			DisablePlayerFiring(PlayerPedId(),true)
+		end
+		Citizen.Wait(timeDistance)
+	end
+end)

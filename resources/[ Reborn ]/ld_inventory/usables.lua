@@ -188,7 +188,7 @@ func.useItem = function(itemName,ramount)
 				if vRPclient.getHealth(source) > 101 and vRPclient.getHealth(source) < 200 then
 					active[user_id] = 25
 					TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-					--vCLIENT.blockButtons(source,true)
+					vCLIENT.blockButtons(source,true)
 					TriggerClientEvent("Progress",source,25000,"Utilizando...")
 					vRPclient._playAnim(source,true,{"amb@world_human_clipboard@male@idle_a","idle_c"},true)
 
@@ -196,7 +196,7 @@ func.useItem = function(itemName,ramount)
 						if active[user_id] == 0 then
 							active[user_id] = nil
 							vRPclient._stopAnim(source,false)
-							--vCLIENT.blockButtons(source,false)
+							vCLIENT.blockButtons(source,false)
 
 							if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
 								vRP.upgradeStress(user_id,5)
@@ -214,7 +214,7 @@ func.useItem = function(itemName,ramount)
 				if vRPclient.getHealth(source) > 101 and vRPclient.getHealth(source) < 200 then
 					active[user_id] = 6
 					TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-					--vCLIENT.blockButtons(source,true)
+					vCLIENT.blockButtons(source,true)
 					TriggerClientEvent("Progress",source,6000,"Utilizando...")
 					vRPclient._playAnim(source,true,{"mp_suicide","pill"},true)
 
@@ -222,7 +222,7 @@ func.useItem = function(itemName,ramount)
 						if active[user_id] == 0 then
 							active[user_id] = nil
 							vRPclient._stopAnim(source,false)
-							--vCLIENT.blockButtons(source,false)
+							vCLIENT.blockButtons(source,false)
 
 							if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
 								vRP.upgradeStress(user_id,5)
@@ -239,13 +239,13 @@ func.useItem = function(itemName,ramount)
 			if itemName == "weed" then
 				if vRP.getInventoryItemAmount(user_id,"weed") >= parseInt(ramount) and vRP.getInventoryItemAmount(user_id,"silk") >= parseInt(ramount) then
 				active[user_id] = parseInt(ramount*3)
-				--vCLIENT.blockButtons(source,true)
+				vCLIENT.blockButtons(source,true)
 				TriggerClientEvent("Progress",source,parseInt(ramount*3000),"Utilizando...")
 
 				repeat
 					if active[user_id] == 0 then
 						active[user_id] = nil
-						--vCLIENT.blockButtons(source,false)
+						vCLIENT.blockButtons(source,false)
 
 							if vRP.tryGetInventoryItem(user_id,"weed",parseInt(ramount),true,slot) and vRP.tryGetInventoryItem(user_id,"silk",parseInt(ramount),true) then
 								vRP.giveInventoryItem(user_id,"joint",parseInt(ramount),true)
@@ -266,7 +266,7 @@ func.useItem = function(itemName,ramount)
 				
 				active[user_id] = 1
 				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				--vCLIENT.blockButtons(source,true)
+				vCLIENT.blockButtons(source,true)
 				TriggerClientEvent("Progress",source,1000,"Fumando...")
 				vRPclient._createObjects(source,"amb@world_human_aa_smoke@male@idle_a","idle_c","prop_cs_ciggy_01",49,28422)
 
@@ -274,7 +274,7 @@ func.useItem = function(itemName,ramount)
 					if active[user_id] == 0 then
 						active[user_id] = nil
 						vRPclient._removeObjects(source)
-						--vCLIENT.blockButtons(source,false)
+						vCLIENT.blockButtons(source,false)
 
 						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
 							vRP.weedTimer(user_id,2)
@@ -292,7 +292,7 @@ func.useItem = function(itemName,ramount)
 			if itemName == "lean" then
 				active[user_id] = 6
 				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				--vCLIENT.blockButtons(source,true)
+				vCLIENT.blockButtons(source,true)
 				TriggerClientEvent("Progress",source,6000,"Utilizando...")
 				vRPclient._playAnim(source,true,{"mp_suicide","pill"},true)
 
@@ -300,7 +300,7 @@ func.useItem = function(itemName,ramount)
 					if active[user_id] == 0 then
 						active[user_id] = nil
 						vRPclient._stopAnim(source,false)
-						--vCLIENT.blockButtons(source,false)
+						vCLIENT.blockButtons(source,false)
 
 						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
 							vRP.chemicalTimer(user_id,2)
@@ -316,7 +316,7 @@ func.useItem = function(itemName,ramount)
 			if itemName == "ecstasy" then
 				active[user_id] = 6
 				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				--vCLIENT.blockButtons(source,true)
+				vCLIENT.blockButtons(source,true)
 				TriggerClientEvent("Progress",source,6000,"Utilizando...")
 				vRPclient._playAnim(source,true,{"mp_suicide","pill"},true)
 
@@ -324,7 +324,7 @@ func.useItem = function(itemName,ramount)
 					if active[user_id] == 0 then
 						active[user_id] = nil
 						vRPclient._stopAnim(source,false)
-						--vCLIENT.blockButtons(source,false)
+						vCLIENT.blockButtons(source,false)
 
 						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
 							vRP.chemicalTimer(user_id,2)
@@ -342,7 +342,7 @@ func.useItem = function(itemName,ramount)
 			if itemName == "lsd" then
 				active[user_id] = 6
 				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				--vCLIENT.blockButtons(source,true)
+				vCLIENT.blockButtons(source,true)
 				TriggerClientEvent("Progress",source,6000,"Utilizando...")
 				vRPclient._playAnim(source,true,{"mp_suicide","pill"},true)
 
@@ -350,7 +350,7 @@ func.useItem = function(itemName,ramount)
 					if active[user_id] == 0 then
 						active[user_id] = nil
 						vRPclient._stopAnim(source,false)
-						--vCLIENT.blockButtons(source,false)
+						vCLIENT.blockButtons(source,false)
 
 						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
 							vRP.chemicalTimer(user_id,2)
@@ -368,7 +368,7 @@ func.useItem = function(itemName,ramount)
 			if itemName == "meth" then
 				active[user_id] = 6
 				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				--vCLIENT.blockButtons(source,true)
+				vCLIENT.blockButtons(source,true)
 				TriggerClientEvent("Progress",source,6000,"Utilizando...")
 				vRPclient._playAnim(source,true,{"anim@amb@nightclub@peds@","missfbi3_party_snort_coke_b_male3"},true)
 
@@ -376,7 +376,7 @@ func.useItem = function(itemName,ramount)
 					if active[user_id] == 0 then
 						active[user_id] = nil
 						vRPclient._stopAnim(source)
-						--vCLIENT.blockButtons(source,false)
+						vCLIENT.blockButtons(source,false)
 
 						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
 							vRP.chemicalTimer(user_id,2)
@@ -392,7 +392,7 @@ func.useItem = function(itemName,ramount)
 			if itemName == "cocaine" then
 				active[user_id] = 6
 				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				--vCLIENT.blockButtons(source,true)
+				vCLIENT.blockButtons(source,true)
 				TriggerClientEvent("Progress",source,6000,"Utilizando...")
 				vRPclient._playAnim(source,true,{"anim@amb@nightclub@peds@","missfbi3_party_snort_coke_b_male3"},true)
 
@@ -400,7 +400,7 @@ func.useItem = function(itemName,ramount)
 					if active[user_id] == 0 then
 						active[user_id] = nil
 						vRPclient._stopAnim(source)
-						--vCLIENT.blockButtons(source,false)
+						vCLIENT.blockButtons(source,false)
 
 						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
 							vRP.chemicalTimer(user_id,2)
@@ -420,7 +420,7 @@ func.useItem = function(itemName,ramount)
 					if vRPclient.getHealth(nplayer) <= 101 then
 						active[user_id] = 10
 						TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-						--vCLIENT.blockButtons(source,true)
+						vCLIENT.blockButtons(source,true)
 						TriggerClientEvent("royale:reanimado",nplayer)
 						TriggerClientEvent("Progress",source,10000,"Utilizando...")
 						TriggerClientEvent("Notify",nplayer,"aviso","Você está sendo reanimado.")
@@ -428,7 +428,7 @@ func.useItem = function(itemName,ramount)
 						repeat
 							if active[user_id] == 0 then
 								active[user_id] = nil
-								--vCLIENT.blockButtons(source,false)
+								vCLIENT.blockButtons(source,false)
 								if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
 									vSURVIVAL._revivePlayer(nplayer,110)
 									TriggerClientEvent("resetBleeding",nplayer)
@@ -442,7 +442,7 @@ func.useItem = function(itemName,ramount)
 					if vRPclient.getHealth(source) > 101 and vRPclient.getHealth(source) < 200 then
 						active[user_id] = 30
 						TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-						--vCLIENT.blockButtons(source,true)
+						vCLIENT.blockButtons(source,true)
 						TriggerClientEvent("Progress",source,30000,"Utilizando...")
 						vRPclient._createObjects(source,"amb@world_human_clipboard@male@idle_a","idle_c","v_ret_ta_firstaid",49,60309)
 
@@ -450,7 +450,7 @@ func.useItem = function(itemName,ramount)
 							if active[user_id] == 0 then
 								active[user_id] = nil
 								vRPclient._removeObjects(source)
-								--vCLIENT.blockButtons(source,false)
+								vCLIENT.blockButtons(source,false)
 
 								if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
 									vRPclient.updateHealth(source,50)
@@ -469,7 +469,7 @@ func.useItem = function(itemName,ramount)
 				if vRPclient.getHealth(source) > 101 and vRPclient.getHealth(source) < 200 then
 					active[user_id] = 3
 					TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-					--vCLIENT.blockButtons(source,true)
+					vCLIENT.blockButtons(source,true)
 					TriggerClientEvent("Progress",source,3000,"Utilizando...")
 					vRPclient._playAnim(source,true,{"amb@world_human_clipboard@male@idle_a","idle_c"},true)
 
@@ -477,7 +477,7 @@ func.useItem = function(itemName,ramount)
 						if active[user_id] == 0 then
 							active[user_id] = nil
 							vRPclient._stopAnim(source,false)
-							--vCLIENT.blockButtons(source,false)
+							vCLIENT.blockButtons(source,false)
 
 							if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
 								TriggerClientEvent("resetBleeding",source)
@@ -500,13 +500,13 @@ func.useItem = function(itemName,ramount)
 			if itemName == "binoculars" then
 				active[user_id] = 2
 				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				--vCLIENT.blockButtons(source,true)
+				vCLIENT.blockButtons(source,true)
 				TriggerClientEvent("Progress",source,2000,"Utilizando...")
 
 				repeat
 					if active[user_id] == 0 then
 						active[user_id] = nil
-						--vCLIENT.blockButtons(source,false)
+						vCLIENT.blockButtons(source,false)
 						vRPclient._createObjects(source,"amb@world_human_binoculars@male@enter","enter","prop_binoc_01",50,28422)
 						Citizen.Wait(750)
 						TriggerClientEvent("useBinoculos",source)
@@ -518,13 +518,13 @@ func.useItem = function(itemName,ramount)
 			if itemName == "camera" then
 				active[user_id] = 2
 				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				--vCLIENT.blockButtons(source,true)
+				vCLIENT.blockButtons(source,true)
 				TriggerClientEvent("Progress",source,2000,"Utilizando...")
 
 				repeat
 					if active[user_id] == 0 then
 						active[user_id] = nil
-						--vCLIENT.blockButtons(source,false)
+						vCLIENT.blockButtons(source,false)
 						vRPclient._createObjects(source,"amb@world_human_paparazzi@male@base","base","prop_pap_camera_01",49,28422)
 						Citizen.Wait(100)
 						TriggerClientEvent("useCamera",source)
@@ -552,7 +552,7 @@ func.useItem = function(itemName,ramount)
 							active[user_id] = 10
 							vRPclient.stopActived(source)
 							TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-							--vCLIENT.blockButtons(source,true)
+							vCLIENT.blockButtons(source,true)
 							TriggerClientEvent("Progress",source,10000,"Utilizando...")
 							vRPclient._playAnim(source,false,{"mini@cpr@char_a@cpr_str","cpr_pumpchest"},true)
 
@@ -560,7 +560,7 @@ func.useItem = function(itemName,ramount)
 								if active[user_id] == 0 then
 									active[user_id] = nil
 									vSURVIVAL._reverseRevive(source)
-									--vCLIENT.blockButtons(source,false)
+									vCLIENT.blockButtons(source,false)
 
 									if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
 										vRP.upgradeStress(user_id,10)
@@ -635,7 +635,7 @@ func.useItem = function(itemName,ramount)
 					active[user_id] = 3
 					firecracker[user_id] = 250
 					TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-					--vCLIENT.blockButtons(source,true)
+					vCLIENT.blockButtons(source,true)
 					TriggerClientEvent("Progress",source,3000,"Utilizando...")
 					vRPclient._playAnim(source,false,{"anim@mp_fireworks","place_firework_3_box"},true)
 
@@ -643,7 +643,7 @@ func.useItem = function(itemName,ramount)
 						if active[user_id] == 0 then
 							active[user_id] = nil
 							vRPclient._stopAnim(source,false)
-							--vCLIENT.blockButtons(source,false)
+							vCLIENT.blockButtons(source,false)
 
 							if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
 								TriggerClientEvent("vrp_inventory:Firecracker",source)
@@ -660,13 +660,13 @@ func.useItem = function(itemName,ramount)
 					if vPLAYER.getHandcuff(nplayer) then
 						active[user_id] = 10
 						TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-						--vCLIENT.blockButtons(source,true)
+						vCLIENT.blockButtons(source,true)
 						TriggerClientEvent("Progress",source,10000,"Utilizando...")
 
 						repeat
 							if active[user_id] == 0 then
 								active[user_id] = nil
-								--vCLIENT.blockButtons(source,false)
+								vCLIENT.blockButtons(source,false)
 
 								if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
 									local check = vPLAYER.gsrCheck(nplayer)
@@ -690,13 +690,13 @@ func.useItem = function(itemName,ramount)
 					if nuser_id then
 						active[user_id] = 10
 						TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-						--vCLIENT.blockButtons(source,true)
+						vCLIENT.blockButtons(source,true)
 						TriggerClientEvent("Progress",source,10000,"Utilizando...")
 
 						repeat
 							if active[user_id] == 0 then
 								active[user_id] = nil
-								--vCLIENT.blockButtons(source,false)
+								vCLIENT.blockButtons(source,false)
 
 								if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
 									local weed = vRP.weedReturn(nuser_id)
@@ -748,7 +748,7 @@ func.useItem = function(itemName,ramount)
 			if itemName == "vest" then
 				active[user_id] = 10
 				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				--vCLIENT.blockButtons(source,true)
+				vCLIENT.blockButtons(source,true)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._playAnim(source,true,{"clothingtie","try_tie_negative_a"},true)
 
@@ -756,7 +756,7 @@ func.useItem = function(itemName,ramount)
 					if active[user_id] == 0 then
 						active[user_id] = nil
 						vRPclient._stopAnim(source,false)
-						--vCLIENT.blockButtons(source,false)
+						vCLIENT.blockButtons(source,false)
 
 						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
 							vRPclient.setArmour(source,100)
@@ -772,16 +772,16 @@ func.useItem = function(itemName,ramount)
 				end
 			end
 
-			if itemName == "GADGET_PARACHUTE" then
+			if itemName == "GADGET_PARACHUTE" or item == "parachute" then
 				active[user_id] = 10
 				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				--vCLIENT.blockButtons(source,true)
+				vCLIENT.blockButtons(source,true)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 
 				repeat	
 					if active[user_id] == 0 then
 						active[user_id] = nil
-						--vCLIENT.blockButtons(source,false)
+						vCLIENT.blockButtons(source,false)
 
 						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
 							vCLIENT.parachuteColors(source)
@@ -791,82 +791,16 @@ func.useItem = function(itemName,ramount)
 				until active[user_id] == nil
 			end
 
-			if itemName == "ominitrix" then
-				active[user_id] = 10
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				--vCLIENT.blockButtons(source,true)
-				TriggerClientEvent("Progress",source,10000,"Utilizando...")
-				TriggerClientEvent("Notify",source,"aviso","Se prepare para o monstro, vá em lugar aberto!",5000)
-				repeat
-					if active[user_id] == 0 then
-						active[user_id] = nil
-						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
-							--vCLIENT.blockButtons(source,false)
-							local plate = "55DTA141"
-							TriggerClientEvent("adminVehicle",source,"bodhi2",plate)
-							TriggerEvent("setPlateEveryone",plate)
-							TriggerEvent("setPlatePlayers",plate,user_id)
-						end
-					end
-					Citizen.Wait(0)
-				until active[user_id] == nil
-			end
-			
-			if itemName == "silenciador" then
-				if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
-					TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-					TriggerClientEvent("rbn_battleroyale:putSilenciador",source)
-				end
-			end
-
-			if itemName == "extendedclip" then
-				if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
-					TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-					TriggerClientEvent("rbn_battleroyale:putExtendedClip",source)
-				end
-			end
-
-			if itemName == "capam" then
-				if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
-					TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-					TriggerClientEvent("rbn_battleroyale:setCapa",source,"m")
-				end
-			end
-
-			if itemName == "capag" then
-				if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
-					TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-					TriggerClientEvent("rbn_battleroyale:setCapa",source,"g")
-				end
-			end
-
-			if itemName == "tablet" then
-				if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
-					TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-					--vCLIENT.blockButtons(source,true)
-					vRPclient._createObjects(source,"amb@code_human_in_bus_passenger_idles@female@tablet@base","base","prop_cs_tablet",50,28422)
-					TriggerClientEvent("Progress",source,5000,"Utilizando...")
-					Citizen.Wait(5000)
-					TriggerClientEvent("Notify",source,"sucesso","Satelite hackeado com sucesso!",3000)
-					--vCLIENT.blockButtons(source,false)
-					Citizen.Wait(1000)
-					TriggerClientEvent("rbn_battleroyale:useTablet",true)
-					Citizen.Wait(15000)
-					TriggerClientEvent("rbn_battleroyale:useTablet",false)
-					vRPclient._removeObjects(source)
-				end
-			end
-
 			if itemName == "skate" then
 				active[user_id] = 3
 				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				--vCLIENT.blockButtons(source,true)
+				vCLIENT.blockButtons(source,true)
 				TriggerClientEvent("Progress",source,3000,"Utilizando...")
 
 				repeat	
 					if active[user_id] == 0 then
 						active[user_id] = nil
-						--vCLIENT.blockButtons(source,false)
+						vCLIENT.blockButtons(source,false)
 						TriggerClientEvent("skate",source)
 						
 					end
@@ -916,7 +850,7 @@ func.useItem = function(itemName,ramount)
 						active[user_id] = 100
 						vRPclient.stopActived(source)
 						TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-						--vCLIENT.blockButtons(source,true)
+						vCLIENT.blockButtons(source,true)
 						vCLIENT.startAnimHotwired(source)
 
 						local taskResult = vTASKBAR.taskLockpick(source)
@@ -953,7 +887,7 @@ func.useItem = function(itemName,ramount)
 						active[user_id] = 100
 						vRPclient.stopActived(source)
 						TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-						--vCLIENT.blockButtons(source,true)
+						vCLIENT.blockButtons(source,true)
 						vRPclient._playAnim(source,false,{"missfbi_s4mop","clean_mop_back_player"},true)
 
 						local taskResult = vTASKBAR.taskLockpick(source)
@@ -989,7 +923,7 @@ func.useItem = function(itemName,ramount)
 							vRP.removeInventoryItem(user_id,itemName,1,true,slot)
 						end
 
-						--vCLIENT.blockButtons(source,false)
+						vCLIENT.blockButtons(source,false)
 						vRPclient._stopAnim(source,false)
 						active[user_id] = nil
 					end
@@ -1001,7 +935,7 @@ func.useItem = function(itemName,ramount)
 							active[user_id] = 30
 							vRPclient.stopActived(source)
 							TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-							--vCLIENT.blockButtons(source,true)
+							vCLIENT.blockButtons(source,true)
 							table.insert(registerTimers,{ x,y,z,120 })
 							TriggerClientEvent("Progress",source,30000,"Utilizando...")
 							TriggerClientEvent("vrp_inventory:updateRegister",-1,registerTimers)
@@ -1027,7 +961,7 @@ func.useItem = function(itemName,ramount)
 									active[user_id] = nil
 									vRP.upgradeStress(user_id,1)
 									vRPclient._removeObjects(source)
-									--vCLIENT.blockButtons(source,false)
+									vCLIENT.blockButtons(source,false)
 									--vRP.giveInventoryItem(user_id,"dollars2",math.random(9000,11000),true)
 
 									if math.random(100) >= 0 then
@@ -1075,14 +1009,14 @@ func.useItem = function(itemName,ramount)
 				active[user_id] = 10
 				vRPclient.stopActived(source)
 				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				--vCLIENT.blockButtons(source,true)
+				vCLIENT.blockButtons(source,true)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"mp_player_intdrink","loop_bottle","prop_energy_drink",49,60309,0.0,0.0,0.0,0.0,0.0,130.0)
 
 				repeat
 					if active[user_id] == 0 then
 						active[user_id] = nil
-						--vCLIENT.blockButtons(source,false)
+						vCLIENT.blockButtons(source,false)
 						vRPclient._removeObjects(source)
 
 						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
@@ -1098,14 +1032,14 @@ func.useItem = function(itemName,ramount)
 				active[user_id] = 10
 				vRPclient.stopActived(source)
 				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				--vCLIENT.blockButtons(source,true)
+				vCLIENT.blockButtons(source,true)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"amb@world_human_drinking@beer@male@idle_a","idle_a","p_whiskey_notop",49,28422,0.0,0.0,0.05,0.0,0.0,0.0)
 
 				repeat
 					if active[user_id] == 0 then
 						active[user_id] = nil
-						--vCLIENT.blockButtons(source,false)
+						vCLIENT.blockButtons(source,false)
 						vRPclient._removeObjects(source)
 
 						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
@@ -1123,14 +1057,14 @@ func.useItem = function(itemName,ramount)
 				active[user_id] = 10
 				vRPclient.stopActived(source)
 				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				--vCLIENT.blockButtons(source,true)
+				vCLIENT.blockButtons(source,true)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"amb@world_human_drinking@beer@male@idle_a","idle_a","p_whiskey_notop",49,28422,0.0,0.0,0.05,0.0,0.0,0.0)
 
 				repeat
 					if active[user_id] == 0 then
 						active[user_id] = nil
-						--vCLIENT.blockButtons(source,false)
+						vCLIENT.blockButtons(source,false)
 						vRPclient._removeObjects(source)
 
 						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
@@ -1147,14 +1081,14 @@ func.useItem = function(itemName,ramount)
 				active[user_id] = 10
 				vRPclient.stopActived(source)
 				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				--vCLIENT.blockButtons(source,true)
+				vCLIENT.blockButtons(source,true)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"amb@world_human_drinking@beer@male@idle_a","idle_a","prop_beer_blr",49,28422,0.0,0.0,-0.10,0.0,0.0,0.0)
 
 				repeat
 					if active[user_id] == 0 then
 						active[user_id] = nil
-						--vCLIENT.blockButtons(source,false)
+						vCLIENT.blockButtons(source,false)
 						vRPclient._removeObjects(source)
 
 						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
@@ -1171,14 +1105,14 @@ func.useItem = function(itemName,ramount)
 				active[user_id] = 10
 				vRPclient.stopActived(source)
 				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				--vCLIENT.blockButtons(source,true)
+				vCLIENT.blockButtons(source,true)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"amb@world_human_drinking@beer@male@idle_a","idle_a","prop_beer_blr",49,28422,0.0,0.0,-0.10,0.0,0.0,0.0)
 
 				repeat
 					if active[user_id] == 0 then
 						active[user_id] = nil
-						--vCLIENT.blockButtons(source,false)
+						vCLIENT.blockButtons(source,false)
 						vRPclient._removeObjects(source)
 
 						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
@@ -1195,14 +1129,14 @@ func.useItem = function(itemName,ramount)
 				active[user_id] = 10
 				vRPclient.stopActived(source)
 				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				--vCLIENT.blockButtons(source,true)
+				vCLIENT.blockButtons(source,true)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"amb@world_human_drinking@beer@male@idle_a","idle_a","prop_tequila",49,28422,0.0,0.0,-0.10,0.0,0.0,0.0)
 
 				repeat
 					if active[user_id] == 0 then
 						active[user_id] = nil
-						--vCLIENT.blockButtons(source,false)
+						vCLIENT.blockButtons(source,false)
 						vRPclient._removeObjects(source)
 
 						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
@@ -1219,14 +1153,14 @@ func.useItem = function(itemName,ramount)
 				active[user_id] = 10
 				vRPclient.stopActived(source)
 				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				--vCLIENT.blockButtons(source,true)
+				vCLIENT.blockButtons(source,true)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"mp_player_intdrink","loop_bottle","prop_ld_flow_bottle",49,60309,0.0,0.0,0.02,0.0,0.0,130.0)
 
 				repeat
 					if active[user_id] == 0 then
 						active[user_id] = nil
-						--vCLIENT.blockButtons(source,false)
+						vCLIENT.blockButtons(source,false)
 						vRPclient._removeObjects(source)
 
 						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
@@ -1242,14 +1176,14 @@ func.useItem = function(itemName,ramount)
 				active[user_id] = 10
 				vRPclient.stopActived(source)
 				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				--vCLIENT.blockButtons(source,true)
+				vCLIENT.blockButtons(source,true)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"amb@world_human_drinking@beer@male@idle_a","idle_a","prop_ld_flow_bottle",49,28422)
 
 				repeat
 					if active[user_id] == 0 then
 						active[user_id] = nil
-						--vCLIENT.blockButtons(source,false)
+						vCLIENT.blockButtons(source,false)
 						vRPclient._removeObjects(source)
 
 						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
@@ -1266,14 +1200,14 @@ func.useItem = function(itemName,ramount)
 				active[user_id] = 10
 				vRPclient.stopActived(source)
 				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				--vCLIENT.blockButtons(source,true)
+				vCLIENT.blockButtons(source,true)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"amb@world_human_drinking@beer@male@idle_a","idle_a","prop_ld_flow_bottle",49,28422)
 
 				repeat
 					if active[user_id] == 0 then
 						active[user_id] = nil
-						--vCLIENT.blockButtons(source,false)
+						vCLIENT.blockButtons(source,false)
 						vRPclient._removeObjects(source)
 
 						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
@@ -1290,14 +1224,14 @@ func.useItem = function(itemName,ramount)
 				active[user_id] = 10
 				vRPclient.stopActived(source)
 				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				--vCLIENT.blockButtons(source,true)
+				vCLIENT.blockButtons(source,true)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"mp_player_intdrink","loop_bottle","prop_ld_flow_bottle",49,60309)
 
 				repeat
 					if active[user_id] == 0 then
 						active[user_id] = nil
-						--vCLIENT.blockButtons(source,false)
+						vCLIENT.blockButtons(source,false)
 						vRPclient._removeObjects(source)
 
 						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
@@ -1315,14 +1249,14 @@ func.useItem = function(itemName,ramount)
 				active[user_id] = 10
 				vRPclient.stopActived(source)
 				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				--vCLIENT.blockButtons(source,true)
+				vCLIENT.blockButtons(source,true)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"mp_player_intdrink","loop_bottle","prop_ecola_can",49,60309,0.0,0.0,0.04,0.0,0.0,130.0)
 
 				repeat
 					if active[user_id] == 0 then
 						active[user_id] = nil
-						--vCLIENT.blockButtons(source,false)
+						vCLIENT.blockButtons(source,false)
 						vRPclient._removeObjects(source)
 
 						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
@@ -1337,14 +1271,14 @@ func.useItem = function(itemName,ramount)
 				active[user_id] = 10
 				vRPclient.stopActived(source)
 				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				--vCLIENT.blockButtons(source,true)
+				vCLIENT.blockButtons(source,true)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"mp_player_intdrink","loop_bottle","ng_proc_sodacan_01b",49,60309,0.0,0.0,-0.04,0.0,0.0,130.0)
 
 				repeat
 					if active[user_id] == 0 then
 						active[user_id] = nil
-						--vCLIENT.blockButtons(source,false)
+						vCLIENT.blockButtons(source,false)
 						vRPclient._removeObjects(source)
 
 						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
@@ -1359,14 +1293,14 @@ func.useItem = function(itemName,ramount)
 				active[user_id] = 10
 				vRPclient.stopActived(source)
 				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				--vCLIENT.blockButtons(source,true)
+				vCLIENT.blockButtons(source,true)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"amb@world_human_drinking@coffee@male@idle_a","idle_c","prop_plastic_cup_02",49,28422,0.0,-0.01,0.0,0.0,0.0,0.0)
 
 				repeat
 					if active[user_id] == 0 then
 						active[user_id] = nil
-						--vCLIENT.blockButtons(source,false)
+						vCLIENT.blockButtons(source,false)
 						vRPclient._removeObjects(source)
 
 						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
@@ -1382,14 +1316,14 @@ func.useItem = function(itemName,ramount)
 				active[user_id] = 10
 				vRPclient.stopActived(source)
 				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				--vCLIENT.blockButtons(source,true)
+				vCLIENT.blockButtons(source,true)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"amb@world_human_drinking@coffee@male@idle_a","idle_c","prop_plastic_cup_02",49,28422,0.0,-0.01,0.0,0.0,0.0,0.0)
 
 				repeat
 					if active[user_id] == 0 then
 						active[user_id] = nil
-						--vCLIENT.blockButtons(source,false)
+						vCLIENT.blockButtons(source,false)
 						vRPclient._removeObjects(source)
 
 						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
@@ -1405,7 +1339,7 @@ func.useItem = function(itemName,ramount)
 				if vCU.fishingStatus(source) then
 					active[user_id] = 30
 					TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-					--vCLIENT.blockButtons(source,true)
+					vCLIENT.blockButtons(source,true)
 
 					if not vCU.fishingAnim(source) then
 						vRPclient.stopActived(source)
@@ -1427,7 +1361,7 @@ func.useItem = function(itemName,ramount)
 						end
 					end
 
-					--vCLIENT.blockButtons(source,false)
+					vCLIENT.blockButtons(source,false)
 					active[user_id] = nil
 				end
 			end
@@ -1436,14 +1370,14 @@ func.useItem = function(itemName,ramount)
 				active[user_id] = 10
 				vRPclient.stopActived(source)
 				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				--vCLIENT.blockButtons(source,true)
+				vCLIENT.blockButtons(source,true)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"amb@world_human_aa_coffee@idle_a", "idle_a","p_amb_coffeecup_01",49,28422)
 
 				repeat
 					if active[user_id] == 0 then
 						active[user_id] = nil
-						--vCLIENT.blockButtons(source,false)
+						vCLIENT.blockButtons(source,false)
 						vRPclient._removeObjects(source)
 
 						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
@@ -1460,14 +1394,14 @@ func.useItem = function(itemName,ramount)
 				active[user_id] = 10
 				vRPclient.stopActived(source)
 				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				--vCLIENT.blockButtons(source,true)
+				vCLIENT.blockButtons(source,true)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"mp_player_inteat@burger","mp_player_int_eat_burger","prop_cs_burger_01",49,60309)
 
 				repeat
 					if active[user_id] == 0 then
 						active[user_id] = nil
-						--vCLIENT.blockButtons(source,false)
+						vCLIENT.blockButtons(source,false)
 						vRPclient._removeObjects(source)
 
 						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
@@ -1482,7 +1416,7 @@ func.useItem = function(itemName,ramount)
 				active[user_id] = 5
 				vRPclient.stopActived(source)
 				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				--vCLIENT.blockButtons(source,true)
+				vCLIENT.blockButtons(source,true)
 				TriggerClientEvent("Progress",source,5000,"Utilizando...")
 				vRPclient._createObjects(source,"amb@code_human_wander_drinking@beer@male@base","","prop_paper_bag_01",49,28422,0.0,-0.02,-0.05,0.0,0.0,0.0)
 				vRPclient._playAnim(source,false,{"mini@cpr@char_a@cpr_str","cpr_kol_idle"},false)
@@ -1494,7 +1428,7 @@ func.useItem = function(itemName,ramount)
 				repeat
 					if active[user_id] == 0 then
 						active[user_id] = nil
-						--vCLIENT.blockButtons(source,false)
+						vCLIENT.blockButtons(source,false)
 						vRPclient._removeObjects(source)
 						vRPclient._stopAnim(source,false)
 
@@ -1510,13 +1444,13 @@ func.useItem = function(itemName,ramount)
 				active[user_id] = 10
 				vRPclient.stopActived(source)
 				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				--vCLIENT.blockButtons(source,true)
+				vCLIENT.blockButtons(source,true)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"amb@code_human_wander_drinking@beer@male@base","static","v_ret_fh_noodle",49,28422,0.0,-0.02,-0.05,0.0,0.0,0.0)
 				repeat
 					if active[user_id] == 0 then
 						active[user_id] = nil
-						--vCLIENT.blockButtons(source,false)
+						vCLIENT.blockButtons(source,false)
 						vRPclient._removeObjects(source)
 
 						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
@@ -1533,14 +1467,14 @@ func.useItem = function(itemName,ramount)
 				active[user_id] = 10
 				vRPclient.stopActived(source)
 				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				--vCLIENT.blockButtons(source,true)
+				vCLIENT.blockButtons(source,true)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"amb@code_human_wander_drinking@beer@male@base","static","prop_bar_nuts",49,28422,0.0,-0.02,-0.05,0.0,0.0,0.0)
 
 				repeat
 					if active[user_id] == 0 then
 						active[user_id] = nil
-						--vCLIENT.blockButtons(source,false)
+						vCLIENT.blockButtons(source,false)
 						vRPclient._removeObjects(source)
 
 						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
@@ -1557,14 +1491,14 @@ func.useItem = function(itemName,ramount)
 				active[user_id] = 10
 				vRPclient.stopActived(source)
 				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				--vCLIENT.blockButtons(source,true)
+				vCLIENT.blockButtons(source,true)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"amb@code_human_wander_drinking@beer@male@base","static","v_ret_fh_noodle",49,28422,0.0,-0.02,-0.05,0.0,0.0,0.0)
 
 				repeat
 					if active[user_id] == 0 then
 						active[user_id] = nil
-						--vCLIENT.blockButtons(source,false)
+						vCLIENT.blockButtons(source,false)
 						vRPclient._removeObjects(source)
 
 						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
@@ -1582,14 +1516,14 @@ func.useItem = function(itemName,ramount)
 				--vRPclient.stopActived(source)
 				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 				TriggerClientEvent("will_spray:removeClosestSpray",source)
-				--[[ --vCLIENT.blockButtons(source,true)
+				--[[ vCLIENT.blockButtons(source,true)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"amb@code_human_wander_drinking@beer@male@base","static","prop_bar_limes",49,28422,0.0,-0.02,-0.038,0.0,0.0,0.0)
 
 				repeat
 					if active[user_id] == 0 then
 						active[user_id] = nil
-						--vCLIENT.blockButtons(source,false)
+						vCLIENT.blockButtons(source,false)
 						vRPclient._removeObjects(source)
 
 						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
@@ -1606,14 +1540,14 @@ func.useItem = function(itemName,ramount)
 				active[user_id] = 10
 				vRPclient.stopActived(source)
 				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				--vCLIENT.blockButtons(source,true)
+				vCLIENT.blockButtons(source,true)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"amb@code_human_wander_eating_donut@male@idle_a","idle_c","prop_cs_hotdog_01",49,28422)
 
 				repeat
 					if active[user_id] == 0 then
 						active[user_id] = nil
-						--vCLIENT.blockButtons(source,false)
+						vCLIENT.blockButtons(source,false)
 						vRPclient._removeObjects(source)
 
 						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
@@ -1628,14 +1562,14 @@ func.useItem = function(itemName,ramount)
 				active[user_id] = 10
 				vRPclient.stopActived(source)
 				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				--vCLIENT.blockButtons(source,true)
+				vCLIENT.blockButtons(source,true)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"mp_player_inteat@burger","mp_player_int_eat_burger","prop_sandwich_01",49,18905,0.13,0.05,0.02,-50.0,16.0,60.0)
 
 				repeat
 					if active[user_id] == 0 then
 						active[user_id] = nil
-						--vCLIENT.blockButtons(source,false)
+						vCLIENT.blockButtons(source,false)
 						vRPclient._removeObjects(source)
 
 						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
@@ -1650,14 +1584,14 @@ func.useItem = function(itemName,ramount)
 				active[user_id] = 10
 				vRPclient.stopActived(source)
 				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				--vCLIENT.blockButtons(source,true)
+				vCLIENT.blockButtons(source,true)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"mp_player_inteat@burger","mp_player_int_eat_burger","prop_taco_01",49,18905,0.16,0.06,0.02,-50.0,220.0,60.0)
 
 				repeat
 					if active[user_id] == 0 then
 						active[user_id] = nil
-						--vCLIENT.blockButtons(source,false)
+						vCLIENT.blockButtons(source,false)
 						vRPclient._removeObjects(source)
 
 						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
@@ -1672,14 +1606,14 @@ func.useItem = function(itemName,ramount)
 				active[user_id] = 10
 				vRPclient.stopActived(source)
 				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				--vCLIENT.blockButtons(source,true)
+				vCLIENT.blockButtons(source,true)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"mp_player_inteat@burger","mp_player_int_eat_burger","prop_food_bs_chips",49,18905,0.10,0.0,0.08,150.0,320.0,160.0)
 
 				repeat
 					if active[user_id] == 0 then
 						active[user_id] = nil
-						--vCLIENT.blockButtons(source,false)
+						vCLIENT.blockButtons(source,false)
 						vRPclient._removeObjects(source)
 
 						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
@@ -1694,14 +1628,14 @@ func.useItem = function(itemName,ramount)
 				active[user_id] = 10
 				vRPclient.stopActived(source)
 				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				--vCLIENT.blockButtons(source,true)
+				vCLIENT.blockButtons(source,true)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"mp_player_inteat@burger","mp_player_int_eat_burger","prop_choc_ego",49,60309)
 
 				repeat
 					if active[user_id] == 0 then
 						active[user_id] = nil
-						--vCLIENT.blockButtons(source,false)
+						vCLIENT.blockButtons(source,false)
 						vRPclient._removeObjects(source)
 
 						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
@@ -1717,14 +1651,14 @@ func.useItem = function(itemName,ramount)
 				active[user_id] = 10
 				vRPclient.stopActived(source)
 				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				--vCLIENT.blockButtons(source,true)
+				vCLIENT.blockButtons(source,true)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"amb@code_human_wander_eating_donut@male@idle_a","idle_c","prop_amb_donut",49,28422)
 
 				repeat
 					if active[user_id] == 0 then
 						active[user_id] = nil
-						--vCLIENT.blockButtons(source,false)
+						vCLIENT.blockButtons(source,false)
 						vRPclient._removeObjects(source)
 
 						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
@@ -1800,7 +1734,7 @@ func.useItem = function(itemName,ramount)
 						active[user_id] = 7
 						vRPclient.stopActived(source)
 						TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-						--vCLIENT.blockButtons(source,true)
+						vCLIENT.blockButtons(source,true)
 						TriggerClientEvent("Progress",source,7000,"Utilizando...")
 						vRPclient._playAnim(source,false,{"anim@amb@clubhouse@tutorial@bkr_tut_ig3@","machinic_loop_mechandplayer"},true)
 
@@ -1808,7 +1742,7 @@ func.useItem = function(itemName,ramount)
 							if active[user_id] == 0 then
 								active[user_id] = nil
 								vRPclient._stopAnim(source,false)
-								--vCLIENT.blockButtons(source,false)
+								vCLIENT.blockButtons(source,false)
 
 								if vRP.tryGetInventoryItem(user_id,"compost",1,true) and vRP.tryGetInventoryItem(user_id,"bucket",1,true) and vRP.tryGetInventoryItem(user_id,"cannabisseed",1,true) then
 									vRP.weedTimer(user_id,1)
@@ -1832,7 +1766,7 @@ func.useItem = function(itemName,ramount)
 						active[user_id] = 30
 						vRPclient.stopActived(source)
 						TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-						--vCLIENT.blockButtons(source,true)
+						vCLIENT.blockButtons(source,true)
 						vRPclient._playAnim(source,false,{"anim@amb@clubhouse@tutorial@bkr_tut_ig3@","machinic_loop_mechandplayer"},true)
 
 						local taskResult = vTASKBAR.taskTwo(source)
@@ -1842,7 +1776,7 @@ func.useItem = function(itemName,ramount)
 							end
 						end
 
-						--vCLIENT.blockButtons(source,false)
+						vCLIENT.blockButtons(source,false)
 						vRPclient._stopAnim(source,false)
 						active[user_id] = nil
 					end
@@ -1907,13 +1841,13 @@ func.useItem = function(itemName,ramount)
 				if vCLIENT.plateDistance(source) then
 					active[user_id] = 10
 					TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-					--vCLIENT.blockButtons(source,true)
+					vCLIENT.blockButtons(source,true)
 					TriggerClientEvent("Progress",source,10000)
 
 					repeat
 						if active[user_id] == 0 then
 							active[user_id] = nil
-							--vCLIENT.blockButtons(source,false)
+							vCLIENT.blockButtons(source,false)
 
 							if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
 								local plate = vRP.genPlate()
@@ -1970,7 +1904,7 @@ func.useItem = function(itemName,ramount)
 						if not plateUsers then
 							active[user_id] = 30
 							TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-							--vCLIENT.blockButtons(source,true)
+							vCLIENT.blockButtons(source,true)
 							TriggerClientEvent("Progress",source,30000,"Utilizando...")
 							vRPclient._playAnim(source,true,{"anim@amb@clubhouse@tutorial@bkr_tut_ig3@","machinic_loop_mechandplayer"},true)
 
@@ -1978,7 +1912,7 @@ func.useItem = function(itemName,ramount)
 								if active[user_id] == 0 then
 									active[user_id] = nil
 									vRPclient._stopAnim(source,false)
-									--vCLIENT.blockButtons(source,false)
+									vCLIENT.blockButtons(source,false)
 
 									if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
 										TriggerClientEvent("vrp_admin:vehicleTuning",source)
