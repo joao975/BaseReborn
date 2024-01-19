@@ -45,8 +45,8 @@ end
 function Creative.CharacterChosen(user_id)
   local source = source
   local data = vRP.getUData(user_id, "vRP:spawnController")
-	local sdata = json.decode(data) or 0
-  if parseInt(sdata) > 0 then
+	local sdata = json.decode(data) or nil
+  if sdata ~= nil then
     TriggerEvent("vRP:BucketServer", source, "Exit")
     TriggerEvent("baseModule:idLoaded", source, user_id, nil)
     return true
