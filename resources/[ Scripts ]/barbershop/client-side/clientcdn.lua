@@ -560,3 +560,46 @@ function TaskUpdateHeadOptions()
 		SetPedHeadOverlayColor(ped,4,1,data.makeupColor,data.makeupColor)
 	end
 end
+
+function cO.setCustomization(custom)
+	if custom then
+		local ped = PlayerPedId()
+		local mhash = nil
+
+		if custom.modelhash then
+			mhash = custom.modelhash
+		elseif custom.model then
+			mhash = GetHashKey(custom.model)
+		end
+
+		if mhash then
+			local i = 0
+			while not HasModelLoaded(mhash) and i < 10000 do
+				i = i + 1
+				RequestModel(mhash)
+				Citizen.Wait(10)
+			end
+
+			if HasModelLoaded(mhash) then
+				SetPlayerModel(PlayerId(),mhash)
+				SetModelAsNoLongerNeeded(mhash)
+			end
+		end
+
+		for k,v in pairs(custom) do
+			if k ~= "model" and k ~= "modelhash" then
+				local isprop, index = parse_part(k)
+				if isprop then
+					if v[1] < 0 then
+						ClearPedProp(ped,index)
+					else
+						SetPedPropIndex(ped,index,v[1],v[2],v[3] or 2)
+					end
+				else
+					SetPedComponentVariation(ped,index,v[1],v[2],v[3] or 2)
+				end
+			end
+		end
+		TriggerEvent("reloadtattos")
+	end
+end

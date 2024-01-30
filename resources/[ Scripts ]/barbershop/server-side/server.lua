@@ -53,7 +53,7 @@ RegisterCommand("desbugar",function(source,args,rawCommand)
 		if value ~= nil then
 			local custom = json.decode(value) or {}
 			vCLIENT.setCharacter(source,custom)
-			vRPclient.DeletarObjeto()
+			vRPclient.DeletarObjeto(source)
 			vRPclient._stopAnim(false)
 		end
 	end
@@ -65,8 +65,7 @@ end)
 RegisterServerEvent("barbershop:bvida")
 AddEventHandler("barbershop:bvida",function()
     local source = source
-    vRPclient._setCustomization(source,vRPclient.getCustomization(source))
-    vRP.removeCloak(source)
+    vCLIENT.setCustomization(source,vRPclient.getCustomization(source))
 	local user_id = vRP.getUserId(source)
 	local value = vRP.getUData(user_id,"currentCharacterMode")
 	if value ~= nil then
