@@ -561,10 +561,20 @@ function TaskUpdateHeadOptions()
 	end
 end
 
+local function parse_part(key)
+	if type(key) == "string" and string.sub(key,1,1) == "p" then
+		return true,tonumber(string.sub(key,2))
+	else
+		return false,tonumber(key)
+	end
+end
+
 function cO.setCustomization(custom)
 	if custom then
 		local ped = PlayerPedId()
 		local mhash = nil
+		local health = GetEntityHealth(ped)
+		local armour = GetPedArmour(ped)
 
 		if custom.modelhash then
 			mhash = custom.modelhash
@@ -586,6 +596,7 @@ function cO.setCustomization(custom)
 			end
 		end
 
+		vSERVER.healthBack(health,armour)
 		for k,v in pairs(custom) do
 			if k ~= "model" and k ~= "modelhash" then
 				local isprop, index = parse_part(k)

@@ -11,6 +11,7 @@ vRPclient = Tunnel.getInterface("vRP")
 cO = {}
 Tunnel.bindInterface("barbershop",cO)
 vCLIENT = Tunnel.getInterface("barbershop")
+vSKINSHOP = Tunnel.getInterface("skinshop")
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- BARBER
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -65,8 +66,9 @@ end)
 RegisterServerEvent("barbershop:bvida")
 AddEventHandler("barbershop:bvida",function()
     local source = source
-    vCLIENT.setCustomization(source,vRPclient.getCustomization(source))
 	local user_id = vRP.getUserId(source)
+	local clothes = vSKINSHOP.getCustomization(source)
+    vCLIENT.setCustomization(source,vRPclient.getCustomization(source))
 	local value = vRP.getUData(user_id,"currentCharacterMode")
 	if value ~= nil then
 		local custom = json.decode(value) or {}
@@ -74,7 +76,17 @@ AddEventHandler("barbershop:bvida",function()
 		vRPclient.DeletarObjeto(source)
 		vRPclient._stopAnim(source,false)
 	end
+	TriggerClientEvent("skinshop:apply",source,clothes)
 end)
+
+function cO.healthBack(health,armour)
+    local source = source
+	local ped = GetPlayerPed(source)
+	if ped then
+		SetPedArmour(ped,armour)
+		vRPclient.setHealth(source,health)
+	end
+end
 ----------------------------------------------------------------------------------------------------------------------------------------
 -- SETINSTANCE
 -----------------------------------------------------------------------------------------------------------------------------------------
