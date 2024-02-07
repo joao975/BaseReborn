@@ -224,7 +224,31 @@ end
 
 Reborn.dbSimilarTables = function()
     return {
-        { ['Old'] = "vrp_user_vehicles", ['New'] = "vrp_vehicles" },
+
+        -- VRP
+        
+        { ['Old'] = "vrp_user_vehicles", ['New'] = "vrp_vehicles",
+            ['Columns'] = {
+                ['detido'] = "arrest",
+                ['ipva'] = "time",
+            }
+        },
+        { ['Old'] = "vrp_user_identities", ['New'] = "vrp_users",
+            ['Columns'] = {
+                ['user_id'] = "id",
+                ['firstname'] = "name",
+                ['name'] = "name2",
+            }
+        },
+        { ['Old'] = "vrp_user_moneys", ['New'] = "vrp_users",
+            ['Columns'] = {
+                ['user_id'] = "id",
+                ['wallet'] = "bank",
+            }
+        },
+
+        -- SUMMERZ
+
         { ['Old'] = "summerz_propertys", ['New'] = "vrp_homes" },
         { ['Old'] = "summerz_vehicles", ['New'] = "vrp_vehicles",
             ['Columns'] = {
@@ -236,5 +260,37 @@ Reborn.dbSimilarTables = function()
         { ['Old'] = "summerz_playerdata", ['New'] = "vrp_user_data" },
         { ['Old'] = "summerz_accounts", ['New'] = "vrp_infos" },
         { ['Old'] = "summerz_characters", ['New'] = "vrp_users" },
+
+        -- ESX
+
+        { ['Old'] = "owned_vehicles", ['New'] = "vrp_vehicles",
+            ['Columns'] = {
+                ['owner'] = 'user_id',
+            }
+        },
+        { ['Old'] = "users", ['New'] = "vrp_users",
+            ['Columns'] = {
+                ['identifier'] = 'id',
+                ['firstname'] = 'name',
+                ['lastname'] = 'name2',
+                ['phone_number'] = 'phone',
+            }
+        },
+
+        -- QBCore
+        { ['Old'] = "owned_vehicles", ['New'] = "vrp_vehicles",
+            ['Columns'] = {
+                ['owner'] = 'user_id',
+            }
+        },
+        { ['Old'] = "players", ['New'] = "vrp_users",
+            ['Columns'] = {
+                ['citizenid'] = 'id',
+                ['cid'] = 'id',
+                ['money'] = 'bank',
+            }
+        },
     }
 end
+
+GlobalState['DbSimilarTables'] = Reborn.dbSimilarTables()
