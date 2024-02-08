@@ -9,37 +9,57 @@ local multi_personagem = Reborn.multi_personagem()
 -----------------------------------------------------------------------------------------------------------------------------------------
 Creative = {}
 Tunnel.bindInterface("spawn",Creative)
-
-vRP.prepare("characters/countPersons","SELECT COUNT(steam) as qtd FROM vrp_users WHERE steam = @steam and deleted = 0")
-vRP.prepare("characters/countChars","SELECT chars FROM vrp_infos WHERE steam = @steam")
-vRP.prepare("characters/lastCharacters","SELECT id FROM vrp_users WHERE steam = @steam ORDER BY id DESC LIMIT 1")
-vRP.prepare("characters/update_character","UPDATE vrp_users SET name = @name, name2 = @name2, phone = @phone, registration = @registration WHERE steam = @steam ORDER BY id DESC LIMIT 1")
-vRP.prepare("characters/create_characters","INSERT INTO vrp_users(steam,name,name2,phone,registration) VALUES(@steam,@name,@name2,@phone,@registration)")
+CreateThread(function()
+  vRP.prepare("characters/countPersons","SELECT COUNT(steam) as qtd FROM vrp_users WHERE steam = @steam and deleted = 0 AND name != 'Individuo'")
+  vRP.prepare("characters/countChars","SELECT chars FROM vrp_infos WHERE steam = @steam")
+  vRP.prepare("characters/lastCharacters","SELECT id FROM vrp_users WHERE steam = @steam ORDER BY id DESC LIMIT 1")
+  vRP.prepare("characters/update_character","UPDATE vrp_users SET name = @name, name2 = @name2, phone = @phone, registration = @registration WHERE steam = @steam ORDER BY id DESC LIMIT 1")
+  vRP.prepare("characters/create_characters","INSERT INTO vrp_users(steam,name,name2,phone,registration) VALUES(@steam,@name,@name2,@phone,@registration)")
+end)
 
 local Global = {}
 
-function Creative.Characters()
+function Creative.joinIn()
   local source = source
   local steam = vRP.getSteam(source)
-  TriggerEvent("vRP:BucketServer", source, "Enter", source)
-  local consult = vRP.query("vRP/get_characters",{ steam = steam })
-  if consult and consult[1] then
-    local values = {}
-    for k, v in pairs(consult) do
-      local userTablesSkin = json.decode(vRP.getUData(v["id"],"Datatable"))
-			if userTablesSkin then
-        local identity = vRP.getUserIdentity(v["id"])
-        local userTablesBarber = json.decode(vRP.getUData(v["id"],"currentCharacterMode")) or {}
-        local userTablesClotings = json.decode(vRP.getUData(v["id"],"Clothings"))
-        local userTablesTatto = json.decode(vRP.getUData(v["id"],"vRP:tattoos")) or {}
-        local fullName = identity.name.." "..identity.name2
-        local sex = userTablesSkin["skin"] == 1885233650 and "Masculino" or "Feminino"
-        values[#values + 1] = { Passport = v.id, Skin = userTablesSkin["skin"] or -1667301416, Nome = fullName, Sexo = sex, Blood = "A", Clothes = userTablesClotings, Barber = userTablesBarber, Tattoos = userTablesTatto, Banco = identity.bank }
+  if GlobalState['Nation_creator'] then
+    if multi_personagem['Enabled'] then
+      TriggerClientEvent("spawn:setupChars", source)
+    else
+      local consult = vRP.query("vRP/get_characters",{ steam = steam })
+      if consult and consult[1] then
+        local user_id = parseInt(consult[1]['id'])
+        local data = vRP.getUData(user_id, "nation_char")
+        if data and data ~= "" then
+          local char = json.decode(data) or nil
+          if char and char.gender then
+            TriggerEvent("baseModule:idLoaded", source, user_id, char.gender)
+          end
+          return
+        end
+        TriggerEvent("baseModule:idLoaded", source, user_id, nil)
       end
     end
-    return values
+  else
+    TriggerEvent("vRP:BucketServer", source, "Enter", source)
+    local consult = vRP.query("vRP/get_characters",{ steam = steam })
+    local values = {}
+    if consult and consult[1] then
+      for k, v in pairs(consult) do
+        local userTablesSkin = json.decode(vRP.getUData(v["id"],"Datatable"))
+        if userTablesSkin then
+          local identity = vRP.getUserIdentity(v["id"])
+          local userTablesBarber = json.decode(vRP.getUData(v["id"],"currentCharacterMode")) or {}
+          local userTablesClotings = json.decode(vRP.getUData(v["id"],"Clothings"))
+          local userTablesTatto = json.decode(vRP.getUData(v["id"],"vRP:tattoos")) or {}
+          local fullName = identity.name.." "..identity.name2
+          local sex = userTablesSkin["skin"] == 1885233650 and "Masculino" or "Feminino"
+          values[#values + 1] = { Passport = v.id, Skin = userTablesSkin["skin"] or -1667301416, Nome = fullName, Sexo = sex, Blood = "A", Clothes = userTablesClotings, Barber = userTablesBarber, Tattoos = userTablesTatto, Banco = identity.bank }
+        end
+      end
+    end
+    TriggerClientEvent("spawn:setCharacters",source,values)
   end
-  return {}
 end
 
 function Creative.CharacterChosen(user_id)

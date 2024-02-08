@@ -447,85 +447,83 @@ end
 --##################### Funções vRP || will_inventory ######################--
 -----------------------------------------------------------------------------
 
-Citizen.CreateThread(function()
-	if GetResourceState('will_inventory') == 'stopped' then
-		function vRP.getInventory(inventory)
-			if tonumber(inventory) > 0 then
-				inventory = 'content-'..inventory
-			end
-			return exports['will_inventory']:getInventory(inventory)
+if GlobalState['Inventory'] == "will_inventory" then
+	vRP.getInventory = function(inventory)
+		if tonumber(inventory) > 0 then
+			inventory = 'content-'..inventory
 		end
-		
-		function vRP.getInventoryItemAmount(inventory, idname)
-			if parseInt(inventory) > 0 then
-				inventory = 'content-'..inventory
-			end
-			return exports['will_inventory']:getItemAmount(inventory, idname)
-		end
-		
-		function vRP.tryGetInventoryItem(inventory,item,amount,notify)
-			local source = 0
-			if parseInt(inventory) > 0 then
-				source = vRP.getUserSource(parseInt(inventory))
-				inventory = 'content-'..inventory
-			end
-			if exports['will_inventory']:removeItem(inventory, item, amount) then
-				if source and notify and vRP.itemBodyList(item) then
-					TriggerClientEvent("itensNotify",source,{ "REMOVIDO",vRP.itemIndexList(item),parseInt(amount),vRP.itemNameList(item) })
-				end
-				return true
-			end
-			return false 
-		end
-		
-		function vRP.giveInventoryItem(inventory,item,amount,notify)
-			local metadata = {}
-			local source = 0
-			if parseInt(inventory) > 0 then
-				source = vRP.getUserSource(parseInt(inventory))
-				inventory = 'content-'..inventory
-			end
-			if exports['will_inventory']:addItem(inventory, item, amount, metadata) then
-				if notify and vRP.itemBodyList(item) then
-					TriggerClientEvent("itensNotify",source,{ "ADICIONADO",vRP.itemIndexList(item),parseInt(amount),vRP.itemNameList(item) })
-				end
-				return true
-			end
-			return false
-		end
-		
-		function vRP.removeInventoryItem(inventory, item, count)
-			if parseInt(inventory) > 0 then
-				inventory = 'content-'..inventory
-			end
-			return exports['will_inventory']:removeItem(inventory, item, count)
-		end
-
-		function vRP.getInventoryMaxWeight(user_id)
-			return exports['will_inventory']:getInvWeight(user_id) or 0
-		end
-
-		function vRP.getInventoryWeight(inventory)
-			if parseInt(inventory) > 0 then
-				inventory = 'content-'..inventory
-			end
-			return exports['will_inventory']:computeInvWeight(inventory)
-		end
-
-		function vRP.computeItemsWeight(itemslist)
-			local weight = 0
-			for k,v in pairs(itemslist) do
-				local name = v.name and v.name:lower() or ''
-				local item = items[v.item] or items[name]
-				if item then
-					weight = weight + (item.weight or 0) * parseInt(v.amount)
-				end
-			end
-			return weight
-		end
-
-		function vRP.getBackpack(user_id)
-			return exports['will_inventory']:getInvWeight(user_id) or 0
-		end
+		return exports['will_inventory']:getInventory(inventory)
 	end
-end)
+	
+	vRP.getInventoryItemAmount = function(inventory, idname)
+		if parseInt(inventory) > 0 then
+			inventory = 'content-'..inventory
+		end
+		return exports['will_inventory']:getItemAmount(inventory, idname)
+	end
+	
+	vRP.tryGetInventoryItem = function(inventory,item,amount,notify)
+		local source = 0
+		if parseInt(inventory) > 0 then
+			source = vRP.getUserSource(parseInt(inventory))
+			inventory = 'content-'..inventory
+		end
+		if exports['will_inventory']:removeItem(inventory, item, amount) then
+			if source and notify and vRP.itemBodyList(item) then
+				TriggerClientEvent("itensNotify",source,{ "REMOVIDO",vRP.itemIndexList(item),parseInt(amount),vRP.itemNameList(item) })
+			end
+			return true
+		end
+		return false 
+	end
+	
+	vRP.giveInventoryItem = function(inventory,item,amount,notify)
+		local metadata = {}
+		local source = 0
+		if parseInt(inventory) > 0 then
+			source = vRP.getUserSource(parseInt(inventory))
+			inventory = 'content-'..inventory
+		end
+		if exports['will_inventory']:addItem(inventory, item, amount, metadata) then
+			if notify and vRP.itemBodyList(item) then
+				TriggerClientEvent("itensNotify",source,{ "ADICIONADO",vRP.itemIndexList(item),parseInt(amount),vRP.itemNameList(item) })
+			end
+			return true
+		end
+		return false
+	end
+	
+	vRP.removeInventoryItem = function(inventory, item, count)
+		if parseInt(inventory) > 0 then
+			inventory = 'content-'..inventory
+		end
+		return exports['will_inventory']:removeItem(inventory, item, count)
+	end
+
+	vRP.getInventoryMaxWeight = function(user_id)
+		return exports['will_inventory']:getInvWeight(user_id) or 0
+	end
+
+	vRP.getInventoryWeight = function(inventory)
+		if parseInt(inventory) > 0 then
+			inventory = 'content-'..inventory
+		end
+		return exports['will_inventory']:computeInvWeight(inventory)
+	end
+
+	vRP.computeItemsWeight = function(itemslist)
+		local weight = 0
+		for k,v in pairs(itemslist) do
+			local name = v.name and v.name:lower() or ''
+			local item = items[v.item] or items[name]
+			if item then
+				weight = weight + (item.weight or 0) * parseInt(v.amount)
+			end
+		end
+		return weight
+	end
+
+	vRP.getBackpack = function(user_id)
+		return exports['will_inventory']:getInvWeight(user_id) or 0
+	end
+end

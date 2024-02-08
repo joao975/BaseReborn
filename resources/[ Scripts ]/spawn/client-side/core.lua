@@ -55,8 +55,14 @@ Citizen.CreateThread(function()
 	RenderScriptCams(true,true,0,true,true)
 	SetCamRot(Camera,0.0,0.0,320.0,2)
 	SetCamActive(Camera,true)
+	if IsScreenFadedOut() then
+		DoScreenFadeIn(1000)
+	end
+	vSERVER.joinIn()
+end)
 
-	Characters = vSERVER.Characters()
+RegisterNetEvent("spawn:setCharacters")
+AddEventHandler("spawn:setCharacters",function(Characters)
 	if parseInt(#Characters) > 0 then
 		Customization(Characters[1])
 	end
@@ -65,7 +71,6 @@ Citizen.CreateThread(function()
 
 	SendNUIMessage({ Action = "Spawn", Table = Characters })
 	SetNuiFocus(true,true)
-
 	if IsScreenFadedOut() then
 		DoScreenFadeIn(1000)
 	end

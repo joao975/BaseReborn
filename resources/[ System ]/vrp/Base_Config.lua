@@ -4,7 +4,7 @@ Reborn = {}
 Proxy.addInterface("Reborn",Reborn)
 Tunnel.bindInterface("Reborn",Reborn)
 
---------  Streams: https://1drv.ms/u/s!AvbdRyXrgoWmjWpuhpmOsgdt5m-w?e=wuwNos
+--------  Base completa: https://1drv.ms/u/s!AvbdRyXrgoWmjWpuhpmOsgdt5m-w?e=wuwNos
 
 ----####----####----####----##
 ----##        LICENÇA      -##
@@ -25,6 +25,18 @@ end
 Reborn.images = function()
     return "http://localhost/imagens"
 end
+
+--####----####----####----
+--##   VARIABLES   ##--
+--####----####----####----
+
+GlobalState['Inventory'] = "ld_inventory"       -- will_inventory
+
+--[[ NATION ADAPTER ]]
+
+GlobalState['Nation_creator'] = false       -- Se usar: Dar wipe para utilizar / Retirar script "creation" / Conferir multi personagem abaixo
+GlobalState['Nation_skinshop'] = false       -- Se usar: Retirar script "skinshop"
+GlobalState['Nation_barbershop'] = false       -- Se usar: Retirar script "barbershop"
 
 ----####----####----####----##
 ----##   MULTI-PERSONAGEM  -##
@@ -159,7 +171,6 @@ Reborn.segurity_code = function()
             'vrp_user_data',
             'vrp_user_ids',
             'vrp_vehicles',
-            'vrp_weapons',
             'will_battlepass',
             'will_sprays',
             'will_ficha',
@@ -263,33 +274,33 @@ Reborn.dbSimilarTables = function()
 
         -- ESX
 
-        { ['Old'] = "owned_vehicles", ['New'] = "vrp_vehicles",
-            ['Columns'] = {
-                ['owner'] = 'user_id',
-            }
-        },
-        { ['Old'] = "users", ['New'] = "vrp_users",
-            ['Columns'] = {
-                ['identifier'] = 'id',
-                ['firstname'] = 'name',
-                ['lastname'] = 'name2',
-                ['phone_number'] = 'phone',
-            }
-        },
+        -- { ['Old'] = "owned_vehicles", ['New'] = "vrp_vehicles",
+        --     ['Columns'] = {
+        --         ['owner'] = 'user_id',
+        --     }
+        -- },
+        -- { ['Old'] = "users", ['New'] = "vrp_users",
+        --     ['Columns'] = {
+        --         ['identifier'] = 'id',
+        --         ['firstname'] = 'name',
+        --         ['lastname'] = 'name2',
+        --         ['phone_number'] = 'phone',
+        --     }
+        -- },
 
-        -- QBCore
-        { ['Old'] = "owned_vehicles", ['New'] = "vrp_vehicles",
-            ['Columns'] = {
-                ['owner'] = 'user_id',
-            }
-        },
-        { ['Old'] = "players", ['New'] = "vrp_users",
-            ['Columns'] = {
-                ['citizenid'] = 'id',
-                ['cid'] = 'id',
-                ['money'] = 'bank',
-            }
-        },
+        -- -- QBCore
+        -- { ['Old'] = "owned_vehicles", ['New'] = "vrp_vehicles",
+        --     ['Columns'] = {
+        --         ['owner'] = 'user_id',
+        --     }
+        -- },
+        -- { ['Old'] = "players", ['New'] = "vrp_users",
+        --     ['Columns'] = {
+        --         ['citizenid'] = 'id',
+        --         ['cid'] = 'id',
+        --         ['money'] = 'bank',
+        --     }
+        -- },
     }
 end
 

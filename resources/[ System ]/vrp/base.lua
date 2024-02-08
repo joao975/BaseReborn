@@ -153,18 +153,14 @@ function vRP.getInventory(user_id)
 	return false
 end
 
-Citizen.CreateThread(function()
-	if GetResourceState('will_inventory') == 'stopped' then
-
-		function vRP.getInventory(inventory)
-			if parseInt(inventory) > 0 then
-				inventory = 'content-'..inventory
-			end
-			return exports['will_inventory']:getInventory(inventory)
+if GlobalState['Inventory'] == "will_inventory" then
+	vRP.getInventory = function(inventory)
+		if parseInt(inventory) > 0 then
+			inventory = 'content-'..inventory
 		end
-
+		return exports['will_inventory']:getInventory(inventory)
 	end
-end)
+end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- UPDATESELECTSKIN
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -267,16 +263,24 @@ AddEventHandler("baseModule:idLoaded",function(source,user_id,model)
 	if vRP.rusers[user_id] == nil then
 		local playerData = vRP.getUData(parseInt(user_id),"Datatable")
 		local resultData = json.decode(playerData) or {}
-
 		vRP.user_tables[user_id] = resultData
 		vRP.user_sources[user_id] = source
 
-		if model ~= nil or not vRP.user_tables[user_id].skin then
+		if model ~= nil then
 			local first_login = Reborn.first_login()
 			TriggerClientEvent("Notify",source,"importante",first_login['Mensagem'],20000)
 			vRP.user_tables[user_id].weaps = {}
 			vRP.user_tables[user_id].inventorys = {}
-			vRP.user_tables[user_id].skin = GetHashKey(model)
+			if model then
+				if model == "female" then
+					model = "mp_f_freemode_01"
+				elseif model == "male" then
+					model = "mp_m_freemode_01"
+				end
+				vRP.user_tables[user_id].skin = GetHashKey(model)
+			else
+				vRP.user_tables[user_id].skin = `mp_m_freemode_01`
+			end
 			vRP.user_tables[user_id].backpack = 5
 			TriggerEvent("Reborn:newPlayer",user_id)
 		end
@@ -292,7 +296,7 @@ AddEventHandler("baseModule:idLoaded",function(source,user_id,model)
 			vRP.execute("vRP/update_characters",{ id = parseInt(user_id), registration = vRP.generateRegistrationNumber(), phone = vRP.generatePhoneNumber() })
 		end
         vRP.setUData(user_id,"Datatable",json.encode(vRP.user_tables[user_id]))
-		TriggerEvent("vRP:playerSpawn",user_id,source)
-		TriggerEvent("playerConnect",user_id,source)
+		TriggerEvent("vRP:playerSpawn",user_id,source,true)
+		TriggerEvent("playerConnect",user_id,source, true)
 	end
 end)
