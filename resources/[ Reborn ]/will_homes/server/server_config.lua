@@ -1,4 +1,27 @@
 CreateThread(function()
+	-- Check table
+	Wait(500)
+	prepare("homes/check_table","DESCRIBE will_homes")
+	local table = query("homes/check_table")
+	local hasHouseId = false
+	local hasTax = false
+	for k,v in pairs(table) do
+		if v.Field == "house_id" then
+			hasHouseId = true
+		end
+		if v.Field == "tax" then
+			hasTax = true
+		end
+	end
+	if not hasHouseId then
+		prepare("homes/put_house_id","ALTER TABLE will_homes ADD house_id INT(11) NOT NULL DEFAULT 0")
+		execute("homes/put_house_id")
+	end
+	if not hasTax then
+		prepare("homes/put_tax","ALTER TABLE will_homes ADD tax INT(11) NOT NULL DEFAULT 1572029150")
+		execute("homes/put_tax")
+	end
+	Wait(500)
     prepare('will/get_all_homes',"SELECT * FROM will_homes")
 	prepare("will/buy_home","INSERT IGNORE INTO will_homes(house_id,owner,name,friends,extends,tax) VALUES(@house_id,@owner,@name,@friends,@extends,@tax)")
     prepare("will/upd_taxhomes","UPDATE `will_homes` SET tax = @tax WHERE owner = @owner AND name = @home")
