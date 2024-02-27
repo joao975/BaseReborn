@@ -283,6 +283,9 @@ AddEventHandler("baseModule:idLoaded",function(source,user_id,model)
 			end
 			vRP.user_tables[user_id].backpack = 5
 			TriggerEvent("Reborn:newPlayer",user_id)
+			for k,v in pairs(first_login['Itens']) do
+				vRP.giveInventoryItem(user_id,k,v)
+            end
 		end
 
 		local identity = vRP.getUserIdentity(user_id)
@@ -298,5 +301,6 @@ AddEventHandler("baseModule:idLoaded",function(source,user_id,model)
         vRP.setUData(user_id,"Datatable",json.encode(vRP.user_tables[user_id]))
 		TriggerEvent("vRP:playerSpawn",user_id,source,true)
 		TriggerEvent("playerConnect",user_id,source, true)
+		TriggerClientEvent("hudActived",source,true)
 	end
 end)
