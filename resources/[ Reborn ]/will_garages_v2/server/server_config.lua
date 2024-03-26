@@ -690,16 +690,15 @@ local maxVehs = {
 }
 
 exports("checkMaxVehs",function(user_id)
+    if not enableMaxVehs then return true end
     local maxVeh = 5
-    if enableMaxVehs then
-        local myvehicles = enableMaxVehs and query("will/get_vehicles", {user_id = user_id}) or {}
-        for perm, veh in pairs(maxVehs) do
-            if hasPermission(user_id, perm) then
-                maxVeh = veh
-            end
+    local myvehicles = query("will/get_vehicles", {user_id = user_id}) or {}
+    for perm, veh in pairs(maxVehs) do
+        if hasPermission(user_id, perm) then
+            maxVeh = veh
         end
     end
-    if not enableMaxVehs or #myvehicles < maxVeh then
+    if #myvehicles < maxVeh then
         return true
     end
     local nplayer = getUserSource(user_id)
