@@ -690,7 +690,7 @@ local maxVehs = {
 }
 
 exports('addVehicle', function(user_id, vehicle)
-    local myvehicles = enableMaxVehs and #query("will/get_vehicles", {user_id = user_id}) or {}
+    local myvehicles = enableMaxVehs and query("will/get_vehicles", {user_id = user_id}) or {}
     local maxVeh = 5
     if enableMaxVehs then
         for perm, veh in pairs(maxVehs) do
