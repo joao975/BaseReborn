@@ -89,9 +89,9 @@ function jewelryPayment(source, number)
 end
 
 RegisterNetEvent("robberys:jewelry")
-AddEventHandler("robberys:jewelry",function()
+AddEventHandler("robberys:jewelry",function(data)
 	local source = source
-	jewelryPayment(source, #jewelryDrawer + 1)
+	jewelryPayment(source, data[1])
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- JEWELRYTIMERS
