@@ -689,23 +689,28 @@ local maxVehs = {
     ['Prata'] = 6
 }
 
-exports('addVehicle', function(user_id, vehicle)
-    local myvehicles = enableMaxVehs and query("will/get_vehicles", {user_id = user_id}) or {}
+exports("checkMaxVehs",function(user_id)
     local maxVeh = 5
     if enableMaxVehs then
+        local myvehicles = enableMaxVehs and query("will/get_vehicles", {user_id = user_id}) or {}
         for perm, veh in pairs(maxVehs) do
             if hasPermission(user_id, perm) then
                 maxVeh = veh
             end
         end
     end
-    if #myvehicles < maxVeh or not enableMaxVehs then
+    if not enableMaxVehs or #myvehicles < maxVeh then
+        return true
+    end
+    local nplayer = getUserSource(user_id)
+    TriggerClientEvent("Notify",nplayer,"negado","Máximo de veículos atingido.",5000)
+end)
+
+exports('addVehicle', function(user_id, vehicle)
+    if exports['will_garages_v2']:checkMaxVehs(user_id) then
         local plate = will.generatePlateNumber()
         local infos = { user_id = user_id, vehicle = vehicle, plate = plate, engine = 1000, body = 1000, fuel = 100, work = 'false' }
         execute("will/add_vehicle", infos)
-    else
-        local nplayer = getUserSource(user_id)
-        TriggerClientEvent("Notify",nplayer,"negado","Máximo de veículos atingido.",5000)
     end
 end)
 
