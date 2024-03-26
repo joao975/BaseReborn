@@ -707,11 +707,9 @@ exports("checkMaxVehs",function(user_id)
 end)
 
 exports('addVehicle', function(user_id, vehicle)
-    if exports['will_garages_v2']:checkMaxVehs(user_id) then
-        local plate = will.generatePlateNumber()
-        local infos = { user_id = user_id, vehicle = vehicle, plate = plate, engine = 1000, body = 1000, fuel = 100, work = 'false' }
-        execute("will/add_vehicle", infos)
-    end
+    local plate = will.generatePlateNumber()
+    local infos = { user_id = user_id, vehicle = vehicle, plate = plate, engine = 1000, body = 1000, fuel = 100, work = 'false' }
+    execute("will/add_vehicle", infos)
 end)
 
 -- ## exports['will_garages_v2']:addVehicle(user_id, vehicle)
