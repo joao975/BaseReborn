@@ -80,7 +80,7 @@ cfg_s.buy_vehicle = function(user_id,category,vehicle,tuning)
                     for k,v in pairs(myVeh) do
                         if v.vehicle == vehicle then
                             if not srv.checkRentSell(user_id,vehicle) then
-                                if request(nplayer,"Deseja comprar "..vehicle.." por R$"..price.."?",30) and tryPayment(user_id,price) then
+                                if request(nplayer,"Deseja comprar "..vehicle.." por R$"..price.."?",30) and exports['will_garages_v2']:checkMaxVehs(user_id) and tryPayment(user_id,price) then
                                     execute('will/rem_rent',{user_id = user_id,vehicle = vehicle})
                                     addVehicle(user_id, vehicle)
                                     if hasEstoque then
@@ -97,7 +97,7 @@ cfg_s.buy_vehicle = function(user_id,category,vehicle,tuning)
                             end
                         end
                     end
-                    if request(nplayer,"Deseja comprar "..vehicle.." por R$"..price.."?",30) and tryPayment(user_id,price) then
+                    if request(nplayer,"Deseja comprar "..vehicle.." por R$"..price.."?",30) and exports['will_garages_v2']:checkMaxVehs(user_id) and tryPayment(user_id,price) then
                         if hasEstoque then
                             execute('will/att_estoque',{estoque = (vehStock[1].estoque - 1),vehicle = vehicle })
                         end
@@ -132,7 +132,7 @@ cfg_s.rent_vehicle = function(user_id,categoria,vehicle)
                     end
                 end
                 local time = parseInt(os.time() + 24*cfg_s.rent_time*60*60)
-                if request(source,"Deseja alugar "..vehicle.." por R$"..rent_price.."?",30) and tryPayment(user_id,rent_price) then
+                if request(source,"Deseja alugar "..vehicle.." por R$"..rent_price.."?",30) and exports['will_garages_v2']:checkMaxVehs(user_id) and tryPayment(user_id,rent_price) then
                     execute('will/add_rend',{user_id = user_id,vehicle = vehicle,time = time})
                     addVehicle(user_id, vehicle)
                     TriggerClientEvent('Notify',source,'sucesso',"Você alugou "..veiculos[categoria][vehicle].nome.." por R$"..rent_price.." dutante "..cfg_s.rent_time.." dias!")
