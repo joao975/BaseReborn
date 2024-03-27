@@ -33,6 +33,7 @@ vRP.prepare("vRP/set_whitelist_id","UPDATE vrp_infos SET whitelist = @whitelist 
 -----------------------------------------------------------------------------------------------------------------------------------------
 vRP.prepare("vRP/set_userdata","REPLACE INTO vrp_user_data(user_id,dkey,dvalue) VALUES(@user_id,@key,@value)")
 vRP.prepare("vRP/get_userdata","SELECT dvalue FROM vrp_user_data WHERE user_id = @user_id AND dkey = @key")
+vRP.prepare("vRP/rem_user_dkey","DELETE FROM vrp_user_data WHERE user_id = @user_id AND dkey = @key")
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- PREPARE vRP_SRV_DATA
 -----------------------------------------------------------------------------------------------------------------------------------------
