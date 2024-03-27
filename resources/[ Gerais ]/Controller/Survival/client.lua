@@ -175,7 +175,7 @@ Citizen.CreateThread(function()
 	while true do
 		local timeDistance = 500
 		local ped = PlayerPedId()
-		if blockControls or (deadPlayer and not inGame) then
+		if blockControls or (deadPlayer and not inGame and not LocalPlayer.state.inPvp) then
 			timeDistance = 4
 			DisablePlayerFiring(ped,true)
 			DisableControlAction(1,2,true)
