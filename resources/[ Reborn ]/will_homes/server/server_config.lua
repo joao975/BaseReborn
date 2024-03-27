@@ -191,7 +191,7 @@ end
 -- Deletar casas sem taxas pagas
 
 CreateThread(function()
-	Wait(1000)
+	Wait(2000)
 	local houses = query('will/get_all_homes') or {}
 	for k,v in pairs(houses) do
 		if (parseInt(v.tax)+60*60*24*Config.delHomeTime) < os.time() then
