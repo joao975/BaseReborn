@@ -121,15 +121,15 @@
                                         </div>
                                     </div>
                                     <div id="data-information">
-                                        NOME: <span id="data-information-name"></span><br/>
-                                        PASSAPORTE: <span id="data-information-id"></span><br/>
+                                        NOME: <span id="data-information-name"></span> ( <span id="data-information-id"></span> )<br/>
                                         <span id="data-information-title-content" >
                                             PATENTE: <span id="data-information-title"></span>
                                         </span>
-                                        RG: <span id="data-information-rg"></span><br/>
+                                        CNH: <span id="data-information-rg"></span><br/>
                                         IDADE: <span id="data-information-age"></span><br/>
                                         TELEFONE: <span id="data-information-phone"></span><br/>
-                                        MULTAS PENDENTES: <span id="data-information-tax"></span>
+                                        PORTE: <span id="data-information-porte"></span><br/>
+                                        MULTAS: <span id="data-information-tax"></span>
                                     </div>
                                     <div id="set-wanted-app-button" class="app-buttons">
                                         <div onclick="openModal('wanted-add')" class="app-content app-mini-content">
@@ -142,6 +142,12 @@
                                         <div class="app-content app-mini-content">
                                             <img src="svg/algemas.svg" height="100px" width="100px" /><br/>
                                             <p>MULTAS E PRISÕES</p>
+                                        </div>
+                                    </div>
+                                    <div id="porte-app-button"  onclick="changePorteStatus()"  class="app-buttons">
+                                        <div class="app-content app-mini-content">
+                                            <img src="svg/weapon.svg" height="100px" width="100px" /><br/>
+                                            <p id="porte-button-label">Adicionar porte</p>
                                         </div>
                                     </div>
                                     <div id="officer-buttons" class="app-buttons">

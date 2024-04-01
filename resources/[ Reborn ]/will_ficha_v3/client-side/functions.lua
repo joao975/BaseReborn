@@ -3,35 +3,19 @@
 -----------------------------------
 
 function removeObjects()
-    if Config.base == "creative" or Config.base == "summerz" then	
-		vRP.removeObjects()
-	else
-		vRP._DeletarObjeto()
-	end
+	vRP.removeObjects()
 end
 
 function createTablet()
-    if Config.base == "creative" or Config.base == "summerz" then		
-        vRP.createObjects("amb@code_human_in_bus_passenger_idles@female@tablet@base","base","prop_cs_tablet",50,28422)
-    else
-        vRP._CarregarObjeto("amb@code_human_in_bus_passenger_idles@female@tablet@idle_a","idle_b","prop_cs_tablet",49,28422)
-    end
+    vRP.createObjects("amb@code_human_in_bus_passenger_idles@female@tablet@base","base","prop_cs_tablet",50,28422)
 end
 
 function createBox()
-    if Config.base == "creative" or Config.base == "summerz" then		
-        vRP.createObjects("anim@heists@box_carry@","idle","hei_prop_heist_box",50,28422)
-    else
-        vRP._CarregarObjeto("anim@heists@box_carry@","idle","hei_prop_heist_box",50,28422)
-    end
+    vRP.createObjects("anim@heists@box_carry@","idle","hei_prop_heist_box",50,28422)
 end
 
 function playServiceAnim()
-    if Config.base == "creative" or Config.base == "summerz" then	
-        vRP._playAnim(false,{"anim@amb@business@coc@coc_packing_hi@", "full_cycle_v1_pressoperator"},	true)
-    else
-        vRP._playAnim(false,{{"anim@amb@business@coc@coc_packing_hi@", "full_cycle_v1_pressoperator"}},	true)
-    end
+    vRP._playAnim(false,{"anim@amb@business@coc@coc_packing_hi@", "full_cycle_v1_pressoperator"},	true)
 end
 
 function takingPhoto()

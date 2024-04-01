@@ -12,14 +12,12 @@ Config = {}
 
 Config.base = "creative"                                        -- 'vrpex' / 'creative'
 
-Config.imgDiret = "http://189.127.165.131/TITANIUM2023/imagens/" --Reborn.images().."/"                               -- Diretorio das imagens dos veiculos
+Config.imgDiret = Reborn.images().."/"                          --Reborn.images().."/"                               -- Diretorio das imagens dos veiculos
 
 Config.vehicle_db = "vrp_vehicles"                              -- Banco de dados de veiculos
+Config.differentPlate = true
 
-Config.openPainel = {                                           -- Coordenada / Comando
-    tipo = "Comando",                                           -- tipo = "Coordenada",
-    data = "tablet"                                            -- data = { ['x'] = -124.41, ['y'] = 120.15, ['z'] = 15.70 }
-}
+Config.openPainel = "opainel"
 
 Config.ld_smartbank = true
 
