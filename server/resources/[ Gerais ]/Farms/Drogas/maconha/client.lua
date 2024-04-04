@@ -134,4 +134,27 @@ function separando()
 	end)
 end
 
-
+CreateThread(function()
+	while true do
+		local timeDistance = 500
+		if processo then
+			timeDistance = 4
+			DisableControlAction(1,73,true)
+			DisableControlAction(1,29,true)
+			DisableControlAction(1,47,true)
+			DisableControlAction(1,187,true)
+			DisableControlAction(1,189,true)
+			DisableControlAction(1,190,true)
+			DisableControlAction(1,188,true)
+			DisableControlAction(1,257,true)
+			DisableControlAction(1,167,true)
+			DisableControlAction(1,140,true)
+			DisableControlAction(1,141,true)
+			DisableControlAction(1,142,true)
+			DisableControlAction(1,137,true)
+			DisableControlAction(1,38,true)
+			DisablePlayerFiring(PlayerPedId(),true)
+		end
+		Wait(timeDistance)
+	end
+end)
