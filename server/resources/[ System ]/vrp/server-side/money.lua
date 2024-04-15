@@ -13,7 +13,7 @@ end
 -- SETBANK
 -----------------------------------------------------------------------------------------------------------------------------------------
 function vRP.setBank(user_id,amount)
-	if amount > 0 then
+	if amount >= 0 then
 		vRP.execute("vRP/set_bank",{ id = parseInt(user_id), bank = parseInt(amount) })
 		if usersIdentity and usersIdentity[user_id] then
 			usersIdentity[user_id]['bank'] = parseInt(amount)
@@ -70,11 +70,11 @@ function vRP.paymentBank(user_id,amount)
 	return false
 end
 
-function vRP.tryFullPayment(id, price)
+function vRP.tryFullPayment(user_id, price)
 	if price > 0 and vRP.tryGetInventoryItem(user_id,"dollars",price) then
 		return true
 	end
-    return vRP.paymentBank(id, price)
+    return vRP.paymentBank(user_id, price)
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- WITHDRAWCASH
