@@ -53,11 +53,11 @@ Citizen.CreateThread(function()
 
 					if IsEntityAVehicle(vehFront) then
 						local vehModel = GetEntityModel(vehFront)
-						local vehHash = vRP.vehicleModel(vehModel)
+						local vehName = vRP.vehicleModel(vehModel)
 						local vehPlate = GetVehicleNumberPlateText(vehFront)
 						local vehSpeed = GetEntitySpeed(vehFront) * 2.236936
 
-						SendNUIMessage({ radar = "top", plate = vehPlate, model = vRP.vehicleName(vehHash), speed = vehSpeed })
+						SendNUIMessage({ radar = "top", plate = vehPlate, model = vehName, speed = vehSpeed })
 					end
 
 					local vehicleBack = GetOffsetFromEntityInWorldCoords(vehicle,0.0,-105.0,0.0)
@@ -66,11 +66,11 @@ Citizen.CreateThread(function()
 
 					if IsEntityAVehicle(vehBack) then
 						local vehModel = GetEntityModel(vehBack)
-						local vehHash = vRP.vehicleModel(vehModel)
+						local vehName = vRP.vehicleModel(vehModel)
 						local vehPlate = GetVehicleNumberPlateText(vehBack)
 						local vehSpeed = GetEntitySpeed(vehBack) * 2.236936
 
-						SendNUIMessage({ radar = "bot", plate = vehPlate, model = vRP.vehicleName(vehHash), speed = vehSpeed })
+						SendNUIMessage({ radar = "bot", plate = vehPlate, model = vehName, speed = vehSpeed })
 					end
 				end
 			end
