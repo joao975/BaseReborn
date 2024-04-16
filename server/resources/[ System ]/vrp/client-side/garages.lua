@@ -177,7 +177,13 @@ end
 -- VEHICLEMODEL
 -----------------------------------------------------------------------------------------------------------------------------------------
 function tvRP.vehicleModel(vehModel)
-	return vehList[vehModel][1]
+	local modelName = nil
+	for k, v in pairs(vehList) do
+		if v.hash == vehModel then
+			modelName = v.name
+		end
+	end
+	return modelName
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- LASTVEHICLE
