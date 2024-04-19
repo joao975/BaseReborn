@@ -63,8 +63,12 @@ end
 
 function closeGuiLojaTattoo()
     local ped = PlayerPedId()
+    local health = GetEntityHealth(ped)
+    local armour = GetPedArmour(ped)
     vRP.setCustomization(oldCustom)
     src.applyTatto()
+    vRP.setHealth(health)
+    vRP.setArmour(armour)
     SetNuiFocus(false, false)
     FreezeEntityPosition(ped, false)
     SetEntityInvincible(ped, false)

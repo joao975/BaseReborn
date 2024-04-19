@@ -7,8 +7,6 @@ ui_page 'nui/index.html'
 files {
     'nui/*',
     'nui/**/*',
-    'nui/**/*/*',
-    'addons/*/*',
     'streams/*'
 }
  
