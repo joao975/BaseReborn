@@ -9,8 +9,7 @@ client_scripts {
     "Drogas/maconha/client.lua",
     "Drogas/meta/client.lua",
     "Gerais/client.lua",
-    "Lavagem/client.lua",
-    "Muni/client.lua",
+    "Lavagem/client.lua"
 }
 
 server_scripts {
@@ -21,6 +20,5 @@ server_scripts {
     "Drogas/maconha/server.lua",
     "Drogas/meta/server.lua",
     "Gerais/server.lua",
-    "Lavagem/server.lua",
-    "Muni/server.lua",
+    "Lavagem/server.lua"
 }

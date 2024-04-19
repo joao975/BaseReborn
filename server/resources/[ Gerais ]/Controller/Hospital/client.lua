@@ -315,6 +315,7 @@ AddEventHandler('tratamento-macas',function()
 	until GetEntityHealth(PlayerPedId()) >= 399 or GetEntityHealth(PlayerPedId()) <= 101
 	TriggerEvent("Notify","importante","Tratamento concluido.")
 	TriggerEvent("cancelando",false)
+	TriggerEvent("vrp_survival:desbugar")
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 --[ TRATAMENTO ]-------------------------------------------------------------------------------------------------------------------------
@@ -345,6 +346,7 @@ AddEventHandler("tratamento",function()
 			until GetEntityHealth(ped) >= 399 or GetEntityHealth(ped) <= 101
 				TriggerEvent("Notify","sucesso","Tratamento concluido.",8000)
 				tratamento = false
+				TriggerEvent("vrp_survival:desbugar")
 		end
 	else
 		TriggerEvent("Notify","negado","Você precisa estar deitado em uma maca para ser tratado.",8000)

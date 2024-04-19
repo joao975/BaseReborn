@@ -1146,65 +1146,13 @@ function plVRP.Taxista()
 	local source = source
 	local user_id = vRP.getUserId(source)
 	if not vRP.hasPermission(user_id,"Taxi") then
-		vRP.execute("vRP/add_group",{ user_id = user_id, permiss = tostring("Taxi") })
 		vRP.insertPermission(user_id,tostring("Taxi"))
 		TriggerClientEvent("Notify",source,"sucesso","Você iniciou o trabalho de taxista.",5000)
 	else
-		vRP.execute("vRP/del_group",{ user_id = user_id, permiss = tostring("Taxi") })
 		vRP.removePermission(user_id,tostring("Taxi"))
 		TriggerClientEvent("Notify",source,"sucesso","Você saiu de serviço.",5000)
 	end
 end
------------------------------------------------------------------------------------------------------------------------------------------
--- ADD
------------------------------------------------------------------------------------------------------------------------------------------
-RegisterCommand("add",function(source,args,rawCommand)
-	local user_id = vRP.getUserId(source)
-	if user_id then
-		if parseInt(args[2]) > 0 then
-			if args[1] == "Policia" then
-				if vRP.hasPermission(user_id,"PolMaster") then
-					vRP.execute("vRP/cle_group",{ user_id = parseInt(args[2]) })
-					vRP.execute("vRP/add_group",{ user_id = parseInt(args[2]), permiss = tostring("Police") })
-					vRP.insertPermission(parseInt(args[2]),tostring("Police"))
-					TriggerClientEvent("Notify",source,"sucesso","Passaporte <b>"..vRP.format(parseInt(args[2])).."</b> adicionado com sucesso.",5000)
-				end
-			end
-
-			if args[1] == "Mecanico" then
-				if vRP.hasPermission(user_id,"MecMaster") then
-					vRP.execute("vRP/cle_group",{ user_id = parseInt(args[2]) })
-					vRP.execute("vRP/add_group",{ user_id = parseInt(args[2]), permiss = tostring("Mechanic") })
-					vRP.insertPermission(parseInt(args[2]),tostring("Mechanic"))
-					TriggerClientEvent("Notify",source,"sucesso","Passaporte <b>"..vRP.format(parseInt(args[2])).."</b> adicionado com sucesso.",5000)
-				end
-			end
-
-			if args[1] == "Paramedico" then
-				if vRP.hasPermission(user_id,"ParMaster") then
-					vRP.execute("vRP/cle_group",{ user_id = parseInt(args[2]) })
-					vRP.execute("vRP/add_group",{ user_id = parseInt(args[2]), permiss = tostring("Paramedic") })
-					vRP.insertPermission(parseInt(args[2]),tostring("Paramedic"))
-					TriggerClientEvent("Notify",source,"sucesso","Passaporte <b>"..vRP.format(parseInt(args[2])).."</b> adicionado com sucesso.",5000)
-				end
-			end
-		end
-	end
-end)
------------------------------------------------------------------------------------------------------------------------------------------
--- REMOVE
------------------------------------------------------------------------------------------------------------------------------------------
-RegisterCommand("rem",function(source,args,rawCommand)
-	local user_id = vRP.getUserId(source)
-	if user_id then
-		if parseInt(args[1]) > 0 then
-			if vRP.hasPermission(user_id,"PolMaster") or vRP.hasPermission(user_id,"MecMaster") or vRP.hasPermission(user_id,"ParMaster") then
-				vRP.execute("vRP/cle_group",{ user_id = parseInt(args[1]) })
-				TriggerClientEvent("Notify",source,"sucesso","Passaporte <b>"..vRP.format(parseInt(args[1])).."</b> removido com sucesso.",5000)
-			end
-		end
-	end
-end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- TRUNKIN
 -----------------------------------------------------------------------------------------------------------------------------------------

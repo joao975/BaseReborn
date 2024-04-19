@@ -315,6 +315,7 @@ RegisterCommand("group",function(source,args,rawCommand)
 			else
 				local group = vRP.getUserGroupByType(parseInt(args[1]),"job")
 				if group then
+					vRP.removePermission(parseInt(args[1]),group)
 					vRP.execute("vRP/del_group",{ user_id = parseInt(args[1]), permiss = group })
 				end
 				if not vRP.hasPermission(parseInt(args[1]),tostring(args[2])) then

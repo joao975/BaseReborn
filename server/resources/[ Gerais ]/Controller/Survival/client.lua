@@ -178,29 +178,21 @@ Citizen.CreateThread(function()
 		if blockControls or (deadPlayer and not inGame and not LocalPlayer.state.inPvp) then
 			timeDistance = 4
 			DisablePlayerFiring(ped,true)
-			DisableControlAction(1,2,true)
-			DisableControlAction(1,22,true)
-			DisableControlAction(1,29,true)
-			DisableControlAction(1,73,true)
-			DisableControlAction(1,75,true)
-			DisableControlAction(1,167,true)
-			DisableControlAction(1,29,true)
-			DisableControlAction(1,182,true)
-			DisableControlAction(1,187,true)
-			DisableControlAction(1,189,true)
-			DisableControlAction(1,190,true)
-			DisableControlAction(1,188,true)
-			DisableControlAction(1,311,true)
-			DisableControlAction(1,47,true)
-			DisableControlAction(1,105,true)
-			DisableControlAction(1,187,true)
-			DisableControlAction(1,189,true)
-			DisableControlAction(1,190,true)
-			DisableControlAction(1,188,true)
-			DisableControlAction(1,311,true)
-			DisableControlAction(1,257,true)
-			DisableControlAction(1,288,true)
-			DisablePlayerFiring(PlayerPedId(),true)
+			DisableControlAction(1,22,true) -- SPACEBAR
+			DisableControlAction(1,29,true) -- B
+			DisableControlAction(1,47,true) -- G
+			DisableControlAction(1,73,true) -- X
+			DisableControlAction(1,75,true) -- F
+			DisableControlAction(1,105,true) -- X
+			DisableControlAction(1,167,true) -- F6
+			DisableControlAction(1,182,true) -- L
+			DisableControlAction(1,187,true) -- ARROW DOWN
+			DisableControlAction(1,188,true) -- ARROW UP
+			DisableControlAction(1,189,true) -- ARROW LEFT
+			DisableControlAction(1,190,true) -- ARROW RIGHT
+			DisableControlAction(1,257,true) -- LEFT MOUSE
+			DisableControlAction(1,288,true) -- F1
+			DisableControlAction(1,311,true) -- K
 		end
 		Citizen.Wait(timeDistance)
 	end

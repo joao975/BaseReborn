@@ -90,7 +90,6 @@ function dvVRP.groupDelivery(source)
 	local source = source
 	local user_id = vRP.getUserId(source)
 	if not vRP.hasPermission(user_id,"Delivery") then
-		vRP.execute("vRP/add_group",{ user_id = user_id, permiss = tostring("Delivery") })
 		vRP.insertPermission(user_id,tostring("Delivery"))
 		TriggerClientEvent("Notify",source,"sucesso","Você iniciou o trabalho de Delivery.",5000)
 		TriggerClientEvent("Notify",source,"importante",'Utilize "/entrega" para sair de serviço.',5000)
@@ -101,7 +100,6 @@ function dvVRP.ungroupDelivery()
 	local source = source
 	local user_id = vRP.getUserId(source)
 	if vRP.hasPermission(user_id,"Delivery") then
-		vRP.execute("vRP/del_group",{ user_id = user_id, permiss = tostring("Delivery") })
 		vRP.removePermission(user_id,tostring("Delivery"))
 	end
 	TriggerClientEvent("Notify",source,"sucesso","Você saiu de serviço.",5000)
