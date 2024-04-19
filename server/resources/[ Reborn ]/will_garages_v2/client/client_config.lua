@@ -51,8 +51,7 @@ function applyModifies(nveh,engine,fuel,tuning,vehDoors,vehWindows,vehTyres,vnam
 			end
 		end
 	end
-	exports['will_tunners']:SetVehicleProp(nveh,tuning)
-	-- vehicleMods(nveh,tuning)
+	vehicleMods(nveh,tuning)
 end
 
 --######################--
@@ -454,27 +453,6 @@ AddEventHandler("will_garages:setHomes", function(serverHomes)
     end
 end)
 
-local propertys = {}
-RegisterNetEvent("garages:Propertys")
-AddEventHandler("garages:Propertys", function(serverHomes)
-    for name,v in pairs(serverHomes) do
-		if not propertys[name] then
-			propertys[name] = true
-			table.insert(Config.garages, {
-				["name"] = name,
-				["payment"] = false,
-				["perm"] = false,  
-				["entrada"] = {
-					["blip"] = { v['x'], v['y'], v['z'] }
-				},
-				["spawns"] = {
-					v["1"],
-				},
-			})
-		end
-    end
-end)
-
 --#####################--
 --##  SET MAP BLIPS  ##--
 --#####################--
@@ -534,14 +512,11 @@ function will.vehList(radius)
 end
 
 function getModelName(vehicle)
-	local model = GetEntityModel(vehicle)
     for k,v in pairs(vehicleGlobal) do
-        if GetHashKey(k) == model then
+        if GetHashKey(k) == GetEntityModel(vehicle) then
             return k
         end
     end
-	local vehname = GetLabelText(GetDisplayNameFromVehicleModel(model))
-	return vehname
 end
 
 --###############--
