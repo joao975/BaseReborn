@@ -698,7 +698,13 @@ exports("checkMaxVehs",function(user_id)
             maxVeh = veh
         end
     end
-    if #myvehicles < maxVeh then
+    local vehQnt = 0
+    for k,v in pairs(myvehicles) do
+        if tostring(v.work) == "false" then
+            vehQnt = vehQnt + 1
+        end
+    end
+    if vehQnt < maxVeh then
         return true
     end
     local nplayer = getUserSource(user_id)
