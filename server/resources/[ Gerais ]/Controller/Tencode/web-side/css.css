@@ -45,6 +45,23 @@ body {
 	border-right: 0;
 }
 
+#freezeRadar {
+	display: none;
+	right: 500px;
+	width: 250px;
+	bottom: 180px;
+	font-size: 12px;
+	text-align: center;
+	line-height: 20px;
+	padding: 10px 15px;
+	position: absolute;
+	border-radius: 4px;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	text-shadow: 1px 1px #000;
+	background: rgba(15, 15, 15, 0.75);
+}
+
 #topRadar {
 	right: 632px;
 	width: 225px;

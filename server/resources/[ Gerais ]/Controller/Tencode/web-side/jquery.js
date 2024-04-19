@@ -26,6 +26,14 @@ $(document).ready(function(){
 		if (event["data"]["radar"] == "bot"){
 			$("#botRadar").html("<legend>RADAR TRASEIRO</legend><c>PLACA:</c> "+ event["data"]["plate"] +"<br><c>MODELO:</c> <v>"+ event["data"]["model"] +"</v><br><c>VELOCIDADE:</c> "+ parseInt(event["data"]["speed"]) +" KMH");
 		}
+
+		if (event["data"]["freeze"] == true) {
+			$("#freezeRadar").css("display", "block");
+		}
+	  
+		if (event["data"]["freeze"] == false) {
+			$("#freezeRadar").css("display", "none");
+		}
 	});
 
 	document.onkeyup = function(data){

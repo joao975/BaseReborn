@@ -43,7 +43,6 @@ Citizen.CreateThread(function()
 			if policeRadar then
 				if not policeFreeze then
 					timeDistance = 100
-
 					local vehicle = GetVehiclePedIsUsing(ped)
 					local vehicleDimension = GetOffsetFromEntityInWorldCoords(vehicle,0.0,1.0,1.0)
 
@@ -106,6 +105,7 @@ RegisterCommand("toggleFreeze",function(source,args,rawCommand)
 	local ped = PlayerPedId()
 	if IsPedInAnyPoliceVehicle(ped) then
 		policeFreeze = not policeFreeze
+		SendNUIMessage({ freeze = policeFreeze })
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
