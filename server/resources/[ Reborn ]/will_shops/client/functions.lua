@@ -266,7 +266,7 @@ function fuelLocsThread(fuelLocs, shop)
 			local timeDistance = 996
 			for k,v in pairs(fuelLocs) do
 				local distance = #(coords - vector3(v[1],v[2],v[3]))
-				if distance <= 8.0 then
+				if distance <= 3.5 then
 					timeDistance = 4
 					local vehicle = GetPlayersLastVehicle()
 					if DoesEntityExist(vehicle) and not IsPedInAnyVehicle(ped) then
@@ -274,7 +274,7 @@ function fuelLocsThread(fuelLocs, shop)
 						local vehFuel = GetVehicleFuelLevel(vehicle)
 						local vehPlate = GetVehicleNumberPlateText(vehicle)
 						local distance = #(coords - vector3(coordsVeh["x"],coordsVeh["y"],coordsVeh["z"]))
-						if distance <= 3.5 then
+						if distance <= 2.0 then
 							if not isFuel then
 								if vehFuel < 100.0 then
 									DrawText3D(coordsVeh["x"],coordsVeh["y"],coordsVeh["z"] + 1,"~g~E~w~   ABASTECER")
@@ -345,7 +345,7 @@ function fuelLocsThread(fuelLocs, shop)
 							end
 						end
 
-						if isFuel and distance > 3.5 then
+						if isFuel and distance > 2.0 then
 							if vSERVER.paymentFuel(isPrice,vehPlate,vehFuel,shop,isPrice * 4) then
 								TriggerServerEvent("engine:tryFuel",vehPlate,vehFuel)
 								vehFuels[vehPlate] = vehFuel
