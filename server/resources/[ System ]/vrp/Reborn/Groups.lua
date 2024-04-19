@@ -294,7 +294,7 @@ Reborn.groups = function()
 				salary = 7000
 			},
 			"mecanico.permissao",
-			"mecanicolider.permissao",
+			"lidermecanico.permissao",
 		},
 		["Bennys"] = {
 			_config = {

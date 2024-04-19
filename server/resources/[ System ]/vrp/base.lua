@@ -258,8 +258,10 @@ end
 -- PLAYERSPAWNED
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterServerEvent("baseModule:idLoaded")
-AddEventHandler("baseModule:idLoaded",function(source,user_id,model)
+AddEventHandler("baseModule:idLoaded",function(source,user,model)
 	local source = source
+	local user_id = parseInt(user)
+	if not user_id then return end
 	if vRP.rusers[user_id] == nil then
 		local playerData = vRP.getUData(parseInt(user_id),"Datatable")
 		local resultData = json.decode(playerData) or {}

@@ -138,3 +138,17 @@ function vRP.downgradeStress(user_id,amount)
 		TriggerClientEvent("statusStress",source,data.stress)
 	end
 end
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- HUNGER / THIRST
+-----------------------------------------------------------------------------------------------------------------------------------------
+Citizen.CreateThread(function()
+	local needs = Reborn.needs()
+	while true do
+		Citizen.Wait(needs['Tempo']*1000)
+		local users = vRP.getUsers()
+		for k,v in pairs(users) do
+			vRP.downgradeThirst(k, needs['Sede'])
+			vRP.downgradeHunger(k, needs['Fome'])
+		end
+	end
+end)

@@ -1,7 +1,7 @@
 vRP.prepare("vRP/get_priorityqueue","SELECT steam,priority FROM vrp_infos")
 
 local Queue = {}
-local maxPlayers = 128
+local maxPlayers = 1024
 local priorityUsers = {}
 local languages = Reborn.Language()
 Queue.QueueList = {}
@@ -267,7 +267,7 @@ function Queue:UpdatePosData(src,ids,deferrals)
 end
 
 function Queue:NotFull(firstJoin)
-	local canJoin = self.PlayerCount + self:ConnectingSize() < maxPlayers and self:ConnectingSize() < 10
+	local canJoin = self.PlayerCount + self:ConnectingSize() < maxPlayers and self:ConnectingSize() < 100
 	if firstJoin and canJoin then
 		canJoin = self:GetSize() <= 1
 	end
@@ -540,15 +540,15 @@ AddEventHandler("queue:playerConnecting",function(source,ids,name,setKickReason,
     local languages = Reborn.Language()
     local steam = vRP.getSteam(source)
     local multi_personagem = Reborn.multi_personagem()
+	local rows = vRP.getInfos(steam)
     if multi_personagem['Enabled'] then
         if steam then
-            if not vRP.isBanned(steam) then
-                if vRP.isWhitelisted(steam) then
+            if not rows[1] or not rows[1].banned then
+                if rows[1] and rows[1].whitelist then
                     deferrals.done()
                 else
-                    local newUser = vRP.getInfos(steam)
-                    if newUser[1] == nil then
-						local rows,affected = vRP.query("vRP/create_user",{ steam = steam })
+                    if rows[1] == nil then
+						local _rows,affected = vRP.query("vRP/create_user",{ steam = steam })
 						if #affected > 0 then
 							local user_id = affected[1].id
 							deferrals.done(languages['whitelist'].."\n[Steam: "..steam.." ]\n[ ID de liberação: "..user_id.." ]")
@@ -556,7 +556,7 @@ AddEventHandler("queue:playerConnecting",function(source,ids,name,setKickReason,
 							return
 						end
 					else
-						deferrals.done(languages['whitelist'].."\n[Steam: "..steam.." ]\n[ ID de liberação: "..newUser[1]['id'].." ]")
+						deferrals.done(languages['whitelist'].."\n[Steam: "..steam.." ]\n[ ID de liberação: "..rows[1]['id'].." ]")
 						TriggerEvent("queue:playerConnectingRemoveQueues",ids)
                     end
                 end
@@ -571,8 +571,8 @@ AddEventHandler("queue:playerConnecting",function(source,ids,name,setKickReason,
     else
         local user_id = vRP.getUserIdByIdentifiers(source,ids)
         if user_id then
-            if not vRP.isBanned(steam) then
-                if vRP.isWhitelisted(steam) then
+            if not rows[1] or not rows[1].banned then
+                if rows[1] and rows[1].whitelist then 
                     deferrals.done()
                 else
                     deferrals.done(languages['whitelist'].."\n[ID: "..user_id.." ]")

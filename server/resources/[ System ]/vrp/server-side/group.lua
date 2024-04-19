@@ -24,7 +24,7 @@ function vRP.getUserGroups(user_id)
 end
 
 function vRP.getUserGroupByType(user_id,gtype)
-    local user_groups = vRP.getUserGroups(user_id)
+    local user_groups = vRP.getUserGroups(parseInt(user_id))
     for k,v in pairs(user_groups) do
         local kgroup = groups[k]
         if kgroup then
@@ -47,30 +47,35 @@ end
 -- NUMPERMISSION
 -----------------------------------------------------------------------------------------------------------------------------------------
 function vRP.insertPermission(user_id,perm)
-	local source = vRP.getUserSource(user_id)
-	if not permissions[user_id] then permissions[user_id] = {} end
-	table.insert(permissions[user_id], { permiss = perm } )
-	if vRP.hasPermission(user_id, "policia.permissao") then
-		TriggerClientEvent("target:setState",source,"Police",true)
-		TriggerEvent("vrp_blipsystem:serviceEnter",source,"Policial",77)
-	elseif vRP.hasPermission(user_id, "paramedico.permissao") then
-		TriggerClientEvent("target:setState",source,"Paramedic",true)
-		TriggerEvent("vrp_blipsystem:serviceEnter",source,"Paramedico",83)
-	elseif vRP.hasPermission(user_id, "mecanico.permissao") then
-		TriggerClientEvent("target:setState",source,"Mechanic",true)
-		TriggerEvent("vrp_blipsystem:serviceEnter",source,"Mecanico",51)
+	local user = parseInt(user_id)
+	local nplayer = vRP.getUserSource(user)
+	if not permissions[user] then permissions[user] = {} end
+	table.insert(permissions[user], { permiss = perm } )
+	if not nplayer then return end
+	if vRP.hasPermission(user, "policia.permissao") then
+		TriggerClientEvent("target:setState",nplayer,"Police",true)
+		TriggerEvent("vrp_blipsystem:serviceEnter",nplayer,"Policial",77)
+	elseif vRP.hasPermission(user, "paramedico.permissao") then
+		TriggerClientEvent("target:setState",nplayer,"Paramedic",true)
+		TriggerEvent("vrp_blipsystem:serviceEnter",nplayer,"Paramedico",83)
+	elseif vRP.hasPermission(user, "mecanico.permissao") then
+		TriggerClientEvent("target:setState",nplayer,"Mechanic",true)
+		TriggerEvent("vrp_blipsystem:serviceEnter",nplayer,"Mecanico",51)
 	end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- NUMPERMISSION
 -----------------------------------------------------------------------------------------------------------------------------------------
 function vRP.removePermission(user_id,perm)
-	local source = vRP.getUserSource(user_id)
-	if permissions[user_id] then
-		for k,v in pairs(permissions[user_id]) do
+	local user = parseInt(user_id)
+	local nplayer = vRP.getUserSource(user)
+	if permissions[user] then
+		for k,v in pairs(permissions[user]) do
 			if perm == v.permiss then
-				table.remove(permissions[user_id], k)
-				TriggerClientEvent("target:setState",source,perm,nil)
+				table.remove(permissions[user], k)
+				if nplayer then
+					TriggerClientEvent("target:setState",nplayer,perm,nil)
+				end
 				return
 			end
 		end
@@ -79,7 +84,8 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- HASPERMISSION
 -----------------------------------------------------------------------------------------------------------------------------------------
-function vRP.hasPermission(user_id,perm)
+function vRP.hasPermission(user,perm)
+	local user_id = parseInt(user)
 	if permissions[user_id] then
 		for k,v in pairs(permissions[user_id]) do
 			if v.permiss == perm then
@@ -87,8 +93,8 @@ function vRP.hasPermission(user_id,perm)
 			else
 				local group = groups[v.permiss]
 				if group then
-					for l,w in pairs(group) do
-						if l ~= "_config" and w == perm then
+					for l,w in ipairs(group) do
+						if w == perm then
 							return true
 						end
 					end
@@ -97,6 +103,32 @@ function vRP.hasPermission(user_id,perm)
 		end
 	end
 	return false
+end
+
+function vRP.hasAnyPermission(user_id, perms)
+	if type(perms) ~= "table" then return false end
+	for k,v in pairs(perms) do
+		if vRP.hasPermission(user_id,v) then
+			return true
+		end
+	end
+	return false
+end
+
+function vRP.numPermission(perm, offline)
+	local users = {}
+	local consult = vRP.query("vRP/get_specific_perm",{ permiss = tostring(perm) })
+	for k,v in pairs(consult) do
+		if offline then
+			table.insert(users,v.user_id)
+		else
+			local userSource = vRP.getUserSource(v.user_id)
+			if userSource then
+				table.insert(users,v.user_id)
+			end
+		end
+	end
+	return users
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- PLAYERLEAVE
