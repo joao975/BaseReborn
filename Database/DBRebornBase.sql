@@ -243,6 +243,13 @@ CREATE TABLE IF NOT EXISTS `ld_orgs_monthly` (
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE IF NOT EXISTS `ld_orgs_farm` (
+  `org` varchar(50) NOT NULL DEFAULT '',
+  `type` text DEFAULT NULL,
+  `daily` int(11) DEFAULT NULL,
+  `monthly` int(11) DEFAULT NULL,
+  `payment` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `will_homes` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
