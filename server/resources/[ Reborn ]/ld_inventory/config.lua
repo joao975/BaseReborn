@@ -237,6 +237,20 @@ config.shops = {
 				["flashlight"] = 675
 			}
 		}, 
+		["Cassino"] = {
+			mode = "Both",
+			payment = {
+				item = "dollars",
+				tax = 1.0,
+			},
+			webhook = "",
+			coords = {
+				[1] = vec3(948.42,33.56,71.84),
+			},
+			list = {
+				["fichas"] = 1,
+			}
+		},
 		["Arsenal"] = {
 			mode = "Buy", -- Buy (apenas compras), Sell (apenas venda), Both (compra E venda)
 			payment = {
