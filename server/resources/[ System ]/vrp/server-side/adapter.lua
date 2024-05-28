@@ -1,4 +1,8 @@
-
+function exportHandler(resource, exportName, func)
+    AddEventHandler(('__cfx_export_%s_%s'):format(resource,exportName), function(setCB)
+        setCB(func)
+    end)
+end
 -------##########-------##########-------##########-------##########
 --						CREATIVE -> VRP
 -------##########-------##########-------##########-------##########

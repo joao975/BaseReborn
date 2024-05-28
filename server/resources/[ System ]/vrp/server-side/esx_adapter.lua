@@ -20,6 +20,10 @@ exports('getSharedObject', function()
     return ESX
 end)
 
+exportHandler("es_extended","getSharedObject", function()
+  return ESX
+end)
+
 RegisterServerEvent('esx:clientLog')
 AddEventHandler('esx:clientLog', function(msg)
     if Config.EnableDebug then
@@ -41,7 +45,7 @@ function ESX.Trace(msg)
       print(('[^2TRACE^7] %s^7'):format(msg))
     end
 end
-  
+
 function ESX.SetTimeout(msec, cb)
     local id = Core.TimeoutCount + 1
 
@@ -260,7 +264,7 @@ function ESX.GetPlayerFromIdentifier(identifier)
         end
     end
 end
-  
+
 function ESX.GetIdentifier(playerId)
     for k, v in ipairs(GetPlayerIdentifiers(playerId)) do
         if string.match(v, 'license:') then
