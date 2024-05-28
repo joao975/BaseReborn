@@ -20,6 +20,10 @@ ESX.Scaleform.Utils = {}
 
 ESX.Streaming = {}
 
+exportHandler("es_extended","getSharedObject", function()
+    return ESX
+end)
+
 AddEventHandler('esx:getSharedObject', function(cb)
     SetTimeout(1500, function()
         TriggerEvent("esx:playerLoaded", ESX.GetPlayerData())

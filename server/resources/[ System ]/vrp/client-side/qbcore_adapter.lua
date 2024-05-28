@@ -13,6 +13,10 @@ AddEventHandler("QBCore:GetObject",function(cb)
     cb(QBCore)
 end)
 
+exportHandler("qb-core","GetCoreObject", function()
+    return QBCore
+end)
+
 QBCore.Functions = {}
 
 -- Player

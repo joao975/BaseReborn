@@ -33,3 +33,7 @@ files {
 	"lib/Tools.lua",
 	"lib/Hofs.lua",
 }
+
+provide 'qb-core'
+provide 'es_extended'
+provide 'spawnmanager'
