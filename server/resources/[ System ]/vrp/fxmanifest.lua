@@ -37,3 +37,4 @@ files {
 provide 'qb-core'
 provide 'es_extended'
 provide 'spawnmanager'
+provide 'sessionmanager'
