@@ -135,7 +135,18 @@ end
 RegisterCommand("gobucket",function(source,args)
 	local source = source
 	local user_id = vRP.getUserId(source)
-	SetPlayerRoutingBucket(source,parseInt(args[1]))
+	if user_id then
+		local perms = {	"Owner", "Admin", "Mod", "Sup" }
+		if vRP.hasAnyPermission(user_id,perms) then
+			SetPlayerRoutingBucket(source,parseInt(args[1]))
+		end
+	end
+end)
+
+RegisterCommand("getbucket",function(source,args)
+	local source = source
+	local bucket = GetPlayerRoutingBucket(source)
+	TriggerClientEvent("Notify",source,"aviso","Você esta no bucket "..bucket,5000)
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- KICK
