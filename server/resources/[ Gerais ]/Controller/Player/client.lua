@@ -2229,18 +2229,3 @@ function DrawText3D(x,y,z,text)
 	local factor = (string.len(text)) / 450
 	DrawRect(_x,_y+0.0125,0.01+factor,0.03,0,0,0,100)
 end
-
-local timeout = 0
-
-RegisterCommand("bvida",function()
-	if timeout == 0 then
-		TriggerServerEvent("barbershop:bvida")
-		timeout = 5
-		CreateThread(function()
-			while timeout > 0 do
-				Wait(1000)
-				timeout = timeout - 1
-			end
-		end)
-	end
-end)

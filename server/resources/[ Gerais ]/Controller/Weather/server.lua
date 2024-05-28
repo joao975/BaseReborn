@@ -4,7 +4,7 @@ vRP = Proxy.getInterface("vRP")
 -- VARIABLES
 -----------------------------------------------------------------------------------------------------------------------------------------
 local timeDate = GetGameTimer()
-GlobalState.clockHours = 18
+GlobalState.clockHours = 7
 GlobalState.clockMinutes = 0
 GlobalState.weatherSync = "EXTRASUNNY"
 -----------------------------------------------------------------------------------------------------------------------------------------
