@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `vrp_invoice` (
 
 -- Copiando estrutura para tabela rbn_base.vrp_permissions
 CREATE TABLE IF NOT EXISTS `vrp_permissions` (
-  `id` int(11) unsigned NOT NULL,
+  `id` INT(11) UNSIGNED NOT NULL DEFAULT '0',
   `user_id` int(11) NOT NULL DEFAULT 0,
   `permiss` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
