@@ -1,14 +1,18 @@
-fx_version 'bodacious'
+fx_version 'cerulean'
 game 'gta5'
 
-client_scripts {
-    'client.lua'
-}
+version '1.0.0'
 
 files {
-    'nui/*',
-    'nui/**/*'
+  '*.*',
+  'img/**',
+  'locales/*.*',
+  'music/*.*',
 }
 
-loadscreen 'nui/darkside.html'
-loadscreen_manual_shutdown "yes"
+loadscreen 'ui.html'
+loadscreen_cursor 'yes'
+loadscreen_manual_shutdown 'yes'
+
+lua54 'yes'
+dependency '/assetpacks'

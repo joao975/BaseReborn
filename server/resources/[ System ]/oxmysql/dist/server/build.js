@@ -22426,10 +22426,10 @@ var init_deprecated = __esm({
     init_query();
     init_transaction();
     deprecated = (invokingResource) => {
-      setTimeout(() => {
+      /* setTimeout(() => {
         console.log(`^3[WARNING] ${invokingResource} triggered a deprecated function! Exports from prior to v1.9.0 will be removed in a future update.
       Refer to the readme for information on updating.^0`);
-      }, 500);
+      }, 500); */
       deprecated = void 0;
     };
     global.exports(
