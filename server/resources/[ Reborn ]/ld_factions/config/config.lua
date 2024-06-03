@@ -75,7 +75,6 @@ orgsConfig.Permissions = {
 }
 
 orgsConfig.List = {
-
 	-- EXEMPLO
 	--[[ ["Ballas"] = {
 		config = {
@@ -87,7 +86,6 @@ orgsConfig.List = {
 				['pistolammo'] = true,
             }
 		},
-		
 		groups = {
 			["Ballas"] = { -- CARGO
 				prefix = "Lider", -- PREFIX
@@ -129,7 +127,6 @@ orgsConfig.List = {
 				["gunpowder"] = true,
             }
 		},
-		
 		groups = {
 			["MiliciaLider"] = { -- CARGO
 				prefix = "Lider", -- PREFIX
@@ -163,6 +160,157 @@ orgsConfig.List = {
 				tier = 2, -- Nivel do Cargo ( Para ter uma Ordem )
 			},
 			["Bahamas"] = { -- CARGO
+				prefix = "Membro", -- PREFIX
+				tier = 1, -- Nivel do Cargo ( Para ter uma Ordem )
+			},
+		}
+	},
+	["Mafia"] = {
+		config = {
+			maxMembers = 15, -- Maximo de Jogadores
+			listMetas = {
+                -- ITEM / SEMPRE TRUE
+                ['m1911'] = true,
+                ['fiveseven'] = true,
+                ['akcompact'] = true,
+				['uzi'] = true,
+				["ak103"] = true,
+				["ak74"] = true,
+            }
+		},
+		
+		groups = {
+			["MafiaLider"] = { -- CARGO
+				prefix = "Lider", -- PREFIX
+				leader = true, -- Se é lider ou não
+				tier = 2, -- Nivel do Cargo ( Para ter uma Ordem )
+			},
+			["Mafia"] = { -- CARGO
+				prefix = "Membro", -- PREFIX
+				tier = 1, -- Nivel do Cargo ( Para ter uma Ordem )
+			},
+		}
+	},
+	["Mafia"] = {
+		config = {
+			maxMembers = 15, -- Maximo de Jogadores
+			listMetas = {
+                -- ITEM / SEMPRE TRUE
+                ['m1911'] = true,
+                ['fiveseven'] = true,
+                ['akcompact'] = true,
+				['uzi'] = true,
+				["ak103"] = true,
+				["ak74"] = true,
+            }
+		},
+		
+		groups = {
+			["MafiaLider"] = { -- CARGO
+				prefix = "Lider", -- PREFIX
+				leader = true, -- Se é lider ou não
+				tier = 2, -- Nivel do Cargo ( Para ter uma Ordem )
+			},
+			["Mafia"] = { -- CARGO
+				prefix = "Membro", -- PREFIX
+				tier = 1, -- Nivel do Cargo ( Para ter uma Ordem )
+			},
+		}
+	},
+	["Vermelhos"] = {
+		config = {
+			maxMembers = 15, -- Maximo de Jogadores
+			listMetas = {
+                -- ITEM / SEMPRE TRUE
+                ['weed'] = true,
+            }
+		},
+		
+		groups = {
+			["VermelhosLider"] = { -- CARGO
+				prefix = "Lider", -- PREFIX
+				leader = true, -- Se é lider ou não
+				tier = 2, -- Nivel do Cargo ( Para ter uma Ordem )
+			},
+			["Vermelhos"] = { -- CARGO
+				prefix = "Membro", -- PREFIX
+				tier = 1, -- Nivel do Cargo ( Para ter uma Ordem )
+			},
+		}
+	},
+	["Azuis"] = {
+		config = {
+			maxMembers = 15, -- Maximo de Jogadores
+			listMetas = {
+                -- ITEM / SEMPRE TRUE
+                ['cocaine'] = true,
+            }
+		},
+		
+		groups = {
+			["AzuisLider"] = { -- CARGO
+				prefix = "Lider", -- PREFIX
+				leader = true, -- Se é lider ou não
+				tier = 2, -- Nivel do Cargo ( Para ter uma Ordem )
+			},
+			["Azuis"] = { -- CARGO
+				prefix = "Membro", -- PREFIX
+				tier = 1, -- Nivel do Cargo ( Para ter uma Ordem )
+			},
+		}
+	},
+	["Verdes"] = {
+		config = {
+			maxMembers = 15, -- Maximo de Jogadores
+			listMetas = {
+                -- ITEM / SEMPRE TRUE
+                ['meth'] = true,
+            }
+		},
+		
+		groups = {
+			["VerdesLider"] = { -- CARGO
+				prefix = "Lider", -- PREFIX
+				leader = true, -- Se é lider ou não
+				tier = 2, -- Nivel do Cargo ( Para ter uma Ordem )
+			},
+			["Verdes"] = { -- CARGO
+				prefix = "Membro", -- PREFIX
+				tier = 1, -- Nivel do Cargo ( Para ter uma Ordem )
+			},
+		}
+	},
+	["Motoclub"] = {
+		config = {
+			maxMembers = 15, -- Maximo de Jogadores
+			listMetas = {}
+		},
+		
+		groups = {
+			["MotoclubLider"] = { -- CARGO
+				prefix = "Lider", -- PREFIX
+				leader = true, -- Se é lider ou não
+				tier = 2, -- Nivel do Cargo ( Para ter uma Ordem )
+			},
+			["Motoclub"] = { -- CARGO
+				prefix = "Membro", -- PREFIX
+				tier = 1, -- Nivel do Cargo ( Para ter uma Ordem )
+			},
+		}
+	},
+	["Vanilla"] = {
+		config = {
+			maxMembers = 15, -- Maximo de Jogadores
+			listMetas = {}
+		},
+		
+		groups = {
+			["VanillaLider"] = { -- CARGO
+				prefix = "Lider", -- PREFIX
+				leader = true, -- Se é lider ou não
+				tier = 2, -- Nivel do Cargo ( Para ter uma Ordem )
+			},
+			["Vanilla"] = { -- CARGO
 				prefix = "Membro", -- PREFIX
 				tier = 1, -- Nivel do Cargo ( Para ter uma Ordem )
 			},

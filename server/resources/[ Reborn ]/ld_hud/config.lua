@@ -1,6 +1,6 @@
 Config = {}
 
-Config.logo = "https://cdn.discordapp.com/attachments/815987015245889616/1007448123473403936/REBORN_WHITE.png"
+Config.logo = "./src/img/logo.png"
 Config.userms = 1000
 Config.usermscar = 400
 Config.maxLife = 400

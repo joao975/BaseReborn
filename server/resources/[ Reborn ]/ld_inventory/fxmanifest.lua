@@ -25,6 +25,7 @@ files {
 	'ui/*.css',
 	'ui/recipes.js',
 	'ui/assets/js/*.js',
+	'ui/assets/images/playerbg.png',
 	'ui/assets/images/items/*.png',
 	'ui/assets/images/items/*.jpg',
 	'ui/assets/images/geral/*.png',

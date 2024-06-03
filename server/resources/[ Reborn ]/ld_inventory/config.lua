@@ -67,14 +67,9 @@ config.weapons = {
 -------------------------------------------------------------------------------------------------------------------------
 -- CRAFTS / configuração das coordenadas / Para adicionar crafts entre em ui > recipes.js
 -------------------------------------------------------------------------------------------------------------------------
-
 config.crafts = {
 	coords = {
-		["m1911"] = { -2366.83,1744.36,215.48 },
-		["fiveseven"] = { -2366.83,1744.36,215.48 },
-		["uzi"] = { -2366.83,1744.36,215.48 },
-		["akcompact"] = { -2366.83,1744.36,215.48 },
-		["ak74"] = { -2366.83,1744.36,215.48 },
+		["toolbox"] = {},
 	},
 	checkDistance = function(source, item)
 		local playerCoords = GetEntityCoords(GetPlayerPed(source))
@@ -84,7 +79,7 @@ config.crafts = {
 			if #(playerCoords - vector3(x,y,z)) <= 5 then
 				return true
 			end
-			TriggerClientEvent("Notify",source,"Você não esta em um lugar apropriado.", 5000)
+			TriggerClientEvent("Notify",source,'negado',"Você não esta em um lugar apropriado.", 5000)
 			return false
 		else
 			return true
@@ -119,13 +114,13 @@ config.chests = {
 	list = {
 		['Roxos'] = { ['x'] = 161.53, ['y'] = -985.91, ['z'] = 30.1, ['weight'] = 5000, ['slots'] = 72, ['perm'] = 'ballas.permissao', ['webhook'] = '' },
 		['Policia'] = { ['x'] = -1078.11, ['y'] = -815.75, ['z'] = 11.04, ['weight'] = 5000, ['slots'] = 72, ['perm'] = 'policia.permissao', ['webhook'] = '' },
-		['Vermelhos'] = { ['x'] = 1581.89, ['y'] = -26.92, ['z'] = 169.21, ['weight'] = 5000, ['slots'] = 72, ['perm'] = 'vermelhos.permissao', ['webhook'] = '' },
-		['Azuis'] = { ['x'] = 1842.73, ['y'] = 21.5, ['z'] = 168.48, ['weight'] = 5000, ['slots'] = 72, ['perm'] = 'azuis.permissao', ['webhook'] = '' },
-		['Verdes'] = { ['x'] = 766.62, ['y'] = -289.07, ['z'] = 63.35, ['weight'] = 5000, ['slots'] = 72, ['perm'] = 'verdes.permissao', ['webhook'] = '' },
-		['Bahamas'] = { ['x'] = 1409.09, ['y'] = -729.15, ['z'] = 74.73, ['weight'] = 5000, ['slots'] = 72, ['perm'] = 'bahamas.permissao', ['webhook'] = '' },
+		['Vermelhos'] = { ['x'] = 1278.87, ['y'] = -195.74, ['z'] = 105.08, ['weight'] = 5000, ['slots'] = 72, ['perm'] = 'vermelhos.permissao', ['webhook'] = '' },
+		['Azuis'] = { ['x'] = 2250.09, ['y'] = 51.49, ['z'] = 251.42, ['weight'] = 5000, ['slots'] = 72, ['perm'] = 'azuis.permissao', ['webhook'] = '' },
+		['Verdes'] = { ['x'] = 1719.06, ['y'] = 396.15, ['z'] = 245.27, ['weight'] = 5000, ['slots'] = 72, ['perm'] = 'verdes.permissao', ['webhook'] = '' },
+		['Bahamas'] = { ['x'] = -1884.34, ['y'] = 2069.89, ['z'] = 145.58, ['weight'] = 5000, ['slots'] = 72, ['perm'] = 'bahamas.permissao', ['webhook'] = '' },
 		['Mafia'] = { ['x'] = 1086.44, ['y'] = 3056.3, ['z'] = 51.06, ['weight'] = 5000, ['slots'] = 72, ['perm'] = 'mafia.permissao', ['webhook'] = '' },
-		['Milicia'] = { ['x'] = 2162.52, ['y'] = 3949.84, ['z'] = 37.02, ['weight'] = 5000, ['slots'] = 72, ['perm'] = 'milicia.permissao', ['webhook'] = '' },
-		['Motoclub'] = { ['x'] = 348.63, ['y'] = 3538.92, ['z'] = 39.37, ['weight'] = 5000, ['slots'] = 72, ['perm'] = 'motoclub.permissao', ['webhook'] = '' },
+		['Milicia'] = { ['x'] = 1392.13, ['y'] = 1134.07, ['z'] = 109.75, ['weight'] = 5000, ['slots'] = 72, ['perm'] = 'milicia.permissao', ['webhook'] = '' },
+		['Motoclub'] = { ['x'] = 977.22, ['y'] = -104.03, ['z'] = 74.85, ['weight'] = 5000, ['slots'] = 72, ['perm'] = 'motoclub.permissao', ['webhook'] = '' },
 		['Vanilla'] = { ['x'] = 93.37, ['y'] = -1291.34, ['z'] = 29.27, ['weight'] = 5000, ['slots'] = 72, ['perm'] = 'vanilla.permissao', ['webhook'] = '' },
 		['Hospital'] = { ['x'] = -465.81, ['y'] = -293.78, ['z'] = 34.92, ['weight'] = 5000, ['slots'] = 72, ['perm'] = 'paramedico.permissao', ['webhook'] = '' },
 	}
@@ -237,20 +232,6 @@ config.shops = {
 				["flashlight"] = 675
 			}
 		}, 
-		["Cassino"] = {
-			mode = "Both",
-			payment = {
-				item = "dollars",
-				tax = 1.0,
-			},
-			webhook = "",
-			coords = {
-				[1] = vec3(948.42,33.56,71.84),
-			},
-			list = {
-				["fichas"] = 1,
-			}
-		},
 		["Arsenal"] = {
 			mode = "Buy", -- Buy (apenas compras), Sell (apenas venda), Both (compra E venda)
 			payment = {
@@ -307,6 +288,20 @@ config.shops = {
 			list = {
 				["fishingrod"] = 500,
 				['bait'] = 20,
+			}
+		},
+		["Cassino"] = {
+			mode = "Both",
+			payment = {
+				item = "dollars",
+				tax = 1.0,
+			},
+			webhook = "",
+			coords = {
+				[1] = vec3(948.42,33.56,71.84),
+			},
+			list = {
+				["fichas"] = 1,
 			}
 		},
 		['Peixes'] = {

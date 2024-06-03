@@ -7,6 +7,8 @@ local Tools = module("vrp","lib/Tools")
 
 vRP = Proxy.getInterface("vRP")
 vRPclient = Tunnel.getInterface("vRP")
+ESX = exports['es_extended']:getSharedObject()
+QBCore = exports['qb-core']:GetCoreObject()
 
 vCU = Tunnel.getInterface("inventory_client")
 vCLIENT = Tunnel.getInterface("inventory")
@@ -33,9 +35,6 @@ Citizen.CreateThread(function()
 	end
 end)
 
-ESX = nil
-TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
-
 func.useItem = function(itemName,ramount)
 	local source = source
 	local user_id = vRP.getUserId(source)
@@ -45,6 +44,7 @@ func.useItem = function(itemName,ramount)
 		local type = vRP.itemTypeList(itemName)
 		if type == 'use' then
 			ESX.UseItem(source, itemName)
+			QBCore.Functions.UseItem(source, itemName)
 			if itemName == "mochila" then
 				if vRP.getBackpack(user_id) >= 90 then
 					TriggerClientEvent("Notify",source,"negado","Você não pode equipar mais mochilas.",8000)
