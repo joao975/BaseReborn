@@ -745,6 +745,11 @@ AddEventHandler("vrp_towdriver:syncTow",function(vehid01,vehid02,mod)
 		end
 	end
 end)
+
+RegisterNetEvent("towdriver:invokeTow")
+AddEventHandler("towdriver:invokeTow",function()
+	ExecuteCommand("tow")
+end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- CHECKSERVICE
 -----------------------------------------------------------------------------------------------------------------------------------------

@@ -5,11 +5,11 @@ Farms = {}
 --------##########################----------
 
 Farms.desmanche = {
-    IniciarServico = { 215.41,3613.59,37.45 },                         -- Onde se inicia o serviço e verifica a existência de um carro
-    LocalDesmancharCarro = { 211.97,3608.88,37.45 },                   -- Onde deve haver o carro que será desmanchado para poder continuar o desmanche
-    LocalFerramentas = { 210.49,3614.87,37.45,8.66 },                  -- Local onde 'pegará' as ferramentas
-    AnuncioChassi = { 215.41,3613.59,37.45 },                          -- Onde finalizará a missão para entregar o chassi e receber dinheiro e itens
-    Computador = { 215.76,3614.1,38.26,345.1 },                        -- Local do computador
+    IniciarServico = { 474.78,-1308.48,29.2 },                         -- Onde se inicia o serviço e verifica a existência de um carro
+    LocalDesmancharCarro = { 479.85,-1318.31,29.02 },                   -- Onde deve haver o carro que será desmanchado para poder continuar o desmanche
+    LocalFerramentas = { 473.81,-1314.05,29.2,119.06 },                  -- Local onde 'pegará' as ferramentas
+    AnuncioChassi = { 472.15,-1310.71,29.22,107.72 },                          -- Onde finalizará a missão para entregar o chassi e receber dinheiro e itens
+    Computador = { 472.15,-1310.71,29.22,107.72 },                        -- Local do computador
     RestritoParaDesmanche = true,                                      -- É restrito para quem tiver só a permissão do desmanche? (TRUE/FALSE)
     PermissaoDesmanche= 'Motoclub',                                   -- Se RestritoParaDesmanche for TRUE, aqui deverá ter a permissão que será verifiada.
 
@@ -64,7 +64,7 @@ Farms.maconha = {
 
 Farms.meta = {
     locais = {
-        { ['id'] = 1, ['x'] =  1493.17, ['y'] = 6390.24, ['z'] = 21.26, ['text'] = "colocar os ingredientes", ['perm'] = "Verdes" },
+        { ['id'] = 1, ['x'] = 1493.17, ['y'] = 6390.24, ['z'] = 21.26, ['text'] = "colocar os ingredientes", ['perm'] = "Verdes" },
         { ['id'] = 2, ['x'] = 1504.89, ['y'] = 6393.25, ['z'] = 20.79, ['text'] = "quebrar metanfetamina", ['perm'] = "Verdes" }, 
         { ['id'] = 3, ['x'] = 1500.67, ['y'] = 6394.03, ['z'] = 20.79, ['text'] = "embalar metanfetamina", ['perm'] = "Verdes" },
     },
