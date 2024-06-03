@@ -1,4 +1,5 @@
 local Webhooks = {
+	createAccount = "",
 	webhookadmin = "",
 	webhookkick = "",
 	webhookgive = "",

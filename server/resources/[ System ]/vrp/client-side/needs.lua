@@ -66,7 +66,8 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 function tvRP.setArmour(amount)
 	local ped = PlayerPedId()
-	local armour = GetPedArmour(ped)
+	local armour = GetPedArmour(ped) or 0
+	amount = tonumber(amount) or 0
 	SetPedArmour(ped,parseInt(armour+amount))
 end
 -----------------------------------------------------------------------------------------------------------------------------------------

@@ -5,12 +5,17 @@ local crouch = false
 local point = false
 local celular = false
 local cancelando = false
+
+LocalPlayer["state"]:set("Handcuff",false,true)
+LocalPlayer["state"]:set("Commands",false,true)
+LocalPlayer["state"]:set("Premium",false,false)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- CANCELANDO
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterNetEvent("cancelando")
 AddEventHandler("cancelando",function(status)
 	cancelando = status
+	LocalPlayer["state"]:set("Commands",status,true)
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- STATUS:CELULAR

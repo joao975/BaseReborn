@@ -3,9 +3,9 @@
 -----------------------------------------------------------------------------------------------------------------------------------------
 usersIdentity = {}
 
-function vRP.getUserIdentity(user_id)
+function vRP.getUserIdentity(user_id,refresh)
 	if not user_id then return {} end
-	if not usersIdentity[user_id] then
+	if not usersIdentity[user_id] or refresh then
 		usersIdentity[user_id] = {}
 		local rows = vRP.getInformation(user_id)
 		if rows[1] then

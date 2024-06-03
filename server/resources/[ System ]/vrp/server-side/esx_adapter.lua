@@ -266,12 +266,12 @@ function ESX.GetPlayerFromIdentifier(identifier)
 end
 
 function ESX.GetIdentifier(playerId)
-    for k, v in ipairs(GetPlayerIdentifiers(playerId)) do
-        if string.match(v, 'license:') then
-            local identifier = string.gsub(v, 'license:', '')
-            return identifier
-        end
-    end
+  for k, v in ipairs(GetPlayerIdentifiers(playerId)) do
+      if string.match(v, 'license:') then
+          local identifier = string.gsub(v, 'license:', '')
+          return identifier
+      end
+  end
 end
 
 function ESX.RefreshJobs()
@@ -458,7 +458,7 @@ end
   end
 end ]]
 
-if not Config.Multichar then
+--[[ if not Config.Multichar then
   AddEventHandler('playerConnecting', function(name, setCallback, deferrals)
     deferrals.defer()
     local playerId = source
@@ -477,7 +477,7 @@ if not Config.Multichar then
         'There was an error loading your character!\nError code: identifier-missing\n\nThe cause of this error is not known, your identifier could not be found. Please come back later or report this problem to the server administration team.')
     end
   end)
-end
+end ]]
 
 function loadESXPlayer(identifier, playerId, isNew)
   local userData = {accounts = {}, inventory = {}, job = {}, loadout = {}, playerName = GetPlayerName(playerId), weight = 0}

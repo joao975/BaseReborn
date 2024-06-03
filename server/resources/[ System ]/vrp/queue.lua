@@ -4,6 +4,7 @@ local Queue = {}
 local maxPlayers = 1024
 local priorityUsers = {}
 local languages = Reborn.Language()
+local Webhooks = module("Reborn/webhooks")
 Queue.QueueList = {}
 Queue.PlayerList = {}
 Queue.PlayerCount = 0
@@ -539,34 +540,227 @@ AddEventHandler("queue:playerConnecting",function(source,ids,name,setKickReason,
 	local source = source
     local languages = Reborn.Language()
     local steam = vRP.getSteam(source)
-    local multi_personagem = Reborn.multi_personagem()
+	local maintenance = Reborn.maintenance()
+	if maintenance and maintenance.enabled then
+		if maintenance[steam] then
+			return deferrals.done()
+		end
+		return deferrals.done(maintenance.text)
+	end
 	local rows = vRP.getInfos(steam)
+    local multi_personagem = Reborn.multi_personagem()
     if multi_personagem['Enabled'] then
         if steam then
             if not rows[1] or not rows[1].banned then
                 if rows[1] and rows[1].whitelist then
                     deferrals.done()
                 else
-                    if rows[1] == nil then
-						local _rows,affected = vRP.query("vRP/create_user",{ steam = steam })
-						if #affected > 0 then
-							local user_id = affected[1].id
-							deferrals.done(languages['whitelist'].."\n[Steam: "..steam.." ]\n[ ID de liberação: "..user_id.." ]")
-							TriggerEvent("queue:playerConnectingRemoveQueues",ids)
-							return
-						end
-					else
-						deferrals.done(languages['whitelist'].."\n[Steam: "..steam.." ]\n[ ID de liberação: "..rows[1]['id'].." ]")
-						TriggerEvent("queue:playerConnectingRemoveQueues",ids)
+					vRP.query("vRP/create_user",{ steam = steam })
+					return deferrals.done()
+					--[[ local Card = {
+                        ["$schema"] = "http://adaptivecards.io/schemas/adaptive-card.json",
+                        ["type"] = "AdaptiveCard",
+                        ["version"] = "1.4",
+                        ["horizontalAlignment"] = 'center',
+                        ["body"] = {
+                            {
+                                ["type"] = "Container",
+                                ["items"] = {
+                                    {
+                                        ["type"] = "TextBlock",
+                                        ["text"] = "Bem-vindo à Base Reborn",
+                                        ["weight"] = 'bolder',
+                                        ["size"] = 'extraLarge', 
+                                    },
+                                    {
+                                        ["type"] = "ColumnSet",
+                                        ["columns"] = {
+                                            {
+                                                ["type"] = "Column",
+                                                ["width"] = "400px",
+                                                ["items"] = {
+                                                    {
+                                                        ["type"] = "TextBlock",
+                                                        ["text"] = "Olá, "..name.."! Prepare-se para mergulhar na vida vibrante e imprevisível de Base City! Aqui, cada escolha molda o seu destino e cada ação tem uma consequência. Junte-se a outros jogadores, estabeleça alianças, enfrente adversários e construa sua própria história neste vasto universo roleplay. Lembre-se: Respeite as regras, entre no personagem e divirta-se!",
+                                                        ["isSubtle"] = true,
+                                                        ["wrap"] = true,
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                    {
+                                        ["type"] = "ColumnSet",
+                                        ["columns"] = {
+                                            {
+                                                ["type"] = "Column",
+                                                ["width"] = "250px",
+                                                ["items"] = {
+                                                    {
+                                                        ["type"] = "Input.ChoiceSet",
+                                                        ["id"] = "choice_set",
+                                                        ["label"] = "Onde nos encontrou?",
+                                                        ["placeholder"] = "Selecionar",
+                                                        ["choices"] = {
+                                                            {
+                                                                ["id"] = 'input_text',
+                                                                ["type"] = "input_text",
+                                                                ["title"] = 'Lista Fivem',
+                                                                ["value"] = 'Lista Fivem'
+                                                            },
+                                                            {
+                                                                ["id"] = 'input_text',
+                                                                ["type"] = "input_text",
+                                                                ["title"] = 'Ultima Season',
+                                                                ["value"] = 'Ultima Season'
+                                                            },
+                                                            {
+                                                                ["id"] = 'input_text',
+                                                                ["type"] = "input_text",
+                                                                ["title"] = 'Tiktok',
+                                                                ["value"] = 'Tiktok'
+                                                            },
+                                                            {
+                                                                ["id"] = 'input_text',
+                                                                ["type"] = "input_text",
+                                                                ["title"] = 'Outros',
+                                                                ["value"] = 'Outros'
+                                                            },
+                                                        }
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                }
+                            },
+                            {
+                                ["isVisible"] = false,
+                                ["type"] = "Container",
+                                ["items"] = {
+                                    {
+                                        ["type"] = "TextBlock",
+                                        ["text"] = "DISCORD",
+                                        ["weight"] = 'bolder',
+                                        ["size"] = 'extraLarge', 
+                                    },
+                                    {
+                                        ["type"] = "TextBlock",
+                                        ["text"] = "Siga as instruções para conectar ao discord",
+                                        ["isSubtle"] = true,
+                                        ["wrap"] = true,
+                                    },
+                                    {
+                                        ["type"] = "Image",
+                                        ["url"] = "https://cdn.discordapp.com/attachments/1128809150508449934/1159214802552492042/imgs.png",
+                                    }, 
+                                    {
+                                        ["type"] = "ColumnSet",
+                                        ["columns"] = {
+                                            {
+                                                ["type"] = "Column",
+                                                ["width"] = "250px",
+                                                ["items"] = {
+                                                    {
+                                                        ["type"] = "TextBlock",
+                                                        ["text"] = "1 PASSO: COPIE SEU ID DE LIBERAÇÃO ABAIXO E COLE NA SALA DE LIBERAR ID DO DISCORD",
+                                                        ["size"] = 'Small', 
+                                                        ["wrap"] = true
+                                                    },
+                                                },
+                                            },
+                                            
+                                        },
+                                    },
+                                    {
+                                        ["horizontalAlignment"] = "Center",
+                                        ["type"] = "ActionSet",
+                                        ["actions"] = {
+                                            {
+                                                ["type"] = "Action.Submit",
+                                                ["id"] = 'copy_to_token',
+                                                ["title"] = 'SEU ID DE LIBERAÇÃO',
+                                                ["iconUrl"] = 'https://cdn.discordapp.com/attachments/1128809150508449934/1159211818854658108/discord.png'
+                                            },
+                                        },
+                                    },
+                                    {
+                                        ["type"] = "TextBlock",
+                                        ["text"] = "2 PASSO: ENTRE EM NOSSO DISCORD",
+                                        ["size"] = 'Small', 
+                                        ["wrap"] = true
+                                    },
+                                    {
+                                        ["horizontalAlignment"] = "Center",
+                                        ["type"] = "ActionSet",
+                                        ["actions"] = {
+                                            {
+                                                ["type"] = "Action.OpenUrl",
+                                                ["id"] = 'copy_to_discord',
+                                                ["title"] = 'https://discord.gg/F2K5CCqcaZ',
+                                                ["url"] = 'https://discord.gg/F2K5CCqcaZ',
+                                                ["iconUrl"] = 'https://cdn.discordapp.com/attachments/1128809150508449934/1159211818854658108/discord.png'
+                                            },
+                                        },
+                                    },
+                                }
+                            }
+                        },
+                        ["actions"] = {
+                            {
+                                ["type"] = "Action.Submit",
+								["id"] = 'confirm_card',
+                                ["title"] = "CONFIRMAR"
+                            }
+                        }
+                    }
+                    function CardCallback(data, rawData)
+                        if not Card["time"] or tonumber(Card["time"]) <= os.time() then
+                            if rows[1] then
+                                if rows[1].whitelist then
+                                    deferrals.done()
+                                else
+                                    if data.submitId == "copy_to_token" then
+                                        os.execute(string.format('echo %s | clip',rows[1].id))
+									elseif data.submitId == "confirm_card" then
+										local newRows = vRP.getInfos(steam)
+										if newRows[1].whitelist then
+											deferrals.done()
+										else
+											deferrals.done("Você ainda não foi liberado. Tente novamente")
+										end
+										-- TriggerEvent("queue:playerConnecting",source,ids,name,setKickReason,deferrals)
+                                    end
+                                end
+                            else
+                                if data.choice_set then
+									local _rows,affected = vRP.query("vRP/create_user",{ steam = steam })
+									if #affected > 0 then
+										local user_id = affected[1].id
+										Card["body"][2]["items"][5]["actions"][1]["title"] = 'SEU ID DE LIBERAÇÃO: '..user_id
+										Card["body"][1]["isVisible"] = false
+										Card["body"][2]["isVisible"] = true 
+										vRP.createWeebHook(Webhooks.createAccount,"```ID DE LIBERAÇÃO: "..user_id.."\nNOME:"..name.." \nIP: "..GetPlayerEndpoint(source).."\n**Onde nos encontrou:** "..data.choice_set,3092790)
+									end
+                                end                 
+                            end
+                            Card["time"] = tostring(os.time()+2)
+                        end
+                        Card["clock"] = tostring(os.clock())
+                        deferrals.presentCard(Card, CardCallback) 
+					end
+					if rows[1] then
+                        Card["body"][1]["isVisible"] = false
+                        Card["body"][2]["isVisible"] = true
+                        Card["body"][2]["items"][5]["actions"][1]["title"] = 'SEU ID DE LIBERAÇÃO: '..rows[1].id
                     end
+                    deferrals.presentCard(Card, CardCallback) ]]
                 end
             else
                 deferrals.done("Você foi banido da cidade. Sua steam: "..steam)
-                TriggerEvent("queue:playerConnectingRemoveQueues",ids)
             end
         else
             deferrals.done("Ocorreu um problema de identificação da sua steam.")
-            TriggerEvent("queue:playerConnectingRemoveQueues",ids)
         end
     else
         local user_id = vRP.getUserIdByIdentifiers(source,ids)
@@ -576,17 +770,15 @@ AddEventHandler("queue:playerConnecting",function(source,ids,name,setKickReason,
                     deferrals.done()
                 else
                     deferrals.done(languages['whitelist'].."\n[ID: "..user_id.." ]")
-                    TriggerEvent("queue:playerConnectingRemoveQueues",ids)
                 end
             else
                 deferrals.done("Você foi banido da cidade. Seu ID: "..user_id)
-                TriggerEvent("queue:playerConnectingRemoveQueues",ids)
             end
         else
             deferrals.done("Ocorreu um problema de identificação.")
-            TriggerEvent("queue:playerConnectingRemoveQueues",ids)
         end
     end
+	TriggerEvent("queue:playerConnectingRemoveQueues",ids)
 end)
 
 RegisterServerEvent("Queue:playerActivated")

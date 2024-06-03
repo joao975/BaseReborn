@@ -11,6 +11,37 @@ AddEventHandler("syncmala",function(index)
 		end
 	end
 end)
+
+CreateThread(function()
+	while true do
+		local Pid = PlayerId()
+		local Ped = PlayerPedId()
+
+		SetPlayerHealthRechargeMultiplier(Pid,0.0)
+		SetPlayerHealthRechargeLimit(Pid,0.0)
+
+		if GetEntityMaxHealth(Ped) ~= 400 then
+			SetEntityMaxHealth(Ped,400)
+			SetPedMaxHealth(Ped,400)
+		end
+
+		if GetPlayerMaxArmour(Ped) ~= 100 then
+			SetPlayerMaxArmour(Ped,100)
+		end
+
+		if GetPlayerMaxStamina(Pid) ~= 200.0 then
+			SetPlayerMaxStamina(Pid,200.0)
+		end
+
+		Wait(100)
+	end
+end)
+
+CreateThread(function()
+	for i = 1,121 do
+		EnableDispatchService(i,false)
+	end
+end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- VARIABLES
 -----------------------------------------------------------------------------------------------------------------------------------------

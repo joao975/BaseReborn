@@ -255,8 +255,11 @@ function QBCore.Functions.CanUseItem(item)
 end
 
 function QBCore.Functions.UseItem(source, item)
-    if GetResourceState('qb-inventory') == 'missing' then return end
-    exports['qb-inventory']:UseItem(source, item)
+    if QBCore.UsableItems[item] then
+        QBCore.UsableItems[item](source,item)
+    end
+    -- if GetResourceState('qb-inventory') == 'missing' then return end
+    -- exports['qb-inventory']:UseItem(source, item)
 end
 
 -- Kick Player
@@ -965,7 +968,7 @@ local function onPlayerConnecting(name, _, deferrals)
     -- Add any additional defferals you may need!
 end
 
-AddEventHandler('playerConnecting', onPlayerConnecting)
+-- AddEventHandler('playerConnecting', onPlayerConnecting)
 
 -- Open & Close Server (prevents players from joining)
 

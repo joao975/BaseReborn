@@ -23,4 +23,3 @@ end
 function vRP.vehicleType(vname)
 	return exports['will_garages_v2']:getVehicleType(vname)
 end
-

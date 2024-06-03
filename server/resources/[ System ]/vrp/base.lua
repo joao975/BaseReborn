@@ -273,6 +273,7 @@ AddEventHandler("baseModule:idLoaded",function(source,user,model)
 			TriggerClientEvent("Notify",source,"importante",first_login['Mensagem'],20000)
 			vRP.user_tables[user_id].weaps = {}
 			vRP.user_tables[user_id].inventorys = {}
+			vRP.user_tables[user_id].health = 400
 			if model then
 				if model == "female" then
 					model = "mp_f_freemode_01"

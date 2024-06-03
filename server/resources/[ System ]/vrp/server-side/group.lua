@@ -52,6 +52,12 @@ function vRP.insertPermission(user_id,perm)
 	if not permissions[user] then permissions[user] = {} end
 	table.insert(permissions[user], { permiss = perm } )
 	if not nplayer then return end
+	Player(nplayer)["state"][perm] = true
+	if groups[perm] and groups[perm]._config then
+		if groups[perm]._config.gtype and groups[perm]._config.gtype == "vip" then
+			Player(nplayer)["state"]["Premium"] = true
+		end
+	end
 	if vRP.hasPermission(user, "policia.permissao") then
 		TriggerClientEvent("target:setState",nplayer,"Police",true)
 		TriggerEvent("vrp_blipsystem:serviceEnter",nplayer,"Policial",77)
@@ -69,14 +75,19 @@ end
 function vRP.removePermission(user_id,perm)
 	local user = parseInt(user_id)
 	local nplayer = vRP.getUserSource(user)
+	if nplayer then
+		TriggerClientEvent("target:setState",nplayer,perm,nil)
+		Player(nplayer)["state"][perm] = false
+		if groups[perm] and groups[perm]._config then
+			if groups[perm]._config.gtype and groups[perm]._config.gtype == "vip" then
+				Player(nplayer)["state"]["Premium"] = false
+			end
+		end
+	end
 	if permissions[user] then
 		for k,v in pairs(permissions[user]) do
 			if perm == v.permiss then
 				table.remove(permissions[user], k)
-				if nplayer then
-					TriggerClientEvent("target:setState",nplayer,perm,nil)
-				end
-				return
 			end
 		end
 	end
