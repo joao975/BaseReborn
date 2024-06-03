@@ -14,12 +14,6 @@ src = Tunnel.getInterface("tattoo")
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- Functions
 -----------------------------------------------------------------------------------------------------------------------------------------
-function SendWebhookMessage(webhook,message)
-    if webhook ~= nil and webhook ~= "" then
-        PerformHttpRequest(webhook, function(err, text, headers) end, 'POST', json.encode({content = message}), { ['Content-Type'] = 'application/json' })
-    end
-end
-
 function cx.getTattooShops()
     return tattooShop
 end
@@ -49,16 +43,13 @@ function cx.payment(price, totalPrice, newTatto)
             TriggerClientEvent("Notify",source,"Sucesso","Você pagou <b>$"..totalPrice.." Reais</b> em suas tatuagens.",5000)
             vRP.setUData(user_id,"vRP:tattoos",json.encode(newTatto))
             src.payment(source, true)
-            TriggerEvent("b2k-barbershop:init",user_id)
         else 
             TriggerClientEvent("Notify",source,"Negado","Você não tem dinheiro suficiente",5000)
             src.payment(source, false)
-            TriggerEvent("b2k-barbershop:init",user_id)
         end 
     else 
         TriggerClientEvent("Notify",source,"Negado","Ocorreu um erro na sua compra! Tente novamente!",5000)
         src.payment(source, false)
-        TriggerEvent("b2k-barbershop:init",user_id)
         
     end
 end

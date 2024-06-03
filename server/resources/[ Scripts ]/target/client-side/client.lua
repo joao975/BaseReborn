@@ -775,10 +775,6 @@ local playerVeh = {
 		event = "player:EnterTrunk",
 		label = "Entrar no Porta-Malas",
 		tunnel = "server"
-	},{
-		event = "enterVehmenus",
-		label = "Veiculo menu",
-		tunnel = "client"
 	}
 }
 -----------------------------------------------------------------------------------------------------------------------------------------

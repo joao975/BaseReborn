@@ -76,20 +76,20 @@ function closeGuiLojaTattoo()
     oldTattoo = nil
     totalPrice = 0
     DeleteCam()
-    TriggerServerEvent("barbershop:reset")
+    TriggerServerEvent("player:Debug")
 end
 
 function resetTattoo()
     atualTattoo = oldTattoo
     if oldTattoo then
 		ClearPedDecorations(PlayerPedId())
-        TriggerServerEvent("barbershop:reset")
+        TriggerServerEvent("player:Debug")
 		for k,v in pairs(oldTattoo) do
 			AddPedDecorationFromHashes(PlayerPedId(),GetHashKey(v[1]),GetHashKey(k))
         end
     else 
         ClearPedDecorations(PlayerPedId())
-        TriggerServerEvent("barbershop:reset")
+        TriggerServerEvent("player:Debug")
 	end
 end
 
@@ -229,7 +229,7 @@ end)
 RegisterNUICallback("reset", function(data, cb)
     resetTattoo()
     ClearPedTasks(PlayerPedId())
-    TriggerServerEvent("barbershop:reset")
+    TriggerServerEvent("player:Debug")
     closeGuiLojaTattoo()
 end)
 
@@ -327,6 +327,6 @@ end
 AddEventHandler('onResourceStop', function(resource)
     if resource == GetCurrentResourceName() then
         closeGuiLojaTattoo()
-        TriggerServerEvent("barbershop:reset")
+        TriggerServerEvent("player:Debug")
     end
 end)
