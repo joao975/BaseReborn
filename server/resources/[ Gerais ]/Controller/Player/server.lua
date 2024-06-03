@@ -13,7 +13,7 @@ plVRP = {}
 Tunnel.bindInterface("Player",plVRP)
 plCLIENT = Tunnel.getInterface("Player")
 vTASKBAR = Tunnel.getInterface("taskbar")
-vSKINSHOP = Tunnel.getInterface("skinshop")
+vSKINSHOP = Tunnel.getInterface("will_skinshop")
 
 local Time = {}
 ----------------------------------------------------------------------------------------------------------------------------------------
@@ -637,6 +637,9 @@ function plVRP.carryToggle()
 		end
 	end
 end
+
+RegisterServerEvent("inventory:Carry")
+AddEventHandler("inventory:Carry", plVRP.carryToggle)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- CARRY
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -656,7 +659,7 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- RV
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterCommand("rv",function(source,args,rawCommand)
+function removeVehicle(source)
 	local user_id = vRP.getUserId(source)
 	if user_id then
 		if vRP.hasPermission(user_id,"Police") or vRP.hasPermission(user_id,"Paramedic") or vRP.hasPermission(user_id,"Admin") or vRP.getInventoryItemAmount(user_id,"rope") >= 1 then
@@ -673,11 +676,15 @@ RegisterCommand("rv",function(source,args,rawCommand)
 			end
 		end
 	end
+end
+
+RegisterCommand("rv",function(source,args,rawCommand)
+	removeVehicle(source)
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- CV
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterCommand("cv",function(source,args,rawCommand)
+function putVehicle(source, seat)
 	local user_id = vRP.getUserId(source)
 	if user_id then
 		if vRP.hasPermission(user_id,"Police") or vRP.hasPermission(user_id,"Paramedic") or vRP.hasPermission(user_id,"Admin") or vRP.getInventoryItemAmount(user_id,"rope") >= 1 then
@@ -687,12 +694,26 @@ RegisterCommand("cv",function(source,args,rawCommand)
 					if vehLock ~= 2 then
 						local nplayer = vRPclient.nearestPlayer(source,2)
 						if nplayer then
-							plCLIENT.putVehicle(nplayer,args[1])
+							plCLIENT.putVehicle(nplayer)
 						end
 					end
 				end
 			end
 		end
+	end
+end
+
+RegisterCommand("cv",function(source,args,rawCommand)
+	putVehicle(source)
+end)
+
+RegisterServerEvent("player:cvFunctions")
+AddEventHandler("player:cvFunctions",function(mode)
+	local source = source
+	if mode == "cv" then
+		putVehicle(source)
+	elseif mode == "rv" then
+		removeVehicle(source)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -710,7 +731,7 @@ local preset = {
 				["mask"] = { item = 121, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["shoes"] = { item = 25, texture = 0, defaultItem = 1, defaultTexture = 0 },
 				["tshirt"] = { item = 56, texture = 0, defaultItem = 1, defaultTexture = 0 },
-				["bag"] = { item = 0, texture = 0, defaultItem = 0, defaultTexture = 0 },
+				["backpack"] = { item = 0, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["torso"] = { item = 149, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["accessory"] = { item = 1, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["watch"] = { item = -1, texture = 0, defaultItem = -1, defaultTexture = 0 },
@@ -727,7 +748,7 @@ local preset = {
 				["mask"] = { item = 121, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["shoes"] = { item = 9, texture = 0, defaultItem = 1, defaultTexture = 0 },
 				["tshirt"] = { item = 27, texture = 0, defaultItem = 1, defaultTexture = 0 },
-				["bag"] = { item = 0, texture = 0, defaultItem = 0, defaultTexture = 0 },
+				["backpack"] = { item = 0, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["torso"] = { item = 144, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["accessory"] = { item = 1, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["watch"] = { item = -1, texture = 0, defaultItem = -1, defaultTexture = 0 },
@@ -746,7 +767,7 @@ local preset = {
 				["mask"] = { item = 121, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["shoes"] = { item = 25, texture = 0, defaultItem = 1, defaultTexture = 0 },
 				["tshirt"] = { item = 56, texture = 0, defaultItem = 1, defaultTexture = 0 },
-				["bag"] = { item = 0, texture = 0, defaultItem = 0, defaultTexture = 0 },
+				["backpack"] = { item = 0, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["torso"] = { item = 143, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["accessory"] = { item = 1, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["watch"] = { item = -1, texture = 0, defaultItem = -1, defaultTexture = 0 },
@@ -763,7 +784,7 @@ local preset = {
 				["mask"] = { item = 121, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["shoes"] = { item = 9, texture = 0, defaultItem = 1, defaultTexture = 0 },
 				["tshirt"] = { item = 27, texture = 0, defaultItem = 1, defaultTexture = 0 },
-				["bag"] = { item = 0, texture = 0, defaultItem = 0, defaultTexture = 0 },
+				["backpack"] = { item = 0, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["torso"] = { item = 143, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["accessory"] = { item = 1, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["watch"] = { item = -1, texture = 0, defaultItem = -1, defaultTexture = 0 },
@@ -782,7 +803,7 @@ local preset = {
 				["mask"] = { item = 121, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["shoes"] = { item = 25, texture = 0, defaultItem = 1, defaultTexture = 0 },
 				["tshirt"] = { item = 56, texture = 0, defaultItem = 1, defaultTexture = 0 },
-				["bag"] = { item = 0, texture = 0, defaultItem = 0, defaultTexture = 0 },
+				["backpack"] = { item = 0, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["torso"] = { item = 74, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["accessory"] = { item = 1, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["watch"] = { item = -1, texture = 0, defaultItem = -1, defaultTexture = 0 },
@@ -799,7 +820,7 @@ local preset = {
 				["mask"] = { item = 121, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["shoes"] = { item = 9, texture = 0, defaultItem = 1, defaultTexture = 0 },
 				["tshirt"] = { item = 27, texture = 0, defaultItem = 1, defaultTexture = 0 },
-				["bag"] = { item = 0, texture = 0, defaultItem = 0, defaultTexture = 0 },
+				["backpack"] = { item = 0, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["torso"] = { item = 110, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["accessory"] = { item = 1, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["watch"] = { item = -1, texture = 0, defaultItem = -1, defaultTexture = 0 },
@@ -818,7 +839,7 @@ local preset = {
 				["mask"] = { item = 121, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["shoes"] = { item = 25, texture = 0, defaultItem = 1, defaultTexture = 0 },
 				["tshirt"] = { item = 56, texture = 0, defaultItem = 1, defaultTexture = 0 },
-				["bag"] = { item = 0, texture = 0, defaultItem = 0, defaultTexture = 0 },
+				["backpack"] = { item = 0, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["torso"] = { item = 24, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["accessory"] = { item = 1, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["watch"] = { item = -1, texture = 0, defaultItem = -1, defaultTexture = 0 },
@@ -835,7 +856,7 @@ local preset = {
 				["mask"] = { item = 121, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["shoes"] = { item = 9, texture = 0, defaultItem = 1, defaultTexture = 0 },
 				["tshirt"] = { item = 27, texture = 0, defaultItem = 1, defaultTexture = 0 },
-				["bag"] = { item = 0, texture = 0, defaultItem = 0, defaultTexture = 0 },
+				["backpack"] = { item = 0, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["torso"] = { item = 146, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["accessory"] = { item = 1, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["watch"] = { item = -1, texture = 0, defaultItem = -1, defaultTexture = 0 },
@@ -854,7 +875,7 @@ local preset = {
 				["mask"] = { item = 121, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["shoes"] = { item = 25, texture = 0, defaultItem = 1, defaultTexture = 0 },
 				["tshirt"] = { item = 56, texture = 0, defaultItem = 1, defaultTexture = 0 },
-				["bag"] = { item = 0, texture = 0, defaultItem = 0, defaultTexture = 0 },
+				["backpack"] = { item = 0, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["torso"] = { item = 200, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["accessory"] = { item = 1, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["watch"] = { item = -1, texture = 0, defaultItem = -1, defaultTexture = 0 },
@@ -871,7 +892,7 @@ local preset = {
 				["mask"] = { item = 121, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["shoes"] = { item = 9, texture = 0, defaultItem = 1, defaultTexture = 0 },
 				["tshirt"] = { item = 27, texture = 0, defaultItem = 1, defaultTexture = 0 },
-				["bag"] = { item = 0, texture = 0, defaultItem = 0, defaultTexture = 0 },
+				["backpack"] = { item = 0, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["torso"] = { item = 202, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["accessory"] = { item = 1, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["watch"] = { item = -1, texture = 0, defaultItem = -1, defaultTexture = 0 },
@@ -882,7 +903,7 @@ local preset = {
 		}
 	},
 	["Paramedic"] = {
-		["1"] = {
+		["12"] = {
 			["homem"] = {
 				["hat"] = { item = -1, texture = 0, defaultItem = -1, defaultTexture = 0 },
 				["pants"] = { item = 20, texture = 0, defaultItem = 0, defaultTexture = 0 },
@@ -892,7 +913,7 @@ local preset = {
 				["mask"] = { item = 121, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["shoes"] = { item = 7, texture = 0, defaultItem = 1, defaultTexture = 0 },
 				["tshirt"] = { item = 96, texture = 1, defaultItem = 1, defaultTexture = 0 },
-				["bag"] = { item = 0, texture = 0, defaultItem = 0, defaultTexture = 0 },
+				["backpack"] = { item = 0, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["torso"] = { item = 32, texture = 7, defaultItem = 0, defaultTexture = 0 },
 				["accessory"] = { item = 126, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["watch"] = { item = -1, texture = 0, defaultItem = -1, defaultTexture = 0 },
@@ -909,7 +930,7 @@ local preset = {
 				["mask"] = { item = 121, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["shoes"] = { item = 7, texture = 3, defaultItem = 1, defaultTexture = 0 },
 				["tshirt"] = { item = 101, texture = 1, defaultItem = 1, defaultTexture = 0 },
-				["bag"] = { item = 0, texture = 0, defaultItem = 0, defaultTexture = 0 },
+				["backpack"] = { item = 0, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["torso"] = { item = 58, texture = 7, defaultItem = 0, defaultTexture = 0 },
 				["accessory"] = { item = 96, texture = 0, defaultItem = 0, defaultTexture = 0 },
 				["watch"] = { item = -1, texture = 0, defaultItem = -1, defaultTexture = 0 },
@@ -944,6 +965,21 @@ RegisterCommand("preset",function(source,args,rawCommand)
 					end
 				end
 			end
+		end
+	end
+end)
+
+RegisterServerEvent("player:Preset")
+AddEventHandler("player:Preset",function(Number)
+	local source = source
+	local user_id = vRP.getUserId(source)
+	if user_id then
+		local model = vRPclient.getModelPlayer(source)
+		local modelType = model == "mp_m_freemode_01" and "homem" or "mulher"
+		if preset["Paramedic"][Number] then
+			TriggerClientEvent("updateRoupas",source,preset["Paramedic"][Number][modelType])
+		elseif preset["Police"][Number] then
+			TriggerClientEvent("updateRoupas",source,preset["Police"][Number][modelType])
 		end
 	end
 end)
@@ -997,6 +1033,105 @@ RegisterCommand("premiumfit",function(source,args,rawCommand)
 					TriggerClientEvent("updateRoupas",source,result)
 					TriggerClientEvent("Notify",source,"sucesso","Premiumfit aplicado com sucesso.",3000)
 				end
+			end
+		end
+	end
+end)
+
+local removeFit = {
+	["homem"] = {
+		["hat"] = { item = -1, texture = 0 },
+		["pants"] = { item = 14, texture = 0 },
+		["vest"] = { item = 0, texture = 0 },
+		["backpack"] = { item = 0, texture = 0 },
+		["bracelet"] = { item = -1, texture = 0 },
+		["decals"] = { item = 0, texture = 0 },
+		["mask"] = { item = 0, texture = 0 },
+		["shoes"] = { item = 5, texture = 0 },
+		["tshirt"] = { item = 15, texture = 0 },
+		["torso"] = { item = 15, texture = 0 },
+		["accessory"] = { item = 0, texture = 0 },
+		["watch"] = { item = -1, texture = 0 },
+		["arms"] = { item = 15, texture = 0 },
+		["glass"] = { item = 0, texture = 0 },
+		["ear"] = { item = -1, texture = 0 }
+	},
+	["mulher"] = {
+		["hat"] = { item = -1, texture = 0 },
+		["pants"] = { item = 14, texture = 0 },
+		["vest"] = { item = 0, texture = 0 },
+		["backpack"] = { item = 0, texture = 0 },
+		["bracelet"] = { item = -1, texture = 0 },
+		["decals"] = { item = 0, texture = 0 },
+		["mask"] = { item = 0, texture = 0 },
+		["shoes"] = { item = 5, texture = 0 },
+		["tshirt"] = { item = 15, texture = 0 },
+		["torso"] = { item = 15, texture = 0 },
+		["accessory"] = { item = 0, texture = 0 },
+		["watch"] = { item = -1, texture = 0 },
+		["arms"] = { item = 15, texture = 0 },
+		["glass"] = { item = 0, texture = 0 },
+		["ear"] = { item = -1, texture = 0 }
+	}
+}
+
+RegisterNetEvent("player:Outfit")
+AddEventHandler("player:Outfit",function(Mode)
+	local source = source
+	local Passport = vRP.getUserId(source)
+	if Mode == "aplicar" then
+		local consult = vRP.getSData("saveClothes:"..Passport)
+		local result = json.decode(consult)
+		if result["pants"] ~= nil then
+			TriggerClientEvent("skinshop:Apply",source,result)
+			TriggerClientEvent("Notify",source,"verde","Roupas aplicadas.",3000)
+		else
+			TriggerClientEvent("Notify",source,"amarelo","Roupas não encontradas.",3000)
+		end
+	elseif Mode == "salvar" then
+		local custom = vSKINSHOP.getCustomization(source)
+		if custom then
+			vRP.setSData("saveClothes:"..Passport,json.encode(custom))
+			TriggerClientEvent("Notify",source,"verde","Roupas salvas.",3000)
+		end
+	elseif Mode == "aplicarpre" then
+		local consult = vRP.getSData("premClothes:"..Passport)
+		local result = json.decode(consult)
+		if result["pants"] then
+			TriggerClientEvent("skinshop:Apply",source,result)
+			TriggerClientEvent("Notify",source,"verde","Roupas aplicadas.",5000)
+		else
+			TriggerClientEvent("Notify",source,"amarelo","Roupas não encontradas.",5000)
+		end
+	elseif Mode == "salvarpre" then
+		local custom = vSKINSHOP.getCustomization(source)
+		if custom then
+			vRP.setSData("premClothes:"..Passport,json.encode(custom))
+			TriggerClientEvent("Notify",source,"verde","Roupas salvas.",5000)
+		end
+	elseif Mode == "remover" then
+		local Model = vRP.modelPlayer(source)
+		if Model == "mp_m_freemode_01" then
+			TriggerClientEvent("skinshop:Apply",source,removeFit["homem"])
+			TriggerClientEvent("Notify",source,"verde","Roupas Removidas",3000)
+		elseif Model == "mp_f_freemode_01" then
+			TriggerClientEvent("skinshop:Apply",source,removeFit["mulher"])
+			TriggerClientEvent("Notify",source,"verde","Roupas Removidas",3000)
+		end
+	else
+		TriggerClientEvent("will_skinshop:set"..Mode,source)
+	end
+end)
+
+RegisterServerEvent("skinshop:Remove")
+AddEventHandler("skinshop:Remove",function(Mode)
+	local source = source
+	local user_id = vRP.getUserId(source)
+	if user_id then
+		local nplayer = vRPclient.nearestPlayer(source,2)
+		if nplayer then
+			if vRP.hasPermission(user_id,"Police") or vRP.hasPermission(user_id,"Paramedic") then
+				TriggerClientEvent("will_skinshop:set"..Mode,nplayer)
 			end
 		end
 	end

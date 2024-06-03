@@ -212,6 +212,8 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- SYNCWINS
 -----------------------------------------------------------------------------------------------------------------------------------------
+local vidros = false
+
 RegisterNetEvent("vrp_player:syncWins")
 AddEventHandler("vrp_player:syncWins",function(index)
 	if NetworkDoesNetworkIdExist(index) then
@@ -550,6 +552,7 @@ function plVRP.toggleHandcuff()
 		TriggerEvent("status:celular",false)
 		SetPedComponentVariation(ped,7,0,0,2)
 	end
+	LocalPlayer["state"]:set("Handcuff",handcuff,true)
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- GETHANDCUFF
@@ -976,33 +979,21 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- PUTVEHICLE
 -----------------------------------------------------------------------------------------------------------------------------------------
-function plVRP.putVehicle(seat)
+function plVRP.putVehicle()
 	local veh = vRP.getNearVehicle(11)
 	if IsEntityAVehicle(veh) then
-		if parseInt(seat) <= 1 or seat == nil then
-			seat = -1
-		elseif parseInt(seat) == 2 then
-			seat = 0
-		elseif parseInt(seat) == 3 then
-			seat = 1
-		elseif parseInt(seat) == 4 then
-			seat = 2
-		elseif parseInt(seat) == 5 then
-			seat = 3
-		elseif parseInt(seat) == 6 then
-			seat = 4
-		elseif parseInt(seat) == 7 then
-			seat = 5
-		elseif parseInt(seat) >= 8 then
-			seat = 6
-		end
+		local vehSeats = 10
+		local Ped = PlayerPedId()
 
-		local ped = PlayerPedId()
-		if IsVehicleSeatFree(veh,seat) then
-			ClearPedTasks(ped)
-			ClearPedSecondaryTask(ped)
-			SetPedIntoVehicle(ped,veh,seat)
-		end
+		repeat
+			vehSeats = vehSeats - 1
+			if IsVehicleSeatFree(veh,vehSeats) then
+				ClearPedTasks(Ped)
+				ClearPedSecondaryTask(Ped)
+				SetPedIntoVehicle(Ped,veh,vehSeats)
+				vehSeats = true
+			end
+		until vehSeats == true or vehSeats == 0
 	end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
