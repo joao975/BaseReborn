@@ -49,6 +49,8 @@ function Proxy.addInterface(name,itable)
 		local rets = {}
 		if type(f) == "function" then
 			rets = {f(table.unpack(args,1,table.maxn(args)))}
+		elseif not f then
+			error(("Nenhuma função nomeada como '%s.%s' \nVerifique se o nome está correto ou se precisa de adaptação"):format(name,member))
 		end
 		if rid >= 0 then
 			TriggerEvent(name..":"..identifier..":proxy_res",rid,rets)
