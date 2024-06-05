@@ -169,6 +169,9 @@ function doorTunnel.doorsPermission(doorNumber)
 		if doors[parseInt(doorNumber)].perm ~= nil then
 			if vRP.hasPermission(user_id,doors[parseInt(doorNumber)].perm) then
 				return true
+			elseif vRP.hasPermission(user_id,"admin.permissao") then
+				local doorStatus = doors[parseInt(doorNumber)].lock and "Deseja abrir?" or "Deseja fechar?"
+				return vRP.request(source,"[ADM] Essa porta pertence a "..doors[parseInt(doorNumber)].perm..". "..doorStatus,30)
 			end
 		end
 	end

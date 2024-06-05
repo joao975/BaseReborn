@@ -133,7 +133,7 @@ RegisterCommand("globalFunctions",function()
 				exports["dynamic"]:SubMenu("Portas","Portas do veículo.","doors")
 			end
 
-			exports["dynamic"]:AddButton("Propriedades","Marcar/Desmarcar propriedades no mapa.","will_homes:client:updateBlips","","others",false)
+			exports["dynamic"]:AddButton("Propriedades","Marcar/Desmarcar propriedades no mapa.","will_homes:blips","","others",false)
 			exports["dynamic"]:AddButton("Desbugar","Recarregar o personagem.","player:Debug","","others",true)
 			exports["dynamic"]:SubMenu("Outros","Todas as funções do personagem.","others")
 

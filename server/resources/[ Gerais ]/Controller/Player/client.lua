@@ -554,6 +554,8 @@ function plVRP.toggleHandcuff()
 	end
 	LocalPlayer["state"]:set("Handcuff",handcuff,true)
 end
+
+RegisterNetEvent("police:client:GetCuffed",plVRP.toggleHandcuff)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- GETHANDCUFF
 -----------------------------------------------------------------------------------------------------------------------------------------

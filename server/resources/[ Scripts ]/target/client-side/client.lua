@@ -11,14 +11,6 @@ local Models = {}
 local innerEntity = {}
 local sucessTarget = false
 local targetActive = false
-
-local LocalPlayer = {}
-LocalPlayer["state"] = {}
-
-RegisterNetEvent("target:setState")
-AddEventHandler("target:setState",function(state, status)
-	LocalPlayer["state"][state] = status
-end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- THREADSYSTEM
 -----------------------------------------------------------------------------------------------------------------------------------------

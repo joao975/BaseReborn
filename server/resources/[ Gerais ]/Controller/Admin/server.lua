@@ -38,16 +38,6 @@ RegisterCommand("say",function(source,args,rawCommand)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
--- CONNECTPLAYERS
------------------------------------------------------------------------------------------------------------------------------------------
-AddEventHandler("vRP:playerSpawn",function(user_id,source)
-	local identity = vRP.getUserIdentity(user_id)
-	if identity then
-		admCLIENT.setDiscord(source,"#"..user_id.." "..identity.name.." "..identity.name2)
-		TriggerClientEvent(source,'active:checkcam',true)
-	end
-end)
------------------------------------------------------------------------------------------------------------------------------------------
 -- SKIN
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterCommand('skin',function(source,args,rawCommand)
@@ -135,12 +125,7 @@ end
 RegisterCommand("gobucket",function(source,args)
 	local source = source
 	local user_id = vRP.getUserId(source)
-	if user_id then
-		local perms = {	"Owner", "Admin", "Mod", "Sup" }
-		if vRP.hasAnyPermission(user_id,perms) then
-			SetPlayerRoutingBucket(source,parseInt(args[1]))
-		end
-	end
+	SetPlayerRoutingBucket(source,parseInt(args[1]))
 end)
 
 RegisterCommand("getbucket",function(source,args)
@@ -324,10 +309,13 @@ RegisterCommand("group",function(source,args,rawCommand)
 			if args[2] == "Owner" then
 				return
 			else
-				local group = vRP.getUserGroupByType(parseInt(args[1]),"job")
-				if group then
-					vRP.removePermission(parseInt(args[1]),group)
-					vRP.execute("vRP/del_group",{ user_id = parseInt(args[1]), permiss = group })
+				local kgroup = vRP.getGroup(tostring(args[2]))
+				if kgroup and kgroup._config and kgroup._config.gtype and kgroup._config.gtype == "job" then
+					local group = vRP.getUserGroupByType(parseInt(args[1]),"job")
+					if group then
+						vRP.removePermission(parseInt(args[1]),group)
+						vRP.execute("vRP/del_group",{ user_id = parseInt(args[1]), permiss = group })
+					end
 				end
 				if not vRP.hasPermission(parseInt(args[1]),tostring(args[2])) then
 					vRP.addUserGroup(parseInt(args[1]),tostring(args[2]))
@@ -378,6 +366,7 @@ end)
 -- UNGROUP
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterCommand("ungroup",function(source,args,rawCommand)
+	local source = source
 	local user_id = vRP.getUserId(source)
 	local perms = {	"Owner", "Admin", "Mod", "Sup" }
 	if user_id then
