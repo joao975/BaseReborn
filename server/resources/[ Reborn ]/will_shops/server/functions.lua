@@ -68,9 +68,29 @@ function getItemName(item)
     return vRP.itemNameList(item) or item
 end
 
+
+local itemsWeight = {
+    ['fuel'] = 0.01,
+    ["arms"] = 0.01,
+	["backpack"] = 0.01,
+	["tshirt"] = 0.01,
+	["torso"] = 0.01,
+	["pants"] = 0.01,
+	["vest"] = 0.01,
+	["shoes"] = 0.01,
+	["mask"] = 0.01,
+	["hat"] = 0.01,
+	["glass"] = 0.01,
+	["ear"] = 0.01,
+	["watch"] = 0.01,
+	["bracelet"] = 0.01,
+	["accessory"] = 0.01,
+	["decals"] = 0.01,
+}
+
 function getItemWeight(item)
-    if item == "fuel" then
-        return 0.01
+    if itemsWeight[item] then
+        return itemsWeight[item]
     end
     return vRP.itemWeightList(item) or 0.5
 end

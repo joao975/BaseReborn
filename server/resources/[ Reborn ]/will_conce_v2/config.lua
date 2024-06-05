@@ -1,13 +1,14 @@
 Tunnel = module("vrp","lib/Tunnel")
 Proxy = module("vrp","lib/Proxy")
 vRP = Proxy.getInterface("vRP")
+Reborn = Proxy.getInterface("Reborn")
 
 config = {}
 
 config.base = "creative"
 
 -- LOCAL ONDE IRA PUXAR AS IMAGENS
-config.ip = "http://189.127.165.131/TITANIUM2023/imagens"
+config.ip =  "http://212.18.114.101/imagens/" --Reborn.images()
 
 basesVehDB = {
     ['vrpex'] = "vrp_user_vehicles",

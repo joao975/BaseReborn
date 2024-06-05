@@ -52,6 +52,16 @@ end
 --####### Funções de Coins e recompensas ########
 -------------------------------------------------
 
+function verifyUserBattlepass(user_id)
+    if not Config.ExclusiveBattlepass then
+        return true
+    end
+    if vRP.hasPermission(user_id,Config.BattlepassPerm) then
+        return true
+    end
+    return false
+end
+
 function tryGetCoins(user_id, amount)
     return vRP.remGmsId(user_id, amount)
 end
@@ -119,40 +129,6 @@ function tryPayment(user_id, price)
     return payment
 end
 
----------------------------------
---####### COMANDOS ADMIN ########
----------------------------------
-
-RegisterCommand('addbp', function(source, args, rawCommand)
-    local user_id = getUserId(source)
-    if args[1] and hasAdminPermission(user_id) then
-        local nplayer = getUserSource(parseInt(args[1]))
-        if nplayer then
-            execute('will/add_battlepass', { user_id = parseInt(args[1]), xp = 0, level = 1 })
-            Config.notify('add_battlepass', source)
-            Config.notify('received_battlepass', nplayer)
-            TriggerClientEvent('will_battlepass:checkBattlepass', nplayer, true)
-        else
-            Config.notify('player_not_online', source)
-        end
-    end
-end)
-
-RegisterCommand('removebp', function(source, args, rawCommand)
-    local user_id = getUserId(source)
-    if args[1] and hasAdminPermission(user_id) then
-        local nplayer = getUserSource(parseInt(args[1]))
-        if nplayer then
-            execute("will/rem_battlepass", { user_id = parseInt(args[1]) })
-            Config.notify('rem_battlepass', source)
-            Config.notify('lost_battlepass', nplayer)
-            TriggerClientEvent('will_battlepass:checkBattlepass', nplayer, false)
-        else
-            Config.notify('player_not_online', source)
-        end
-    end
-end)
-
 ---------------------------
 --####### PREPARES ########
 ---------------------------
@@ -160,7 +136,7 @@ end)
 Citizen.CreateThread(function()
     prepare("will/add_battlepass", "INSERT INTO will_battlepass(user_id, level, xp) VALUES (@user_id, @level, @xp)")
     prepare("will/rem_battlepass", "DELETE FROM will_battlepass WHERE user_id = @user_id")
-    prepare("will/get_data","SELECT * FROM will_battlepass WHERE user_id = @user_id")
+    prepare("will/get_battlepass","SELECT * FROM will_battlepass WHERE user_id = @user_id")
     prepare("will/set_xp","UPDATE will_battlepass SET xp = @xp WHERE user_id = @user_id")
     prepare("will/level_up","UPDATE will_battlepass SET xp = @xp, level = @level WHERE user_id = @user_id")
     prepare("will/create_battlepass",[[

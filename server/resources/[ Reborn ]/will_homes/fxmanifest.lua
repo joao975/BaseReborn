@@ -10,6 +10,7 @@ ui_page "nui/index.html"
 client_scripts {
 	"@vrp/lib/utils.lua",
 	'Config.lua',
+	'Homes.lua',
 	'client/*'
 }
 

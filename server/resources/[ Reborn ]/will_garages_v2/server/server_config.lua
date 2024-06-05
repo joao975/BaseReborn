@@ -718,3 +718,23 @@ exports('addVehicle', function(user_id, vehicle)
 end)
 
 -- ## exports['will_garages_v2']:addVehicle(user_id, vehicle)
+
+function createHouseGarage(coords, spawns, permissions, garageType)
+    local result = {}
+    local home = {}
+    home.name = garageType
+    home.payment = false
+    home.perm = false
+    home.entrada = {}
+    home.entrada['blip'] = { coords.x,coords.y,coords.z }
+    home.spawns = {}
+    for k,v in pairs(spawns) do
+        if v.coordinates.x then
+            table.insert(home.spawns,{ v.coordinates.x, v.coordinates.y, v.coordinates.z, v.heading })
+        end
+    end
+    table.insert(result, { home })
+    TriggerClientEvent("will_garages:setHomes", -1, result)
+end
+
+exports("createHouseGarage",createHouseGarage)

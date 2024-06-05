@@ -96,7 +96,7 @@ Config.data = {
         Anim = ""
     },
     [12] = {
-        loc = { 308.13,-602.28,43.29 },
+        loc = { -432.41,-318.56,34.92 },
         group = "Enfermeiro",
         paisanaGroup = "PaisanaEnfermeiro",
         webhook = "",
@@ -104,7 +104,7 @@ Config.data = {
         Anim = ""
     },
     [13] = {
-        loc = { 308.13,-602.28,43.29 },
+        loc = { -432.41,-318.56,34.92 },
         group = "Medico",
         paisanaGroup = "PaisanaMedico",
         webhook = "",
@@ -112,7 +112,7 @@ Config.data = {
         Anim = ""
     },
     [14] = {
-        loc = { 308.13,-602.28,43.29 },
+        loc = { -432.41,-318.56,34.92 },
         group = "Diretor",
         paisanaGroup = "PaisanaDiretor",
         webhook = "",
@@ -120,7 +120,7 @@ Config.data = {
         Anim = ""
     },
     [15] = {
-        loc = { 835.9,-934.37,32.4 },
+        loc = { 821.16,-932.98,26.47 },
         group = "Mecanico",
         paisanaGroup = "PaisanaMecanico",
         webhook = "",
@@ -128,7 +128,7 @@ Config.data = {
         Anim = ""
     },
     [16] = {
-        loc = { 835.9,-934.37,32.4 },
+        loc = { 821.16,-932.98,26.47 },
         group = "Mecanicolider",
         paisanaGroup = "PaisanaMecanicolider",
         webhook = "",

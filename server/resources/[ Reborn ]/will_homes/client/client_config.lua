@@ -11,6 +11,12 @@ Theme = {
     aqua = {interiorId = 233217, ipl = "apa_v_mp_h_08_c"},
 }
 
+RegisterNetEvent("will_homes:blips")
+AddEventHandler("will_homes:blips",function()
+    TriggerEvent("Notify","aviso","Marcação das casas",5000)
+    TriggerEvent("will_homes:client:updateBlips")
+end)
+
 theftCoords = {
     ['apartment1'] = {
         { 265.71,-997.11,-99.0 },

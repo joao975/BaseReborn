@@ -2,7 +2,7 @@
 --##            Threads 
 -----#######################################--
 
-Citizen.CreateThread(function()
+--[[ Citizen.CreateThread(function()
     Wait(2000)
     for k, v in pairs (Config.Customs) do
         local blip = AddBlipForCoord(v.shopcoord.x, v.shopcoord.y, v.shopcoord.z)
@@ -15,7 +15,7 @@ Citizen.CreateThread(function()
         AddTextComponentSubstringPlayerName(k)
         EndTextCommandSetBlipName(blip)
     end
-end)
+end) ]]
 
 CreateThread(function()
     Wait(500)

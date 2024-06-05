@@ -2,6 +2,12 @@
 --########## Funções vRP ##########
 -----------------------------------
 
+RegisterNetEvent("police:Open")
+AddEventHandler("police:Open",function()
+	TriggerEvent("dynamic:closeSystem")
+	ExecuteCommand(Config.openPainel)
+end)
+
 function removeObjects()
 	vRP.removeObjects()
 end
@@ -68,6 +74,7 @@ local prison = false
 RegisterNetEvent("prisioneiro")
 AddEventHandler("prisioneiro",function(status)
 	prison = status
+	LocalPlayer.state:set("Prison",status,true)
 end)
 
 Citizen.CreateThread(function()

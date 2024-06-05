@@ -16,14 +16,17 @@ Config.base = "creative"						-- vrpex / creative / summerz
 
 Config.XpPerMinute = 6						-- XP ganho a cada minuto
 Config.MaxXpPerLevel = 1500					-- Maximo de XP por nivel
+Config.AddXpTime = 60 * 1000				-- 60 segundos para aumentar xp
+Config.LevelPrice = 20						-- Preço para comprar um nivel
+
 Config.Command = "battlepass"				-- Comando para abrir o painel
+Config.AcessToEveryone = true				-- Todos tem acesso para ver os premios (Nao conseguem resgatar)
 Config.ExclusiveBattlepass = false			-- Battlepass exclusivo para comprar
+Config.BattlepassPerm = "battlepass.perm"	-- Permissao que tera acesso ao battlepass
 
 Config.Images = "./images"					-- Diretorio das imagens
 
-Config.LevelPrice = 20						-- Preço para comprar um nivel
-
---------------------------------------
+-----##########################################################-----
 
 -- name é o item do inventario e nome da imagem
 

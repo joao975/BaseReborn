@@ -158,8 +158,8 @@ function request(source,text,time)
 end
 
 CreateThread(function()
-    AddEventHandler("playerConnect",playerSpawn)
-    AddEventHandler("Connect",playerSpawn)
+    -- AddEventHandler("playerConnect",playerSpawn)
+    -- AddEventHandler("Connect",playerSpawn)
     AddEventHandler("vRP:playerSpawn",playerSpawn)
 end)
 

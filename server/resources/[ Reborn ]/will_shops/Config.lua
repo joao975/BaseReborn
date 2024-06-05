@@ -15,7 +15,7 @@ Config.base = "creative"
 Config.cooldown = 60
 
 -- // Diretorio das imagens
-Config.imageDirect = "http://189.127.165.131/TITANIUM2023/imagens/" --Reborn.images().."/"
+Config.imageDirect = Reborn.images().."/"
 
 -- // Taxa ao vender a loja
 Config.sellTax = 0.85
@@ -450,7 +450,101 @@ Config.Shops = {
             ["knuckle"] = 975,
             ["flashlight"] = 675
         },
-    }
+    },
+    ["Skinshop_01"] = {
+        ['value'] = 150000,
+        ['stock'] = 100,
+        ['managment_coords'] = vector3(71.69,-1391.7,29.38),
+        ['buy_products_coords'] = vector3(76.14,-1389.36,29.38),
+        ['job_coords'] = vector3(84.8,-1397.97,29.3),
+        ['veh_spawn'] = vector4(91.83,-1404.44,29.15,315.79),
+        ['products'] = {
+            ["arms"] = 50,
+            ["backpack"] = 50,
+            ["mask"] = 50,
+            ["vest"] = 50,
+	        ["glass"] = 50,
+            ["hat"] = 50,
+            ["ear"] = 50,
+            ["bracelet"] = 50,
+            ["accessory"] = 50,
+            ["decals"] = 50,
+            ["tshirt"] = 50,
+            ["torso"] = 50,
+            ["pants"] = 50,
+            ["shoes"] = 50,
+            ["watch"] = 50,
+        },
+        ['shopDifference'] = function()
+            local clothLocs = {
+                { 70.81,-1399.61,29.38 },
+            }
+            skinshopThread(clothLocs,"Skinshop_01")
+        end,
+    },
+    ["Skinshop_02"] = {
+        ['value'] = 150000,
+        ['stock'] = 100,
+        ['managment_coords'] = vector3(-700.25,-151.38,37.42),
+        ['buy_products_coords'] = vector3(-710.62,-151.69,37.42),
+        ['job_coords'] = vector3(-712.55,-165.26,36.99),
+        ['veh_spawn'] = vector4(-714.74,-173.76,36.83,28.52),
+        ['products'] = {
+            ["arms"] = 50,
+            ["backpack"] = 50,
+            ["mask"] = 50,
+            ["vest"] = 50,
+	        ["glass"] = 50,
+            ["hat"] = 50,
+            ["ear"] = 50,
+            ["bracelet"] = 50,
+            ["accessory"] = 50,
+            ["decals"] = 50,
+            ["tshirt"] = 50,
+            ["torso"] = 50,
+            ["pants"] = 50,
+            ["shoes"] = 50,
+            ["watch"] = 50,
+        },
+        ['shopDifference'] = function()
+            local clothLocs = {
+                { -710.96,-155.39,37.42 },
+            }
+            skinshopThread(clothLocs,"Skinshop_02")
+        end,
+    },
+    ["Skinshop_03"] = {
+        ['value'] = 150000,
+        ['stock'] = 100,
+        ['managment_coords'] = vector3(429.12,-807.42,29.5),
+        ['buy_products_coords'] = vector3(423.07,-809.78,29.5),
+        ['job_coords'] = vector3(417.97,-812.59,29.3),
+        ['veh_spawn'] = vector4(409.82,-799.31,29.22,349.2),
+        ['products'] = {
+            ["arms"] = 50,
+            ["backpack"] = 50,
+            ["mask"] = 50,
+            ["vest"] = 50,
+	        ["glass"] = 50,
+            ["hat"] = 50,
+            ["ear"] = 50,
+            ["bracelet"] = 50,
+            ["accessory"] = 50,
+            ["decals"] = 50,
+            ["tshirt"] = 50,
+            ["torso"] = 50,
+            ["pants"] = 50,
+            ["shoes"] = 50,
+            ["watch"] = 50,
+        },
+        ['shopDifference'] = function()
+            local clothLocs = {
+                { 428.46,-800.76,29.5 },
+            }
+            skinshopThread(clothLocs,"Skinshop_03")
+        end,
+    },
+    
 }
 
 -- // Trabalhos para aumentar o estoque das lojas (Feito pelo dono)

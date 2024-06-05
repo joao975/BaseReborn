@@ -44,8 +44,9 @@ Config.Customs = {
 		radius = 30,
 		shopcoord = vector4(827.41,-984.23,26.16,89.29),
 		mod = {
-			{coord = vector4(835.65,-977.01,25.98,89.29), taken = false},
-			{coord = vector4(835.49,-985.58,25.98,88.48), taken = false},
+			{coord = vector4(835.4,-983.77,26.0,90.87), taken = false},
+			{coord = vector4(835.51,-975.3,26.0,94.41), taken = false},
+			{coord = vector4(835.06,-967.17,26.01,90.02), taken = false},
 		},
 		Blips = {sprite = 446, color = 68, scale = 0.5},
     },

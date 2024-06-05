@@ -24,7 +24,6 @@ files {
 	'html/*.js',
 	'html/fonts/*',	
 	'html/img/*.svg',
-	'imgs/uploads/*.jpg',
 	'html/audio/*.ogg',
 	"data/carcols_gen9.meta",
     "data/carmodcols_gen9.meta",
