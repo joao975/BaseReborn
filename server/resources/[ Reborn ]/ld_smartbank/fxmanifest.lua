@@ -32,6 +32,7 @@ files{
     'nui/index.html',
     'nui/css/style.css',
     'nui/img/banking.png',
+    'nui/img/logo.png',
     'nui/js/script.js',
     'nui/js/demo/chart-area-demo.js',
     'nui/vendor/bootstrap/js/bootstrap.bundle.min.js',

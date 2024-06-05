@@ -304,7 +304,7 @@ config.shops = {
 				["fichas"] = 1,
 			}
 		},
-		['Peixes'] = {
+		['Venda de Peixes'] = {
 			mode = "Sell",
 			payment = {
 				item = "dollars",

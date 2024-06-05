@@ -1363,6 +1363,8 @@ func.useItem = function(itemName,ramount)
 
 					vCLIENT.blockButtons(source,false)
 					active[user_id] = nil
+				else
+					TriggerClientEvent("Notify",source,"negado","Muito longe do local de pesca.",5000)
 				end
 			end
 

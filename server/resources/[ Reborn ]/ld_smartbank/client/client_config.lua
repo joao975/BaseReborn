@@ -224,7 +224,7 @@ ld_smartbank['functions'] = {
 	end,
 	
     CreateBlips = function()
-        for k, v in pairs(ld_smartbank['config']['banks']) do
+        --[[ for k, v in pairs(ld_smartbank['config']['banks']) do
             local newBlip = AddBlipForCoord(tonumber(v.x), tonumber(v.y), tonumber(v.z))
             SetBlipSprite(newBlip, ld_smartbank['config']['blip']['blipType'])
             SetBlipDisplay(newBlip, 4)
@@ -235,7 +235,7 @@ ld_smartbank['functions'] = {
             AddTextComponentString(ld_smartbank['config']['blip']['blipName'])
             EndTextCommandSetBlipName(newBlip)
             table.insert(createdBlips, newBlip)
-        end
+        end ]]
         return true
     end,
 

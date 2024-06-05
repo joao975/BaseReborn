@@ -79,6 +79,6 @@ ld_smartbank['config'] = {
 
     ['nui'] = {
         ['customColor']             = 'purple',  -- Cores da interface disponíveis: lightblue, red, green, yellow, blue, purple
-        ['logo']                    = 'https://media.discordapp.net/attachments/950068214296088596/959320569717874738/rbn.png' -- Logo do banco [recomendado 818x482]
+        ['logo']                    = './img/logo.png' -- Logo do banco [recomendado 818x482]
     }
 }
