@@ -17,6 +17,10 @@ AddEventHandler("cancelando",function(status)
 	cancelando = status
 	LocalPlayer["state"]:set("Commands",status,true)
 end)
+
+function tvRP.isHandcuffed()
+	return LocalPlayer.state.Handcuff
+end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- STATUS:CELULAR
 -----------------------------------------------------------------------------------------------------------------------------------------

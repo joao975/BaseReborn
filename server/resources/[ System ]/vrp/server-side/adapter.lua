@@ -240,3 +240,12 @@ vRP.removeUserGroup = function(user,group)
         vRP.execute("vRP/del_group",{ user_id = parseInt(user), permiss = group })
     end
 end
+
+vRP.Source = vRP.getUserSource
+vRP.Passport = vRP.getUserId
+vRP.UserData = vRP.getUData
+vRP.Query = vRP.query
+vRP.Prepare = vRP.prepare
+vRP.Datatable = vRP.getUserDataTable
+vRP.HasPermission = vRP.hasPermission
+vRP.PaymentFull = vRP.tryFullPayment

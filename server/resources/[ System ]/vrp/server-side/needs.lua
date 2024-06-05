@@ -43,6 +43,12 @@ function vRP.upgradeThirst(user_id,amount)
 		TriggerClientEvent("statusThirst",source,data.thirst)
 	end
 end
+
+function vRP.clientUpgradeThirst(amount)
+	local source = source
+	local user_id = vRP.getUserId(source)
+	vRP.upgradeThirst(user_id,amount)
+end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- UPGRADEHUNGER
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -62,6 +68,13 @@ function vRP.upgradeHunger(user_id,amount)
 		TriggerClientEvent("statusHunger",source,data.hunger)
 	end
 end
+
+function vRP.clientUpgradeHunger()
+	local source = source
+	local user_id = vRP.getUserId(source)
+	vRP.upgradeHunger(user_id,amount)
+end
+
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- DOWNGRADETHIRST
 -----------------------------------------------------------------------------------------------------------------------------------------

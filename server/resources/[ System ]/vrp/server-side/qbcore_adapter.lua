@@ -422,14 +422,15 @@ end
 
 function QBCore.Player.Login(source, citizenid, newData)
     if source and source ~= '' then
+        local dataTable = json.decode(json.encode(newData))
         if citizenid then
+            local UserData = {}
             local PlayerData = MySQL.Sync.fetchSingle('SELECT * FROM vrp_users where id = ?', { citizenid })
             if PlayerData then
-                local dataTable = json.decode(json.encode(newData))
                 local group = vRP.getUserGroupByType(citizenid, "job")
-                PlayerData.citizenid = citizenid
-                PlayerData.money = { bank = PlayerData.bank, cash = vRP.getInventoryItemAmount(citizenid, "dollars") }
-                PlayerData.job = {
+                UserData.citizenid = citizenid
+                UserData.money = { bank = PlayerData.bank, cash = vRP.getInventoryItemAmount(citizenid, "dollars") }
+                UserData.job = {
                     name = group,
                     label = group,
                     payment = vRP.getSalaryByGroup(group),
@@ -438,15 +439,15 @@ function QBCore.Player.Login(source, citizenid, newData)
                     isboss = false,
                     grade = {}
                 }
-                PlayerData.position = dataTable.position
-                PlayerData.metadata = dataTable
-                PlayerData.charinfo = PlayerData
-                if PlayerData.gang then
-                    PlayerData.gang = json.decode(PlayerData.gang)
+                UserData.position = dataTable.position
+                UserData.metadata = dataTable
+                UserData.charinfo = PlayerData
+                if UserData.gang then
+                    UserData.gang = json.decode(PlayerData.gang)
                 else
-                    PlayerData.gang = {}
+                    UserData.gang = {}
                 end
-                QBCore.Player.CheckPlayerData(source, PlayerData)
+                QBCore.Player.CheckPlayerData(source, UserData)
             else
                 DropPlayer(source, Lang:t("info.exploit_dropped"))
                 TriggerEvent('qb-log:server:CreateLog', 'anticheat', 'Anti-Cheat', 'white', GetPlayerName(source) .. ' Has Been Dropped For Character Joining Exploit', false)
@@ -460,22 +461,16 @@ function QBCore.Player.Login(source, citizenid, newData)
         return false
     end
 end
---[[ 
-
-{"backpack":5,"walletid":"QB-77731662","armour":0,"phone":[],"isdead":false,"bloodtype":"AB-","fingerprint":"la958D58eiX5841","licences":{"weapon":false,"driver":true,"business":false},"inlaststand":false,"inside":{"apartment":[]},"criminalrecord":{"hasRecord":false},"armor":0,"hunger":96,"callsign":"NO CALLSIGN","health":200,"position":{"x":-809.52,"y":190.12,"z":72.48},"status":[],"attachmentcraftingrep":0,"jailitems":[],"dealerrep":0,"jobrep":{"taxi":0,"trucker":0,"hotdog":0,"tow":0},"phonedata":{"SerialNumber":75132920,"InstalledApps":[]},"craftingrep":0,"commandbinds":[],"stress":0,"ishandcuffed":false,"tracker":false,"injail":0,"fitbit":[],"thirst":96}
-
-
-{"position":{"z":11.45,"y":-1101.8,"x":-816.81},"backpack":5,"health":390,"skin":-1667301416,"weaps":[],"inventorys":{"17":{"amount":10000,"item":"dollars"},"16":{"amount":3,"item":"water"},"15":{"amount":1,"item":"identity"},"13":{"amount":3,"item":"sandwich"},"14":{"amount":1,"item":"celular"}},"armour":100,"thirst":40,"hunger":40,"stress":0} ]]
-
 
 function QBCore.Player.GetOfflinePlayer(citizenid)
     if citizenid then
+        local UserData = {}
         local PlayerData = MySQL.Sync.prepare('SELECT * FROM vrp_users where id = ?', {citizenid})
         if PlayerData then
             local group = vRP.getUserGroupByType(citizenid, "job")
-            PlayerData.citizenid = citizenid
-            PlayerData.money = { bank = PlayerData.bank, cash = vRP.getInventoryItemAmount(citizenid, "dollars") }
-            PlayerData.job = {
+            UserData.citizenid = citizenid
+            UserData.money = { bank = PlayerData.bank, cash = vRP.getInventoryItemAmount(citizenid, "dollars") }
+            UserData.job = {
                 name = group,
                 label = group,
                 payment = vRP.getSalaryByGroup(group),
@@ -484,16 +479,20 @@ function QBCore.Player.GetOfflinePlayer(citizenid)
                 isboss = false,
                 grade = {}
             }
-            PlayerData.position = newData.position
-            PlayerData.metadata = newData
-            PlayerData.charinfo = PlayerData
-            if PlayerData.gang then
-                PlayerData.gang = json.decode(PlayerData.gang)
+            local newData = vRP.getUserDataTable(user_id)
+            if newData == nil then
+		        newData = json.decode(vRP.getUData(user_id,"Datatable")) or {}
+            end
+            UserData.position = newData.position
+            UserData.metadata = newData
+            UserData.charinfo = PlayerData
+            if UserData.gang then
+                UserData.gang = json.decode(PlayerData.gang)
             else
-                PlayerData.gang = {}
+                UserData.gang = {}
             end
 
-            return QBCore.Player.CheckPlayerData(nil, PlayerData)
+            return QBCore.Player.CheckPlayerData(nil, UserData)
         end
     end
     return nil

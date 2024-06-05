@@ -319,7 +319,12 @@ Citizen.CreateThread(function()
 			label = v._config and v._config.title or k,
 			defaultDuty = true,
 			offDutyPay = false,
-			grades = {},
+			grades = {
+				['0'] = {
+					name = v._config and v._config.title or k,
+					payment = 0
+				},
+			},
 		}
 	end
 end)
@@ -328,45 +333,10 @@ QBShared.Gangs = {}
 
 QBShared.Items = {}
 
-Citizen.CreateThread(function()
-	local items = Reborn.itemList()
-	for k,v in pairs(items) do
-		QBShared.Items[k] = {
-			['name'] = v.name,
-			['label'] = v.name,
-			['weight'] = v.weight,
-			['type'] = v.type,
-			['ammotype'] = nil,
-			['image'] = 'placeholder.png',
-			['unique'] = true, 
-			['useable'] = true, 
-			['description'] = v.description
-		}
-	end
-end)
-
 QBShared.Locations = {}
 
 QBShared.VehicleHashes = {}
 QBShared.Vehicles = {}
-
-Citizen.CreateThread(function()
-	local vehList = Reborn.vehList()
-	for k,v in pairs(vehList) do
-		QBShared.Vehicles[v.name] = {
-			['name'] = v.modelo,
-			['brand'] = v.modelo,
-			['model'] = v.modelo,
-			['price'] = v.price,
-			['category'] = v.tipo,
-			['hash'] = v.hash,
-			['shop'] = 'pdm',
-		}
-	end
-	for _, v in pairs(QBShared.Vehicles) do
-		QBShared.VehicleHashes[v.hash] = v
-	end
-end)
 
 QBShared.Weapons = {
 	-- // WEAPONS

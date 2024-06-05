@@ -202,7 +202,12 @@ end
 -- PLAYERDROPPED
 -----------------------------------------------------------------------------------------------------------------------------------------
 AddEventHandler("playerDropped",function()
-	vRP.rejoinServer(source)
+	local source = source
+	local ped = GetPlayerPed(source)
+    local health = GetEntityHealth(ped)
+    local armour = GetPedArmour(ped)
+    local coords = GetEntityCoords(ped)
+	vRP.rejoinServer(source,health,armour,coords)
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- KICK
@@ -210,15 +215,18 @@ end)
 function vRP.kick(user_id,reason)
 	if vRP.user_sources[user_id] then
 		local source = vRP.user_sources[user_id]
-
-		vRP.rejoinServer(source)
+		local ped = GetPlayerPed(source)
+		local health = GetEntityHealth(ped)
+		local armour = GetPedArmour(ped)
+		local coords = GetEntityCoords(ped)
+		vRP.rejoinServer(source,health,armour,coords)
 		DropPlayer(source,reason)
 	end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- DROPPLAYER
 -----------------------------------------------------------------------------------------------------------------------------------------
-function vRP.rejoinServer(source)
+function vRP.rejoinServer(source,health,armour,coords)
 	local source = source
 	local user_id = vRP.getUserId(source)
 	if user_id then
@@ -226,9 +234,19 @@ function vRP.rejoinServer(source)
 		if identity then
 			TriggerEvent("vRP:playerLeave",user_id,source)
 			TriggerEvent("playerDisconnect",user_id,source)
+			TriggerEvent("Disconnect",user_id,source)
 			TriggerEvent("esx:playerLogout",source)
+			if health then
+				vRP.user_tables[user_id].health = health
+			end
+			if armour then
+				vRP.user_tables[user_id].armour = armour
+			end
+			if coords then
+				vRP.user_tables[user_id].position = { x = coords.x, y = coords.y, z = coords.z }
+			end
 			vRP.setUData(user_id,"Datatable",json.encode(vRP.user_tables[user_id]))
-			local Player = QBCore.Functions.GetPlayer(nplayer)
+			local Player = QBCore.Functions.GetPlayer(source)
 			if Player then
 				Player.Functions.Logout()
 			end

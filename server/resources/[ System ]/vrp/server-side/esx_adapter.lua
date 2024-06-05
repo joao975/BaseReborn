@@ -563,7 +563,7 @@ function loadESXPlayer(identifier, playerId, isNew)
           {name = v.item, count = v.amount, label = item.label, weight = item.weight, usable = Core.UsableItemsCallbacks[v.item] ~= nil, rare = item.rare,
             canRemove = item.canRemove})
       else
-        print(('[^3WARNING^7] Ignoring invalid item "%s" for "%s"'):format(v.item, identifier))
+        -- print(('[^3WARNING^7] Ignoring invalid item "%s" for "%s"'):format(v.item, identifier))
       end
 
     end
@@ -619,6 +619,10 @@ function loadESXPlayer(identifier, playerId, isNew)
   end
 
   local data = vRP.getUserDataTable(user_id)
+  if data == nil then
+    local playerData = vRP.getUData(user_id,"Datatable")
+    data = json.decode(playerData) or {}
+  end
 
   -- Position
   result.position = data.position

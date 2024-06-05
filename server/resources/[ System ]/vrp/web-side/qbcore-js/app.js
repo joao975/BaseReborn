@@ -13,14 +13,12 @@ const { onMounted, onUnmounted } = Vue;
 const app = Vue.createApp({
   setup() {
     const $q = useQuasar();
-
     const showNotif = async ({ data }) => {
       // Otherwise we process any old MessageEvent with a data property
       if (data?.action !== "notify") return;
 
       const { text, length, type, caption } = data;
       const { classes, icon } = determineStyleFromVariant(type);
-
       // Make sure we have sucessfully fetched out config properly
       if (!NOTIFY_CONFIG) {
         console.error(

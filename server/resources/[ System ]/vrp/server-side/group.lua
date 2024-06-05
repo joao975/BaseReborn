@@ -36,6 +36,12 @@ function vRP.getUserGroupByType(user_id,gtype)
     return nil
 end
 
+function vRP.getGroup(group)
+	if group and groups[group] then
+		return groups[group]
+	end
+end
+
 function vRP.getSalaryByGroup(group)
 	local g = groups[group]
 	if g and g._config and g._config.salary then
@@ -59,13 +65,13 @@ function vRP.insertPermission(user_id,perm)
 		end
 	end
 	if vRP.hasPermission(user, "policia.permissao") then
-		TriggerClientEvent("target:setState",nplayer,"Police",true)
+		Player(nplayer)["state"]["Police"] = true
 		TriggerEvent("vrp_blipsystem:serviceEnter",nplayer,"Policial",77)
 	elseif vRP.hasPermission(user, "paramedico.permissao") then
-		TriggerClientEvent("target:setState",nplayer,"Paramedic",true)
+		Player(nplayer)["state"]["Paramedic"] = true
 		TriggerEvent("vrp_blipsystem:serviceEnter",nplayer,"Paramedico",83)
 	elseif vRP.hasPermission(user, "mecanico.permissao") then
-		TriggerClientEvent("target:setState",nplayer,"Mechanic",true)
+		Player(nplayer)["state"]["Mechanic"] = true
 		TriggerEvent("vrp_blipsystem:serviceEnter",nplayer,"Mecanico",51)
 	end
 end
@@ -76,7 +82,7 @@ function vRP.removePermission(user_id,perm)
 	local user = parseInt(user_id)
 	local nplayer = vRP.getUserSource(user)
 	if nplayer then
-		TriggerClientEvent("target:setState",nplayer,perm,nil)
+		TriggerEvent("vrp_blipsystem:serviceExit",nplayer)
 		Player(nplayer)["state"][perm] = false
 		if groups[perm] and groups[perm]._config then
 			if groups[perm]._config.gtype and groups[perm]._config.gtype == "vip" then
@@ -158,13 +164,13 @@ AddEventHandler("vRP:playerSpawn",function(user_id,source,first_spawn)
 		vRP.insertPermission(user_id, v.permiss)
 		if vRP.hasPermission(user_id,"policia.permissao") then
 			TriggerEvent("vrp_blipsystem:serviceEnter",source,"Policial",77)
-			TriggerClientEvent("target:setState",source,"Police", true)
+			Player(source)["state"]["Police"] = true
 		elseif vRP.hasPermission(user_id,"paramedico.permissao") then
 			TriggerEvent("vrp_blipsystem:serviceEnter",source,"Paramedico",83)
-			TriggerClientEvent("target:setState",source,"Paramedic", true)
+			Player(source)["state"]["Paramedic"] = true
 		elseif vRP.hasPermission(user_id,"mecanico.permissao") then
 			TriggerEvent("vrp_blipsystem:serviceEnter",source,"Mecanico",51)
-			TriggerClientEvent("target:setState",source,"Mechanic", true)
+			Player(source)["state"]["Mechanic"] = true
 		end
 	end
 end)

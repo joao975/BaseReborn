@@ -10,7 +10,7 @@ Tunnel.bindInterface("Reborn",Reborn)
 
 Reborn.license = function()
     return {
-        ['license'] = "Sua licença (Token) aqui!",
+        ['license'] = "Sua licença (Token) aqui",
         ['ip'] = "http://localhost/",
         ['porta'] = "30120",
     }
@@ -27,7 +27,7 @@ GlobalState['Inventory'] = "ld_inventory"       -- "ld_inventory" / "will_invent
 ----####----####----####----##
 
 Reborn.images = function()
-    return "http://localhost/imagens/"
+    return "http://localhost/imagens"
 end
 
 ----####----####----####----##
