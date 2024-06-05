@@ -4,39 +4,31 @@ Reborn = {}
 Proxy.addInterface("Reborn",Reborn)
 Tunnel.bindInterface("Reborn",Reborn)
 
---------  Base completa: https://1drv.ms/u/s!AvbdRyXrgoWmjWpuhpmOsgdt5m-w?e=wuwNos
-
 ----####----####----####----##
 ----##        LICENÇA      -##
 ----####----####----####----##
 
 Reborn.license = function()
     return {
+        ['license'] = "Sua licença (Token) aqui!",
         ['ip'] = "http://localhost/",
         ['porta'] = "30120",
-        ['license'] = "Sua licença (Token) aqui!"
     }
-end
-
-----####----####----####----##
-----##    IMG DIRETORIO    -##
-----####----####----####----##
-
-Reborn.images = function()
-    return "http://localhost/imagens"
 end
 
 --####----####----####----
 --##   VARIABLES   ##--
 --####----####----####----
 
-GlobalState['Inventory'] = "ld_inventory"       -- will_inventory
+GlobalState['Inventory'] = "ld_inventory"       -- "ld_inventory" / "will_inventory"
 
---[[ NATION ADAPTER ]]
+----####----####----####----##
+----##    IMG DIRETORIO    -##
+----####----####----####----##
 
-GlobalState['Nation_creator'] = false       -- Se usar: Dar wipe para utilizar / Retirar script "creation" / Conferir multi personagem abaixo
-GlobalState['Nation_skinshop'] = false       -- Se usar: Retirar script "skinshop"
-GlobalState['Nation_barbershop'] = false       -- Se usar: Retirar script "barbershop"
+Reborn.images = function()
+    return "http://localhost/imagens/"
+end
 
 ----####----####----####----##
 ----##   MULTI-PERSONAGEM  -##
@@ -64,50 +56,11 @@ Reborn.first_login = function()
             ['sandwich'] = 3,
             ['dollars'] = 10000,
         },
-
-        ['Spawn'] = { x = -1036.84, y = -2734.79, z = 13.76 },
         ['Groups'] = {
             --[id] = { 'grupos' }
             [1] = { "Owner", "Admin" },
             [2] = { "Owner", "Admin" },
         },
-        -- Roupa inicial
-        ['Clothes'] = {
-            ['Male'] = {
-                ["pants"] = { item = 17, texture = 4 },
-                ["arms"] = { item = 0, texture = 0 },
-                ["tshirt"] = { item = 15, texture = 0 },
-                ["torso"] = { item = 44, texture = 2 },
-                ["vest"] = { item = 0, texture = 0 },
-                ["shoes"] = { item = 5, texture = 1 },
-                ["mask"] = { item = 0, texture = 0 },
-                ["backpack"] = { item = 0, texture = 0 },
-                ["hat"] = { item = -1, texture = 0 },
-                ["glass"] = { item = 0, texture = 0 },
-                ["ear"] = { item = -1, texture = 0 },
-                ["watch"] = { item = -1, texture = 0 },
-                ["bracelet"] = { item = -1, texture = 0 },
-                ["accessory"] = { item = 0, texture = 0 },
-                ["decals"] = { item = 0, texture = 0 }
-            },
-            ['Female'] = {
-                ["pants"] = { item = 37, texture = 0 },
-                ["arms"] = { item = 2, texture = 0 },
-                ["tshirt"] = { item = 14, texture = 0 },
-                ["torso"] = { item = 30, texture = 0 },
-                ["vest"] = { item = 0, texture = 0 },
-                ["shoes"] = { item = 13, texture = 0 },
-                ["mask"] = { item = 0, texture = 0 },
-                ["backpack"] = { item = 0, texture = 0 },
-                ["hat"] = { item = -1, texture = 0 },
-                ["glass"] = { item = 0, texture = 0 },
-                ["ear"] = { item = -1, texture = 0 },
-                ["watch"] = { item = -1, texture = 0 },
-                ["bracelet"] = { item = -1, texture = 0 },
-                ["accessory"] = { item = 0, texture = 0 },
-                ["decals"] = { item = 0, texture = 0 }
-            }
-        }
     }
 end
 
@@ -135,6 +88,20 @@ Reborn.npcControl = function()
     }
 end
 -- Caso deseja tirar os npc, deixa tudo 0.0
+
+----####----####----##
+----## MANUTENÇÃO -##
+----####----####----##
+
+Reborn.maintenance = function()
+    return {
+        enabled = false,
+        text = "Servidor em manutenção",
+        licenses = {
+            [""] = true
+        }
+    }
+end
 
 ----####----####----####----##
 ----## ESTATISTICAS SERVER -##
@@ -168,8 +135,6 @@ Reborn.segurity_code = function()
             'smartbank_cards',
             'smartbank_fines',
             'smartbank_statements',
-            'vrp_user_data',
-            'vrp_user_ids',
             'vrp_vehicles',
             'will_battlepass',
             'will_sprays',
@@ -177,10 +142,14 @@ Reborn.segurity_code = function()
             'will_homes',
             'will_rent',
             'will_conce',
-            'will_shops',
+            'user_bans',
+            'ld_orgs',
+            'ld_orgs_daily',
+            'ld_orgs_monthly',
+            'ld_orgs_farm',
             'will_shops_jobs',
             'will_shops_stock',
-            'user_bans',
+            'will_shops',
 
             'smartphone_uber_trips',
             'smartphone_ifood_orders',
