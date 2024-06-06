@@ -555,9 +555,7 @@ AddEventHandler("queue:playerConnecting",function(source,ids,name,setKickReason,
                 if rows[1] and rows[1].whitelist then
                     deferrals.done()
                 else
-					vRP.query("vRP/create_user",{ steam = steam })
-					return deferrals.done()
-					--[[ local Card = {
+					local Card = {
                         ["$schema"] = "http://adaptivecards.io/schemas/adaptive-card.json",
                         ["type"] = "AdaptiveCard",
                         ["version"] = "1.4",
@@ -754,7 +752,7 @@ AddEventHandler("queue:playerConnecting",function(source,ids,name,setKickReason,
                         Card["body"][2]["isVisible"] = true
                         Card["body"][2]["items"][5]["actions"][1]["title"] = 'SEU ID DE LIBERAÇÃO: '..rows[1].id
                     end
-                    deferrals.presentCard(Card, CardCallback) ]]
+                    deferrals.presentCard(Card, CardCallback)
                 end
             else
                 deferrals.done("Você foi banido da cidade. Sua steam: "..steam)
