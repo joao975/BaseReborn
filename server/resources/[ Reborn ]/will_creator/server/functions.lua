@@ -246,9 +246,9 @@ AddEventHandler(spawnerEvents[Config.Base] or "vRP:playerSpawn",
 
 RegisterCommand("creator",function(source)
     local user_id = getUserId(source)
-    -- if vRP.hasPermission(user_id, "admin.permissao") or vRP.hasPermission(user_id, "Admin") then
+    if vRP.hasPermission(user_id, "admin.permissao") or vRP.hasPermission(user_id, "Admin") then
         TriggerClientEvent('will_creator:client:CreateCharacter', source, "mp_m_freemode_01")
-    -- end
+    end
 end)
 
 RegisterCommand('addcode', function(source, args)
@@ -274,7 +274,7 @@ local bvidaCooldown = {}
 
 function reloadPlayer(src)
     local user_id = getUserId(src)
-    if bvidaCooldown[user_id] and bvidaCooldown[user_id] < os.time() then return end
+    if bvidaCooldown[user_id] and bvidaCooldown[user_id] > os.time() then return end
     bvidaCooldown[user_id] = os.time() + 10
     if not user_id then return end
     local skin,model = getBarber(user_id)
