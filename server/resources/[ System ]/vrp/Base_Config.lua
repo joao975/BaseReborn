@@ -131,6 +131,8 @@ Reborn.segurity_code = function()
             'vrp_users',
             'vrp_user_data',
             'vrp_user_ids',
+            'playerskins',
+            'saved_skins',
             'smartbank_accounts',
             'smartbank_cards',
             'smartbank_fines',
