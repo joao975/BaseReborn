@@ -20,6 +20,10 @@ tvRP.getNearestPlayer = function(radius)
     return vRP.nearestPlayer(radius)
 end
 
+tvRP.getNearestPlayers = function(distance)
+    return vRP.nearestPlayers(distance)
+end
+
 tvRP.getNearestVehicle = function(radius)
     return vRP.getNearVehicle(radius)
 end

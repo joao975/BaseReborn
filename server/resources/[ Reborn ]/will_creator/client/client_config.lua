@@ -597,6 +597,27 @@ skinData = {
 -- #########################
 --      UTIL FUNCTIONS
 -- #########################
+
+CreateThread(function()
+    while true do
+        local ped = PlayerPedId()
+        local coords = GetEntityCoords(ped)
+        local timeDistance = 500
+        if not inShopping then
+            for k, store in pairs(Config.Stores) do
+                if #(coords - vec3(store.coords.x,store.coords.y,store.coords.z)) <= 3 then
+                    timeDistance = 3
+                    DrawMarker(27,store.coords.x,store.coords.y,store.coords.z-0.95,0,0,0,0,180.0,130.0,1.0,1.0,1.0,255,0,0,75,0,0,0,1)
+                    if IsControlJustPressed(0, 38) then
+                        openShopMenu(store.type)
+                    end
+                end
+            end
+        end
+        Wait(timeDistance)
+    end
+end)
+
 --[[ 
 function setupBlips()
     for k, _ in pairs(Config.Stores) do
