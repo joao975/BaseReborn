@@ -33,7 +33,13 @@ function Will.Save(vehName)
     local identity = vRP.getUserIdentity(user_id, true)
 	if user_id then
         if identity.initial == "false" then
-            exports['will_garages_v2']:addVehicle(user_id, vehName)
+            if GetResourceState("will_garages_v2") == "started" then
+                exports['will_garages_v2']:addVehicle(user_id, vehName)
+            else
+                local plate = vRP.generatePlateNumber()
+                local phone = vRP.getPhone(user_id)
+                execute("will/add_vehicle",{ user_id = parseInt(user_id), vehicle = vehName, plate = plate, phone = phone, work = 'false' })
+            end
             vRP.query("accounts/Initial",{ id = user_id })
             TriggerClientEvent("Notify",source,"verde",NotifySuccess,30000)
         else
