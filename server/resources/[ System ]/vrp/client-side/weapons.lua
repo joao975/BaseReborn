@@ -146,10 +146,14 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- REPLACEWEAPONS
 -----------------------------------------------------------------------------------------------------------------------------------------
-function tvRP.replaceWeapons()
+function tvRP.replaceWeapons(weapons)
 	local old_weapons = tvRP.getWeapons()
 	RemoveAllPedWeapons(PlayerPedId(),true)
-	weapon_list = {}
+	if weapons then
+		weapon_list = weapons
+	else
+		weapon_list = {}
+	end
 	return old_weapons
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
