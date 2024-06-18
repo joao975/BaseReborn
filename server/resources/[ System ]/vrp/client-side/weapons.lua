@@ -148,12 +148,7 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 function tvRP.replaceWeapons(weapons)
 	local old_weapons = tvRP.getWeapons()
-	RemoveAllPedWeapons(PlayerPedId(),true)
-	if weapons then
-		weapon_list = weapons
-	else
-		weapon_list = {}
-	end
+	tvRP.giveWeapons(weapons, true)
 	return old_weapons
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -174,7 +169,7 @@ function tvRP.giveWeapons(weapons,clear_before)
 	end
 
 	for k,v in pairs(weapons) do
-		GiveWeaponToPed(ped,GetHashKey(k),v.ammo or 0,false,true)
+		GiveWeaponToPed(ped,GetHashKey(k),v.ammo or 0,false)
 		weapon_list[string.upper(k)] = v
 	end
 	TriggerServerEvent("will_inventory:giveWeapons", weapon_list)
