@@ -234,17 +234,13 @@ CreateThread(function()
 		HideHudComponentThisFrame(15)
 		HideHudComponentThisFrame(17)
 		HideHudComponentThisFrame(18)
-		HideHudComponentThisFrame(19)
+		-- HideHudComponentThisFrame(19)	-- WEAPON_WHEEL
 		HideHudComponentThisFrame(20)
 		HideHudComponentThisFrame(21)
 		HideHudComponentThisFrame(22)
 
-		DisableControlAction(1,37,true)
-		DisableControlAction(1,204,true)
-		DisableControlAction(1,211,true)
-		DisableControlAction(1,349,true)
-		DisableControlAction(1,192,true)
-		DisableControlAction(1,157,true)
+		-- DisableControlAction(1,37,true)	-- TAB
+		--[[ DisableControlAction(1,157,true)
 		DisableControlAction(1,158,true)
 		DisableControlAction(1,159,true)
 		DisableControlAction(1,160,true)
@@ -252,7 +248,7 @@ CreateThread(function()
 		DisableControlAction(1,162,true)
 		DisableControlAction(1,163,true)
 		DisableControlAction(1,164,true)
-		DisableControlAction(1,165,true)
+		DisableControlAction(1,165,true) ]]
 
 		DisablePlayerVehicleRewards(PlayerId())
 		
