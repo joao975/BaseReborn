@@ -184,7 +184,7 @@ Citizen.CreateThread(function()
 				local distance = #(coords - vector3(v[1],v[2],v[3]))
 				if distance <= 3 then
 					timeDistance = 4
-					DrawText3D(v[1],v[2],v[3]-1,"~g~E~w~   ATENDIMENTO")
+					DrawText3Ds(v[1],v[2],v[3],"~g~E~w~   ATENDIMENTO")
 					if distance <= 1.5 and IsControlJustPressed(1,38) and hpSERVER.checkServices() then
 						if  GetEntityHealth(ped) < 400 then
 							local checkBusy = 0
@@ -357,7 +357,7 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- DRAWTEXT3D
 -----------------------------------------------------------------------------------------------------------------------------------------
-function DrawText3D(x,y,z,text)
+function DrawText3Ds(x,y,z,text)
 	local onScreen,_x,_y = World3dToScreen2d(x,y,z)
 	SetTextFont(4)
 	SetTextScale(0.35,0.35)

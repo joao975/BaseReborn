@@ -12,7 +12,7 @@ vRPclient = Tunnel.getInterface("vRP")
 svVRP = {}
 Tunnel.bindInterface("Survival",svVRP)
 svCLIENT = Tunnel.getInterface("Survival")
-
+local resetCoords = { -445.38,-307.61,35.84 }
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- GOD
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -188,7 +188,7 @@ function svVRP.ResetPedToHospital()
 			TriggerClientEvent("resetBleeding",source)
 			TriggerClientEvent("resetDiagnostic",source)
 			TriggerClientEvent("vrp_survival:FadeOutIn",source)
-			Wait(5000)
+			Wait(1000)
 			if not vRP.hasPermission(user_id, "vip.permissao") then
 				local clear = vRP.clearInventory(user_id)
 				if clear then
@@ -196,9 +196,11 @@ function svVRP.ResetPedToHospital()
 				end
 			end
 			Wait(2000)
-			vRPclient.teleport(source,359.87,-585.34,43.29)
+			vRPclient.teleport(source,resetCoords[1], resetCoords[2], resetCoords[3])
 			Wait(1000)
 			svCLIENT.SetPedInBed(source)
+			Wait(1000)
+			TriggerClientEvent("Notify",source,"importante","Você acabou de acordar de um coma.",3000)
 		end
 	end
 end
