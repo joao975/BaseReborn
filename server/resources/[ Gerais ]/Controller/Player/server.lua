@@ -463,59 +463,25 @@ end)]]
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- SERVICE
 -----------------------------------------------------------------------------------------------------------------------------------------
+local admGroups = { "Owner", "Admin", "Mod", "Sup" }
+
 RegisterCommand("deus",function(source,args,rawCommand)
 	local user_id = vRP.getUserId(source)
 	if user_id then
-		if not plCLIENT.getHandcuff(source) then
-			if vRP.hasPermission(user_id,"Admin") then
-				vRP.removePermission(source,"Admin")
-				--TriggerEvent("vrp_blipsystem:serviceExit",source)
-				TriggerClientEvent("Notify",source,"importante","Você saiu de serviço.",5000)
+		for k,adm in pairs(admGroups) do
+			local waitGroup = "wait"..adm
+			if vRP.hasPermission(user_id,adm) then
+				vRP.removePermission(user_id,adm)
+				vRP.insertPermission(user_id,waitGroup)
+				TriggerClientEvent("Notify",source,"importante","Você saiu de serviço de "..adm,5000)
+				vRP.execute("vRP/upd_group",{ user_id = user_id, permiss = adm, newpermiss = waitGroup })
 				vRP.createWeebHook(Webhooks.servicedeus,"```prolog\n[ID]: "..user_id.." \n[PERDEU OS PODERES] "..os.date("\n[Data]: %d/%m/%Y [Hora]: %H:%M:%S").." \r```")
-				vRP.execute("vRP/upd_group",{ user_id = user_id, permiss = "Admin", newpermiss = "waitAdmin" })
-			elseif vRP.hasPermission(user_id,"waitAdmin") then
-				vRP.insertPermission(user_id,"Admin")
-				--TriggerEvent("vrp_blipsystem:serviceEnter",source,"Admin",77)
-				TriggerClientEvent("Notify",source,"importante","Você entrou em serviço.",5000)
+			elseif vRP.hasPermission(user_id, waitGroup) then
+				vRP.removePermission(user_id, waitGroup)
+				vRP.insertPermission(user_id, adm)
+				TriggerClientEvent("Notify",source,"importante","Você entrou em serviço de "..adm,5000)
+				vRP.execute("vRP/upd_group",{ user_id = user_id, permiss = waitGroup, newpermiss = adm })
 				vRP.createWeebHook(Webhooks.servicedeus,"```prolog\n[ID]: "..user_id.." \n[GANHOU PODERES] "..os.date("\n[Data]: %d/%m/%Y [Hora]: %H:%M:%S").." \r```")
-				vRP.execute("vRP/upd_group",{ user_id = user_id, permiss = "waitAdmin", newpermiss = "Admin" })
-			end
-
-			if vRP.hasPermission(user_id,"Owner") then
-				vRP.removePermission(source,"Owner")
-				--TriggerEvent("vrp_blipsystem:serviceExit",source)
-				TriggerClientEvent("Notify",source,"importante","Você saiu de serviço.",5000)
-				vRP.createWeebHook(Webhooks.servicedeus,"```prolog\n[ID]: "..user_id.." \n[PERDEU OS PODERES] "..os.date("\n[Data]: %d/%m/%Y [Hora]: %H:%M:%S").." \r```")
-				vRP.execute("vRP/upd_group",{ user_id = user_id, permiss = "Owner", newpermiss = "waitOwner" })
-			elseif vRP.hasPermission(user_id,"waitOwner") then
-				vRP.insertPermission(user_id,"Owner")
-				--TriggerEvent("vrp_blipsystem:serviceEnter",source,"Owner",77)
-				TriggerClientEvent("Notify",source,"importante","Você entrou em serviço.",5000)
-				vRP.createWeebHook(Webhooks.servicedeus,"```prolog\n[ID]: "..user_id.." \n[GANHOU PODERES] "..os.date("\n[Data]: %d/%m/%Y [Hora]: %H:%M:%S").." \r```")
-				vRP.execute("vRP/upd_group",{ user_id = user_id, permiss = "waitOwner", newpermiss = "Owner" })
-			end
-
-			if vRP.hasPermission(user_id,"Mod") then
-				vRP.removePermission(source,"Mod")
-				TriggerClientEvent("Notify",source,"importante","Você saiu de serviço.",5000)
-				vRP.createWeebHook(Webhooks.servicedeus,"```prolog\n[ID]: "..user_id.." \n[PERDEU OS PODERES] "..os.date("\n[Data]: %d/%m/%Y [Hora]: %H:%M:%S").." \r```")
-				vRP.execute("vRP/upd_group",{ user_id = user_id, permiss = "Mod", newpermiss = "waitMod" })
-			elseif vRP.hasPermission(user_id,"waitMod") then
-				vRP.insertPermission(user_id,"Mod")
-				TriggerClientEvent("Notify",source,"importante","Você entrou em serviço.",5000)
-				vRP.createWeebHook(Webhooks.servicedeus,"```prolog\n[ID]: "..user_id.." \n[GANHOU PODERES] "..os.date("\n[Data]: %d/%m/%Y [Hora]: %H:%M:%S").." \r```")
-				vRP.execute("vRP/upd_group",{ user_id = user_id, permiss = "waitMod", newpermiss = "Mod" })
-			end
-			if vRP.hasPermission(user_id,"Sup") then
-				vRP.removePermission(source,"Sup")
-				TriggerClientEvent("Notify",source,"importante","Você saiu de serviço.",5000)
-				vRP.createWeebHook(Webhooks.servicedeus,"```prolog\n[ID]: "..user_id.." \n[PERDEU OS PODERES] "..os.date("\n[Data]: %d/%m/%Y [Hora]: %H:%M:%S").." \r```")
-				vRP.execute("vRP/upd_group",{ user_id = user_id, permiss = "Sup", newpermiss = "waitSup" })
-			elseif vRP.hasPermission(user_id,"waitSup") then
-				vRP.insertPermission(user_id,"Sup")
-				TriggerClientEvent("Notify",source,"importante","Você entrou em serviço.",5000)
-				vRP.createWeebHook(Webhooks.servicedeus,"```prolog\n[ID]: "..user_id.." \n[GANHOU PODERES] "..os.date("\n[Data]: %d/%m/%Y [Hora]: %H:%M:%S").." \r```")
-				vRP.execute("vRP/upd_group",{ user_id = user_id, permiss = "waitSup", newpermiss = "Sup" })
 			end
 		end
 	end
