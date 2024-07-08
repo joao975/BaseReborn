@@ -13,7 +13,7 @@ Elevators = {
         { ['Coord'] = vector4(-1097.49,-848.54,23.04,35.87), ['Name'] = '<i class="fa-solid fa-circle-sort"></i><br> Andar 2' },
         { ['Coord'] = vector4(-1067.52,-831.91,19.04,35.43), ['Name'] = '<i class="fa-solid fa-circle-sort"></i><br> Andar 1' },
         { ['Coord'] = vector4(-1067.53,-831.85,14.89,34.92), ['Name'] = '<i class="fa-solid fa-circle-sort"></i><br> Andar -3' },
-        { ['Coord'] = vector4(-1096.11,-850.65,10.28,34.92), ['Name'] = '<i class="fa-solid fa-circle-sort"></i><br> Andar -2' },
+        { ['Coord'] = vector4(-1097.61,-848.65,10.28,34.15), ['Name'] = '<i class="fa-solid fa-circle-sort"></i><br> Andar -2' },
         { ['Coord'] = vector4(-1067.46,-831.77,5.48,111.04), ['Name'] = '<i class="fa-solid fa-circle-sort-down"></i><br> Andar -1' },
     }
 }

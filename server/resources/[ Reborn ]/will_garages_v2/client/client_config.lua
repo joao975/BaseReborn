@@ -51,7 +51,8 @@ function applyModifies(nveh,engine,fuel,tuning,vehDoors,vehWindows,vehTyres,vnam
 			end
 		end
 	end
-	vehicleMods(nveh,tuning)
+	-- vehicleMods(nveh,tuning)
+	exports['will_tunners']:SetVehicleProp(nveh, tuning)
 end
 
 --######################--
