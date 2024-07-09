@@ -51,8 +51,11 @@ function applyModifies(nveh,engine,fuel,tuning,vehDoors,vehWindows,vehTyres,vnam
 			end
 		end
 	end
-	-- vehicleMods(nveh,tuning)
-	exports['will_tunners']:SetVehicleProp(nveh, tuning)
+	if GetResourceState("will_tunners") == "started" then
+		exports['will_tunners']:SetVehicleProp(nveh, tuning)
+	else
+		vehicleMods(nveh,tuning)
+	end
 end
 
 --######################--
