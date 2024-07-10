@@ -28,9 +28,9 @@ function cmVRP.startMachine()
 		if parseInt(#copAmount) <= Config.cashMachine['cops'] then
 			TriggerClientEvent("Notify",source,"aviso","Sistema indisponível no momento, tente mais tarde.",5000)
 			return false
-		--[[ elseif parseInt(machineGlobal) > 0 then
+		elseif parseInt(machineGlobal) > 0 then
 			TriggerClientEvent("Notify",source,"aviso","Aguarde "..vRP.getTimers(parseInt(machineGlobal)),5000)
-			return false ]]
+			return false
 		else
 			if not machineStart then
 				machineStart = true
@@ -105,7 +105,7 @@ function cmVRP.startRegister(x,y,z)
 	active[user_id] = 15
 	TriggerClientEvent("cashRegister:updateRegister",-1,registerTimers)
 	vRPclient._playAnim(source,false,{"oddjobs@shop_robbery@rob_till","loop"},true)
-	TriggerClientEvent("Progress",source,30000,"Utilizando...")
+	TriggerClientEvent("Progress",source,15000,"Utilizando...")
 	cmVRP.callPolice(x,y,z)
 	repeat
 		if tonumber(active[user_id]) > 0 and tonumber(active[user_id]) <= 30 then

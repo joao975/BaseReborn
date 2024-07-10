@@ -94,57 +94,27 @@ end
 -- CASHREGISTER
 -----------------------------------------------------------------------------------------------------------------------------------------
 local registerCoords = {}
-
---[[ Citizen.CreateThread(function()
-	while true do
-		local timeDistance = 500
-		local ped = PlayerPedId()
-		local coords = GetEntityCoords(ped)
-
-		for k,v in pairs(registerCoords) do
-			local distance = #(coords - vector3(v[1],v[2],v[3]))
-			if distance <= 1 then
-				return false,v[1],v[2],v[3]
-			end
-		end
-
-		local object = GetClosestObjectOfType(coords,0.4,GetHashKey("prop_till_01"),0,0,0)
-		if DoesEntityExist(object) then
-			local coords = GetEntityCoords(object)
-			if coords.x and coords.y then
-				timeDistance = 4
-				DrawText3D(coords.x,coords.y,coords.z-0.4,"~g~G~w~   ROUBAR",400)
-				if IsControlJustPressed(0,47) then
-					if vSERVER.cashRegister(coords.x,coords.y,coords.z) then
-						SetEntityHeading(ped,GetEntityHeading(object)-360.0)
-						SetPedComponentVariation(ped,5,45,0,2)
-						vSERVER.startRegister(coords.x,coords.y,coords.z)
-					end
-				end
-			end
-		end
-		Citizen.Wait(timeDistance)
-	end
-end) ]]
+local robberyStatus = false
 
 RegisterNetEvent("cashRegister:robberyMachine")
 AddEventHandler("cashRegister:robberyMachine",function(status)
+	if robberyStatus then return end
 	local ped = PlayerPedId()
-	local coords = GetEntityCoords(ped)
+	local coordsPed = GetEntityCoords(ped)
 	for k,v in pairs(registerCoords) do
-		local distance = #(coords - vector3(v[1],v[2],v[3]))
-		if distance <= 1 then
+		local distance = #(coordsPed - vector3(v[1],v[2],v[3]))
+		if distance <= 2.0 then
 			return
 		end
 	end
-	local ped = PlayerPedId()
-	local coordsPed = GetEntityCoords(ped)
 	local object = GetClosestObjectOfType(coordsPed,0.4,GetHashKey("prop_till_01"),0,0,0)
 	local coords = GetEntityCoords(object)
 	if vSERVER.cashRegister(coords.x,coords.y,coords.z) then
+		robberyStatus = true
 		SetEntityHeading(ped,GetEntityHeading(object)-360.0)
 		SetPedComponentVariation(ped,5,45,0,2)
 		vSERVER.startRegister(coords.x,coords.y,coords.z)
+		robberyStatus = false
 	end
 end)
 
