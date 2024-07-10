@@ -2020,10 +2020,10 @@ Config.garages = {
     },
     [495] = { ["name"] = "Helipolice", ["payment"] = false, ["perm"] = "policia.permissao",  
         ["entrada"] = {
-            ["blip"] = { 2504.43,-335.51,118.03 },
+            ["blip"] = { -1097.94,-841.11,37.7 },
         },
         ["spawns"] = {
-            { 2510.67,-342.0,118.19,266.36 },
+            { -1095.46,-830.57,37.71,308.93 },
         }
     },
     [496] = { ["name"] = "Paramedic", ["payment"] = false, ["perm"] = "paramedico.permissao",  
@@ -2246,4 +2246,3 @@ Config.garages = {
         }  
     },
 }
-
