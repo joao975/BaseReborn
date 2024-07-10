@@ -204,6 +204,54 @@ local List = {
 		Model = "s_m_m_prisguard_01",
 		anim = { "anim@heists@heist_corona@single_team","single_team_loop_boss" }
 	},
+	{ -- Venda de peixes
+		Distance = 50,
+		Coords = { -1564.64,-976.76,13.02,271.64 },
+		Model = "ig_dale",
+		anim = { "anim@heists@heist_corona@single_team","single_team_loop_boss" }
+	},
+	{ -- Venda de peixes
+		Distance = 50,
+		Coords = { -1558.87,-970.52,13.02,229.83 },
+		Model = "ig_dale",
+		anim = { "anim@heists@heist_corona@single_team","single_team_loop_boss" }
+	},
+	{ -- Lenhador
+		Distance = 50,
+		Coords = { -843.63,5407.52,34.62,301.0 },
+		Model = "a_m_m_farmer_01",
+		anim = { "anim@heists@heist_corona@single_team","single_team_loop_boss" }
+	},
+	{ -- Motorista
+		Distance = 50,
+		Coords = { 452.95,-607.92,28.6,272.22 },
+		Model = "csb_prologuedriver",
+		anim = { "anim@heists@heist_corona@single_team","single_team_loop_boss" }
+	},
+	{ -- Lixeiro
+		Distance = 50,
+		Coords = { -469.95,-1722.21,18.69,288.12 },
+		Model = "s_m_y_garbage",
+		anim = { "anim@heists@heist_corona@single_team","single_team_loop_boss" }
+	},
+	{ -- Salva-vidas
+		Distance = 50,
+		Coords = { -1483.17,-1029.64,6.13,232.31 },
+		Model = "s_m_y_baywatch_01",
+		anim = { "anim@heists@heist_corona@single_team","single_team_loop_boss" }
+	},
+	{ -- Guincho
+		Distance = 50,
+		Coords = { 407.53,-1624.49,29.3,225.12 },
+		Model = "s_m_m_dockwork_01",
+		anim = { "anim@heists@heist_corona@single_team","single_team_loop_boss" }
+	},
+	{ -- Transporter
+		Distance = 50,
+		Coords = { 239.45,243.0,106.69,68.97 },
+		Model = "s_m_y_hwaycop_01",
+		anim = { "anim@heists@heist_corona@single_team","single_team_loop_boss" }
+	},
 }
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- ADDPED

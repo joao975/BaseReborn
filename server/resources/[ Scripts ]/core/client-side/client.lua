@@ -255,6 +255,7 @@ CreateThread(function()
 		if GetPlayerWantedLevel(PlayerId()) ~= 0 then
 			ClearPlayerWantedLevel(PlayerId())
 		end
+		ClearAreaOfPeds(549.69,-3149.5,6.07,200.0,false)  -- Remove ped Mafia
 		Wait(0)
 	end
 end)
