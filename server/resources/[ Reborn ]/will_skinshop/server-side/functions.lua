@@ -133,7 +133,7 @@ end)
 RegisterCommand("skinshop",function(source,args)
     local user_id = getUserId(source)
     if user_id and hasPermission(user_id,"Admin") then
-        TriggerClientEvent("will_skinshop:openShop",source)
+        TriggerClientEvent("will_skinshop:openShop",source,"Creator")
     end
 end)
 

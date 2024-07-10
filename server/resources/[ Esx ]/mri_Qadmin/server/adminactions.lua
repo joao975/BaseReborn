@@ -969,7 +969,7 @@ RegisterServerEvent("mri_Qadmin:server:OpenSkinMenu", function(targetId)
     local src = source
     if AdminPanel.HasPermission(src, "skinmenu") then
         TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.skinMenuOpened", {value = GetPlayerName(targetId)}))
-        TriggerClientEvent("will_skinshop:openShop",src)
+        TriggerClientEvent("will_skinshop:openShop",src,"Creator")
         TriggerEvent("qb-log:server:CreateLog", "adminactions", "Skin Menu", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** opened skin menu for " .. GetPlayerName(targetId), false)
     end
 end)
