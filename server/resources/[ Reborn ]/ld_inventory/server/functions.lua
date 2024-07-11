@@ -310,3 +310,14 @@ end)
 function GetPlayers()
 	return vRP.getUsers()
 end
+
+Citizen.CreateThread(function()
+	Wait(500)
+	for _, player in pairs(GetPlayers()) do
+		local user_id = vRP.getUserId(player)
+		if user_id then
+			Ammos[user_id] = json.decode(vRP.getUData(user_id,"weaponAmmos")) or {}
+			Attachs[user_id] = json.decode(vRP.getUData(user_id,"weaponAttachs")) or {}
+		end
+	end
+end)

@@ -134,7 +134,7 @@ function tvRP.legalWeaponsChecker(weapon)
 	  end
 	end
 	if ilegal then
-		tvRP.giveWeapons(weapons_legal, true)
+		tvRP.giveWeapons(weapons_legal, true, false)
 		weapon = weapons_legal						 
 	end
 	return weapon
@@ -148,7 +148,7 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 function tvRP.replaceWeapons(weapons)
 	local old_weapons = tvRP.getWeapons()
-	tvRP.giveWeapons(weapons, true)
+	tvRP.giveWeapons(weapons, true, false)
 	return old_weapons
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -161,15 +161,16 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- GiveWeaponToPed
 -----------------------------------------------------------------------------------------------------------------------------------------
-function tvRP.giveWeapons(weapons,clear_before)
+function tvRP.giveWeapons(weapons,clear_before,forceHand)
 	local ped = PlayerPedId()
 	if clear_before then
 		RemoveAllPedWeapons(ped,true)
 		weapon_list = {}
 	end
+	if forceHand == nil then forceHand = true end
 
 	for k,v in pairs(weapons) do
-		GiveWeaponToPed(ped,GetHashKey(k),v.ammo or 0,false)
+		GiveWeaponToPed(ped,GetHashKey(k),v.ammo or 0,false,forceHand)
 		weapon_list[string.upper(k)] = v
 	end
 	TriggerServerEvent("will_inventory:giveWeapons", weapon_list)
