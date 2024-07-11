@@ -28,7 +28,7 @@ end
 -- #########################
 
 local cameras = {
-    body = { coords = vec3(0.0, 1.1, 0.7), point = vec3(0.0,0.0,0.7), f = function() freezeAnim("mp_sleep", "bind_pose_180", 49, true) end }, 
+    body = { coords = vec3(0.0, 1.8, 0.7), point = vec3(0.0,0.0,0.0), f = function() freezeAnim("mp_sleep", "bind_pose_180", 49, true) end }, 
     eye = { coords = vec3(0.0, 0.32, 0.7), point = vec3(0.0,0.0,0.7), f = function() freezeAnim("mp_sleep", "bind_pose_180", 49, true) end },
     nose = { coords = vec3(0.0, 0.32, 0.66), point = vec3(0.0,0.0,0.66), f = function() freezeAnim("mp_sleep", "bind_pose_180", 49, true) end },
     mouth = { coords = vec3(0.0, 0.32, 0.63), point = vec3(0.0,0.0,0.63), f = function() freezeAnim("mp_sleep", "bind_pose_180", 49, true) end },
@@ -165,27 +165,6 @@ function enableMulticharCam()
     headingToCam = GetEntityHeading(PlayerPedId()) + 90
     camOffset = 2.0
 end
---[[ 
-function freezeAnim(dict, anim, flag, keep)
-    local ped = PlayerPedId()
-    if not keep then
-        ClearPedTasks(ped)
-    end
-    loadAnim(dict)
-    SetFacialIdleAnimOverride(ped, "pose_normal_1", 0)
-    TaskPlayAnim(ped, dict, anim, 2.0, 2.0, -1, 49, 0, false, false, false)
-    -- vRP.playAnim(true,{dict, anim},true)
-    animActived = true
-    CreateThread(function()
-        while animActived do
-            if not IsEntityPlayingAnim(PlayerPedId(),dict,anim,3) then
-                TaskPlayAnim(PlayerPedId(),dict,anim,3.0,3.0,-1,49,0,0,0,0)
-            end
-            Wait(4)
-        end
-    end)
-end
- ]]
 
 function freezeAnim(dict, anim, flag, keep)
     if not keep then

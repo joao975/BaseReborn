@@ -1,5 +1,3 @@
-let isMiddleMouseDown = false;
-
 function loadChars(data, maxValue, defaultSlots, maxSlots) {
   $("#charList").html("");
   for (var i = 0; i < data.length; i++) {
@@ -192,27 +190,244 @@ function errorNotify(text) {
   });
 }
 
-document.body.addEventListener("mousedown", (event) => {
-  if (event.button === 1) {
-    isMiddleMouseDown = true;
-  }
-});
+const defaultCams = ["body", "head", "eye", "nose", "mouth"];
 
-document.body.addEventListener("mouseup", (event) => {
-  if (event.button === 1) {
-    isMiddleMouseDown = false;
-  }
-});
-
-document.body.addEventListener("mousemove", (event) => {
-  if (isMiddleMouseDown) {
-    const deltaX = event.movementX;
-    postMouseDataToLua(deltaX);
-  }
-});
-
-function postMouseDataToLua(deltaX) {
-  apiPost("mouseData", {
-    deltaX: deltaX,
-  });
-}
+const defaultValues = {
+  beard: {
+    type: "item",
+    value: 0,
+    max: 0,
+    hasTexture: {
+      1: {
+        value: 0,
+        max: 0,
+      },
+    },
+    opacity: 10,
+  },
+  chest_hair: {
+    type: "item",
+    value: -1,
+    min: -1,
+    max: 0,
+    hasTexture: false,
+  },
+  lipstick: {
+    type: "item",
+    value: -1,
+    min: -1,
+    max: 0,
+    hasTexture: {
+      1: {
+        value: 0,
+        max: 0,
+      },
+    },
+    opacity: 10,
+  },
+  lips_thickness: {
+    type: "item",
+    value: -1,
+    min: -30,
+    max: 0,
+    hasTexture: false,
+  },
+  jaw_bone_width: {
+    type: "item",
+    value: 0,
+    min: -30,
+    max: 0,
+    hasTexture: false,
+  },
+  jaw_bone_back_lenght: {
+    type: "item",
+    value: 0,
+    min: -30,
+    max: 0,
+    hasTexture: false,
+  },
+  chimp_bone_lowering: {
+    type: "item",
+    value: 0,
+    min: -30,
+    max: 0,
+    hasTexture: false,
+  },
+  chimp_bone_lenght: {
+    type: "item",
+    value: 0,
+    min: -30,
+    max: 0,
+    hasTexture: false,
+  },
+  chimp_bone_width: {
+    type: "item",
+    value: 0,
+    min: -30,
+    max: 0,
+    hasTexture: false,
+  },
+  chimp_hole: {
+    type: "item",
+    value: 0,
+    min: -1,
+    max: 0,
+    hasTexture: false,
+  },
+  neck_thikness: {
+    type: "item",
+    value: 0,
+    min: -1,
+    max: 0,
+    hasTexture: false,
+  },
+  hair: {
+    type: "item",
+    value: 0,
+    min: 0,
+    max: 0,
+    hasTexture: {},
+  },
+  eye_color: {
+    type: "item",
+    value: -1,
+    min: -1,
+    max: 0,
+    hasTexture: false,
+  },
+  moles: {
+    type: "item",
+    value: -1,
+    min: -1,
+    max: 0,
+    hasTexture: {
+      1: {
+        value: 0,
+        max: 0,
+      },
+    },
+  },
+  nose_0: {
+    type: "item",
+    value: 0,
+    min: -30,
+    max: 0,
+    hasTexture: false,
+  },
+  nose_1: {
+    type: "item",
+    value: 0,
+    min: -30,
+    max: 0,
+    hasTexture: false,
+  },
+  nose_2: {
+    type: "item",
+    value: 0,
+    min: -30,
+    max: 0,
+    hasTexture: false,
+  },
+  nose_3: {
+    type: "item",
+    value: 0,
+    min: -30,
+    max: 0,
+    hasTexture: false,
+  },
+  nose_4: {
+    type: "item",
+    value: 0,
+    min: -30,
+    max: 0,
+    hasTexture: false,
+  },
+  nose_5: {
+    type: "item",
+    value: 0,
+    min: -30,
+    max: 0,
+    hasTexture: false,
+  },
+  eyebrown_high: {
+    type: "item",
+    value: 0,
+    min: -30,
+    max: 0,
+    hasTexture: false,
+  },
+  eyebrown_forward: {
+    type: "item",
+    value: 0,
+    min: -30,
+    max: 0,
+    hasTexture: false,
+  },
+  cheek_1: {
+    type: "item",
+    value: 0,
+    min: -30,
+    max: 0,
+    hasTexture: false,
+  },
+  cheek_2: {
+    type: "item",
+    value: 0,
+    min: -30,
+    max: 0,
+    hasTexture: false,
+  },
+  cheek_3: {
+    type: "item",
+    value: 0,
+    min: 0,
+    max: 0,
+    hasTexture: false,
+  },
+  eye_opening: {
+    type: "item",
+    value: 0,
+    min: -30,
+    max: 0,
+    hasTexture: false,
+  },
+  eyebrows: {
+    type: "item",
+    value: -1,
+    min: -1,
+    max: 0,
+    hasTexture: {
+      1: {
+        value: 0,
+        max: 0,
+      },
+    },
+    opacity: 10,
+  },
+  blush: {
+    type: "item",
+    value: -1,
+    min: -1,
+    max: 0,
+    hasTexture: {
+      1: {
+        value: 0,
+        max: 0,
+      },
+    },
+    opacity: 10,
+  },
+  makeup: {
+    type: "item",
+    value: -1,
+    min: -1,
+    max: 0,
+    hasTexture: {
+      1: {
+        value: 0,
+        max: 0,
+      },
+    },
+    opacity: 10,
+  },
+};

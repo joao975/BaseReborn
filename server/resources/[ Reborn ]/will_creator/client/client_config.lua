@@ -8,15 +8,17 @@ CreateThread(function()
     Wait(500)
     DoScreenFadeOut(0)
     ClearPedTasks(PlayerPedId())
-    -- setupBlips()
     while true do
         Wait(100)
         if NetworkIsSessionActive() or NetworkIsPlayerActive(PlayerId()) then
-            exports['spawnmanager']:setAutoSpawn(false)
+            if GetResourceState("spawnmanager") == "started" then
+                exports['spawnmanager']:setAutoSpawn(false)
+            end
             Wait(500)
             SetEntityVisible(PlayerPedId(), false)
             -- Desativar hud
             TriggerEvent("hudActived",false)
+            TriggerEvent("hud:Active",false)
             CharacterSelect()
             break
         end
@@ -139,8 +141,8 @@ function creatorClothes(creating)
 end
 
 function applyClothes(ped,data)
-	if data then
-		if not data["pants"] then return end
+    if not data then return end
+	if data["pants"] and data["torso"] then
 		if data["backpack"] == nil then
 			data["backpack"] = {}
 			data["backpack"]["item"] = 0
@@ -186,6 +188,11 @@ function applyClothes(ped,data)
 		else
 			ClearPedProp(ped,7)
 		end
+    elseif data.modelhash or data.model then
+        vRP.setCustomization(data)
+    else
+        TriggerEvent("skinshop:apply",data)
+        TriggerEvent("skinshop:Apply",data)
 	end
 end
 
@@ -195,29 +202,34 @@ function applyCustomization(ped, data)
         
         SetPedComponentVariation(ped, 2, data["hair"].item, 0, 0)
         SetPedHairColor(ped, data["hair"].texture, data["hair2"] and data["hair2"].texture or data["hair"].texture)
-    
-        SetPedHeadOverlay(ped, 2, data["eyebrows"].item, 1.0)
-        SetPedHeadOverlayColor(ped, 2, 1, data["eyebrows"].texture, 0)
         
-        SetPedHeadOverlay(ped, 1, data["beard"].item, 1.0)
+        SetPedHeadOverlay(ped, 1, data["beard"].item, data["beard"].opacity and data["beard"].opacity/10 or 1.0)
         SetPedHeadOverlayColor(ped, 1, 1, data["beard"].texture, 0)
-    
-        SetPedHeadOverlay(ped, 5, data["blush"].item, 1.0)
-        SetPedHeadOverlayColor(ped, 5, 1, data["blush"].texture, 0)
-    
-        SetPedHeadOverlay(ped, 8, data["lipstick"].item, 1.0)
-        SetPedHeadOverlayColor(ped, 8, 1, data["lipstick"].texture, 0)
-    
-        SetPedHeadOverlay(ped, 4, data["makeup"].item, 1.0)
-        SetPedHeadOverlayColor(ped, 4, 1, data["makeup"].texture, 0)
-    
+
+        SetPedHeadOverlay(ped, 2, data["eyebrows"].item, data["eyebrows"].opacity and data["eyebrows"].opacity/10 or 1.0)
+        SetPedHeadOverlayColor(ped, 2, 1, data["eyebrows"].texture, 0)
+
         SetPedHeadOverlay(ped, 3, data["ageing"].item, 1.0)
         SetPedHeadOverlayColor(ped, 3, 1, data["ageing"].texture, 0)
-        
-        SetPedEyeColor(ped, data["eye_color"].item)
+
+        SetPedHeadOverlay(ped, 4, data["makeup"].item, data["makeup"].opacity and data["makeup"].opacity / 10 or 1.0)
+        SetPedHeadOverlayColor(ped, 4, 2, data["makeup"].texture, 0)
     
+        SetPedHeadOverlay(ped, 5, data["blush"].item, data["blush"].opacity and data["blush"].opacity / 10 or 1.0)
+        SetPedHeadOverlayColor(ped, 5, 2, data["blush"].texture, 0)
+    
+        SetPedHeadOverlay(ped, 8, data["lipstick"].item, data["lipstick"].opacity and data["lipstick"].opacity / 10 or 1.0)
+        SetPedHeadOverlayColor(ped, 8, 2, data["lipstick"].texture,  0)
+
         SetPedHeadOverlay(ped, 9, data["moles"].item, 1.0)
         SetPedHeadOverlayColor(ped, 9, GetPedDrawableVariation(ped, 9), data["moles"].texture / 10)
+
+        if data["chest_hair"] then
+            SetPedHeadOverlay(ped, 10, data["chest_hair"].item, 1.0)
+            SetPedHeadOverlayColor(ped, 10, 1, data["chest_hair"].texture, 0)
+        end
+                
+        SetPedEyeColor(ped, data["eye_color"].item)
         
         -- Nariz
         SetPedFaceFeature(ped, 0, data["nose_0"].item / 10)
@@ -231,10 +243,12 @@ function applyCustomization(ped, data)
         SetPedFaceFeature(ped, 6, data["eyebrown_high"].item / 10)
         SetPedFaceFeature(ped, 7, data["eyebrown_forward"].item / 10)
     
+        -- Bochecha
         SetPedFaceFeature(ped, 8, data["cheek_1"].item / 10)
         SetPedFaceFeature(ped, 9, data["cheek_2"].item / 10)
         SetPedFaceFeature(ped, 10, data["cheek_3"].item / 10)
     
+        -- Outros
         SetPedFaceFeature(ped, 11, data["eye_opening"].item / 10)
         SetPedFaceFeature(ped, 12, data["lips_thickness"].item / 10)
         SetPedFaceFeature(ped, 13, data["jaw_bone_width"].item / 10)
@@ -256,6 +270,7 @@ pedCategories = {
     ["beard"]                = { type = "overlay", id = 1 },
     ["blush"]                = { type = "overlay", id = 5 },
     ["lipstick"]             = { type = "overlay", id = 8 },
+    ["chest_hair"]             = { type = "overlay", id = 10 },
     ["makeup"]               = { type = "overlay", id = 4 },
     ["ageing"]               = { type = "ageing", id = 3 },
     ["eye_color"]            = { type = "eye_color", id = 1 },
@@ -281,7 +296,6 @@ pedCategories = {
     ["chimp_hole"]           = { type = "cheek", id = 4 },
     ["neck_thikness"]        = { type = "cheek", id = 5 },
 }
-
 
 function GetMaxValues(isSingle, key, push)
     local maxModelValues = {
@@ -312,6 +326,7 @@ function GetMaxValues(isSingle, key, push)
         ["neck_thikness"]        = { type = "hair", item = 0, texture = 0 },
         ["blush"]                = { type = "hair", item = 0, texture = 0 },
         ["lipstick"]             = { type = "hair", item = 0, texture = 0 },
+        ["chest_hair"]           = { type = "hair", item = 0, texture = 0 },
         ["makeup"]               = { type = "hair", item = 0, texture = 0 },
         ["ageing"]               = { type = "hair", item = 0, texture = 0 },
         ["face"]                 = { type = "character", item = 0, texture = 0 },
@@ -399,7 +414,7 @@ skinData = {
     ["face"] = {
         item = 0,
         texture = 0,
-        defaultItem = 0,
+        defaultItem = 21,
         defaultTexture = 0,
     },
     ["face2"] = {
@@ -429,20 +444,30 @@ skinData = {
         texture = 1,
         defaultItem = -1,
         defaultTexture = 1,
+        opacity = 10
     },
     ["beard"] = {
         item = -1,
         texture = 1,
         defaultItem = -1,
         defaultTexture = 1,
+        opacity = 10
     },
     ["blush"] = {
         item = -1,
         texture = 1,
         defaultItem = -1,
         defaultTexture = 1,
+        opacity = 10
     },
     ["lipstick"] = {
+        item = -1,
+        texture = 1,
+        defaultItem = -1,
+        defaultTexture = 1,
+        opacity = 10
+    },
+    ["chest_hair"] = {
         item = -1,
         texture = 1,
         defaultItem = -1,
@@ -453,6 +478,7 @@ skinData = {
         texture = 1,
         defaultItem = -1,
         defaultTexture = 1,
+        opacity = 10
     },
     ["ageing"] = {
         item = -1,
@@ -618,7 +644,7 @@ CreateThread(function()
     end
 end)
 
---[[ 
+--[[ --> BLIPS PARA O MAPA
 function setupBlips()
     for k, _ in pairs(Config.Stores) do
         local blipConfig = Config.BlipType[Config.Stores[k].type]
@@ -626,7 +652,7 @@ function setupBlips()
             createBlip(blipConfig, Config.Stores[k].coords)
         end
     end
-end ]]
+end
 
 function createBlip(blipConfig, coords)
     local blip = AddBlipForCoord(coords.x, coords.y, coords.z)
@@ -638,12 +664,7 @@ function createBlip(blipConfig, coords)
     AddTextComponentString(blipConfig.name)
     EndTextCommandSetBlipName(blip)
     return blip
-end
-
-function f(n) 
-	n = parseInt(n) + 0.00000
-    return n 
-end
+end ]]
 
 function loadModel(model)
 	while not HasModelLoaded(model) do
@@ -915,7 +936,6 @@ function cutScene()
     StopCutsceneImmediately()
     inCutscene = false
 end 
-
 
 function setWeather()
     while inCutscene do
