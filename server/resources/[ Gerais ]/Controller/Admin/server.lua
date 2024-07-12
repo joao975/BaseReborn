@@ -43,8 +43,11 @@ end)
 RegisterCommand('skin',function(source,args,rawCommand)
     local user_id = vRP.getUserId(source)
 	if vRP.hasPermission(user_id,"Owner") then
-		TriggerClientEvent("skinmenu",args[1],args[2])
-		TriggerClientEvent("Notify",source,"negado","Voce setou a skin <b>"..args[2].."</b> no passaporte <b>"..parseInt(args[1]).."</b>.",5000)
+		local nplayer = vRP.getUserSource(tonumber(args[1]))
+		if nplayer then
+			TriggerClientEvent("skinmenu",nplayer,args[2])
+			TriggerClientEvent("Notify",source,"negado","Voce setou a skin <b>"..args[2].."</b> no passaporte <b>"..parseInt(args[1]).."</b>.",5000)
+		end
     end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
