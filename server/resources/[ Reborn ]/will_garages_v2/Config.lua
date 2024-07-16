@@ -16,10 +16,7 @@ Config.base = "creative"                        -- vrpex / creative (v1 a v3) / 
 Config.Mysql = "oxmysql"                        -- mysql-async // oxmysql // ghmattimysql
 Config.vehicleDB = "vrp_vehicles"               -- Tabela dos veiculos
 
-Config.imgDiret = "http://income.ind.br/images"               -- Diretorio de imagens para os carros
-
-Config.updateFile = true                        -- Atualizar vehicleGlobal com comando
-Config.scriptPaste = "resources"                -- Diretorio do script. Outro exemplo: "resources/[ SCRIPTS ]"
+Config.imgDiret = "http://212.18.114.101/imagens/"               -- Diretorio de imagens para os carros
 
 Config.deleteNearVeh = true                     -- Botão para deletar veiculo proximo
 Config.pick_cars = true                         -- Abrir opçoes de veiculos ao entrar em garagem sem vaga
@@ -38,6 +35,8 @@ Config.robberyVehs = {
     ['Days_stealed'] = 2,                       -- Dias para o carro roubado permanecer
     ['Vehs_limit'] = 5                          -- Limite de carros que pode guardar na garagem (Funciona apenas se usar a opção Config.guardar_outro_veh)
 }
+
+Config.disable_veh_peds = false                 -- Desativar veiculos de npc
 
 Config.car_by_garage = false                    -- Spawnar carro em apenas garagem que foi guardado
 
@@ -61,11 +60,32 @@ Config.blip_distance = {
 }
 
 Config.vehicleTypes = {
-   --[[  ["carros"] = "Nativo",
+    ["carros"] = "Nativo",
     ["motos"] = "Moto",
-    ["work"] = "Serviço", ]]
+    ["work"] = "Serviço",
+    ["automobile"] = "cars",
+    ["bike"] = "bikes",
+    ["boat"] = "boats",
+    ["heli"] = "work",
+    ["plane"] = "work",
+    ["submarine"] = "work",
+    ["trailer"] = "work",
+    ["train"] = "work",
 }
 
+Config.defaultValues = {
+    ["carros"] = 100000,
+    ["motos"] = 100000,
+    ["work"] = -1,
+    ["automobile"] = 100000,
+    ["bike"] = 100000,
+    ["boat"] = -1,
+    ["heli"] = -1,
+    ["plane"] = -1,
+    ["submarine"] = -1,
+    ["trailer"] = -1,
+    ["train"] = -1,
+}
 -----##########################################################-----
 --###          BLACKLISTS
 -----##########################################################-----

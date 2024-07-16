@@ -1,52 +1,22 @@
 -----------------------------------------------------------------------------------------------------------------------------------------
--- PREPARES
------------------------------------------------------------------------------------------------------------------------------------------
-Citizen.CreateThread(function()
-    
-	prepare("will/add_vehicle","INSERT IGNORE INTO "..Config.vehicleDB.."(user_id,vehicle,plate,engine,body,fuel,work) VALUES(@user_id,@vehicle,@plate,@engine,@body,@fuel,@work)")
-	prepare("will/add_work_veh","INSERT IGNORE INTO "..Config.vehicleDB.."(user_id,vehicle,plate,engine,body,fuel,work) VALUES(@user_id,@vehicle,@plate,@engine,@body,@fuel,'true')")
-	prepare("will/rem_vehicle","DELETE FROM "..Config.vehicleDB.." WHERE user_id = @user_id AND vehicle = @vehicle")
-	prepare("will/get_vehicle","SELECT * FROM "..Config.vehicleDB.." WHERE user_id = @user_id AND vehicle = @vehicle")
-	prepare("will/get_vehicles","SELECT * FROM "..Config.vehicleDB.." WHERE user_id = @user_id")
-	prepare("will/get_user_plate","SELECT * FROM "..Config.vehicleDB.." WHERE plate = @plate")
-	prepare("will/update_vehicles_plates","UPDATE "..Config.vehicleDB.." SET plate = @plate WHERE user_id = @user_id AND vehicle = @vehicle")
-	prepare("will/update_vehicles","UPDATE "..Config.vehicleDB.." SET engine = @engine, body = @body, fuel = @fuel, doors = @doors, windows = @windows, tyres = @tyres WHERE plate = @plate")
-	prepare("will/move_vehicle","UPDATE "..Config.vehicleDB.." SET user_id = @nuser_id WHERE plate = @plate")
-	prepare("will/set_garage","UPDATE "..Config.vehicleDB.." SET garage = @garage WHERE plate = @plate")
-	prepare("will/get_stoled_vehs","SELECT * FROM "..Config.vehicleDB.." WHERE theft LIKE '%thief%'")
-	prepare("will/get_shared_vehs","SELECT * FROM "..Config.vehicleDB.." WHERE garage LIKE CONCAT('shared:', @garage)")
-	prepare("will/set_veh_stoled","UPDATE "..Config.vehicleDB.." SET theft = @theft WHERE plate = @plate")
-
-    AddEventHandler("vRP:playerSpawn",function(user_id,source)
-        playerSpawn(user_id,source)
-    end)
-
-	if Config.base == "creative" then
-		prepare("will/set_arrest","UPDATE "..Config.vehicleDB.." SET arrest = @arrest, time = @time WHERE plate = @plate")
-		prepare("will/get_arrested_vehs","SELECT * FROM "..Config.vehicleDB.." WHERE arrest > 0")
-        -- prepare("will/get_homeuser","SELECT * FROM vrp_homes WHERE user_id = @user_id AND home = @home")
-        prepare("will/get_homeuser","SELECT * FROM will_homes WHERE owner = @user_id AND name = @home")
-        prepare("will/rem_srv_data","DELETE FROM vrp_srv_data WHERE dkey = @dkey")
-        prepare("will/set_srvdata","REPLACE INTO vrp_srv_data(dkey,dvalue) VALUES(@key,@value)")
-    elseif Config.base == "summerz" then
-        prepare("will/set_arrest","UPDATE "..Config.vehicleDB.." SET arrest = @arrest, tax = @time WHERE plate = @plate")
-		prepare("will/get_arrested_vehs","SELECT * FROM "..Config.vehicleDB.." WHERE arrest > 0")
-        prepare("will/get_homeuser","SELECT * FROM summerz_propertys WHERE id = @user_id AND name = @home")
-        prepare("will/rem_srv_data","DELETE FROM summerz_entitydata WHERE dkey = @dkey")
-        prepare("will/set_srvdata","REPLACE INTO summerz_entitydata(dkey,dvalue) VALUES(@key,@value)")
-    else
-		prepare("will/set_arrest","UPDATE "..Config.vehicleDB.." SET detido = @arrest, time = @time WHERE plate = @plate")
-		prepare("will/get_arrested_vehs","SELECT * FROM "..Config.vehicleDB.." WHERE detido > 0")
-        prepare("will/get_homeuser","SELECT * FROM will_homes WHERE owner = @user_id AND name = @home")
-        prepare("will/set_srvdata","REPLACE INTO vrp_srv_data(dkey,dvalue) VALUES(@key,@value)")
-        prepare("will/rem_srv_data","DELETE FROM vrp_srv_data WHERE dkey = @dkey")
-	end
-end)
------------------------------------------------------------------------------------------------------------------------------------------
 -- COMANDOS
 -----------------------------------------------------------------------------------------------------------------------------------------
+local adminVehs = {}
+GlobalState["Plates"] = {}          -- Creative Network
+GlobalState["vehPlates"] = {}       -- Creative V5
+local ADMIN_PERMISSION = "admin.permissao"
 
-local adminPermission = "admin.permissao"
+--######################--
+--### SPAWNAR CARRO ###---
+--######################--
+
+RegisterCommand("addgarage", function(source)
+	local source = source
+	local user_id = getUserId(source)
+	if hasPermission(user_id, ADMIN_PERMISSION) then
+		vCLIENT.startRegisterGarage(source)
+	end
+end)
 
 --######################--
 --### SPAWNAR CARRO ###---
@@ -56,13 +26,17 @@ RegisterCommand("car",function(source,args,rawCommand)
 	local user_id = getUserId(source)
     local identity = getUserIdentity(user_id)
  	if user_id then
-		if hasPermission(user_id,adminPermission) and args[1] then
-			TriggerClientEvent("will_garages_v2:adminVehicle",source,args[1],identity.registration)
-            local ped = GetPlayerPed(source)
-			local x,y,z = table.unpack(GetEntityCoords(ped))
-            local h = GetEntityHeading(ped)
-            --will.spawnVehicle(args[1],x,y,z,h,{},false,0)
-			--SendDiscord(Config.Weebhok,12422,"Reborn Shop","Garagem","ID: "..user_id,"Spawnou o **"..args[1].."**\n Coordenadas: "..tD(x)..", "..tD(y)..", "..tD(z))
+		if hasPermission(user_id,ADMIN_PERMISSION) and args[1] then
+            local Ped = GetPlayerPed(source)
+			local Coords = GetEntityCoords(Ped)
+			local heading = GetEntityHeading(Ped)
+            local x,y,z = Coords["x"],Coords["y"],Coords["z"]
+            local plate = generatePlateNumber()
+            adminVehs[plate] = user_id
+            local netid = will.spawnVehicle(args[1],x,y,z,heading,{plate=plate},true)
+            local nveh = NetworkGetEntityFromNetworkId(netid)
+			SetPedIntoVehicle(Ped,nveh,-1)
+			SendDiscord("ID: "..user_id, "Spawnou o **"..args[1].."**\n Coordenadas: "..tD(x)..", "..tD(y)..", "..tD(z))
 		end
 	end
 end)
@@ -73,7 +47,7 @@ end)
 
 RegisterCommand("dv",function(source,args,rawCommand)
 	local user_id = getUserId(source)
-	if hasPermission(user_id,adminPermission) then
+	if hasPermission(user_id,ADMIN_PERMISSION) then
         if args[1] then
             local vehicles = vCLIENT.getNearVehicles(parseInt(args[1])) or {}
             if #vehicles > 0 then
@@ -88,18 +62,12 @@ RegisterCommand("dv",function(source,args,rawCommand)
                 local veh,vehNet,vehPlate,vehName = vCLIENT.vehList(source,11)
                 if vehName then
                     local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(source)))
-                    SendDiscord(Config.Weebhok,12422,"Reborn Shop","Garagem","ID: "..user_id,"Deletou o **"..vehName.."**\n Coordenadas: "..tD(x)..", "..tD(y)..", "..tD(z))
+                    SendDiscord("ID: "..user_id, "Deletou o **"..vehName.."**\n Coordenadas: "..tD(x)..", "..tD(y)..", "..tD(z))
                 end
             end
         end
 	end
 end)
-
-function tD(n)
-	local n = n or 0
-    n = math.ceil(n * 100) / 100
-    return n
-end
 
 --######################--
 --###  FIXAR CARRO  ###---
@@ -108,44 +76,12 @@ end
 RegisterCommand("fix",function(source,args,rawCommand)
 	local user_id = getUserId(source)
 	if user_id then
-		if hasPermission(user_id,adminPermission) then
+		if hasPermission(user_id,ADMIN_PERMISSION) then
 			local vehicle,vehNet,vehPlate,vehName = vCLIENT.vehList(source,7)
 			if vehicle then
 				TriggerClientEvent("will_garages_v2:repairVehicle",-1,vehNet,true)
 				local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(source)))
-				SendDiscord(Config.Weebhok,12422,"Reborn Shop","Garagem","ID: "..user_id,"Deu fix no carro **"..vehName.."**\n Coordenadas: "..tD(x)..", "..tD(y)..", "..tD(z))
-			end
-		end
-	end
-end)
-
---############################--
---###  REGISTRAR VEICULO  ###---
---############################--
-
-RegisterCommand("setcar",function(source,args,rawCommand)
-    local source = source
-	local user_id = getUserId(source)
-	if user_id then
-		if hasPermission(user_id,adminPermission) then
-			local vehicle = vCLIENT.getNearVehicle(source,12)
-			if vehicle then
-				local carname = prompt(source,"Nome de spawn do veiculo:","")
-				local nicename = prompt(source,"Nome bonito do veiculo:","")
-				local carprice = prompt(source,"Preço do veiculo:","50000")
-				local carchest = prompt(source,"Bau do veiculo:","40")
-				local cartype = prompt(source,"Tipo do veiculo:","carros")
-                if carname and nicename then
-                    if Config.updateFile then
-                        if updateVehicles(carname, nicename, carprice, carchest, cartype) then
-                            TriggerClientEvent("Notify",source,"sucesso","Veiculo cadastrado com sucesso!",5000)
-                        else
-                            TriggerClientEvent("Notify",source,"negado","Erro ao cadastrar veiculo",5000)
-                        end
-                    else
-                        prompt(source,"Resultado:","['"..carname.."'] = { ['name'] = '"..nicename.."', ['price'] = "..carprice..", ['type'] = '"..cartype.."', ['chest'] = '"..carchest.."' },")
-                    end
-                end
+				SendDiscord("ID: "..user_id, "Deu fix no carro **"..vehName.."**\n Coordenadas: "..tD(x)..", "..tD(y)..", "..tD(z))
 			end
 		end
 	end
@@ -156,6 +92,22 @@ end)
 --#############################--
 
 local sharedKeys = {}
+
+RegisterServerEvent("garages:Key")
+AddEventHandler("garages:Key",function(entity)
+	local source = source
+	local Plate = entity[1]
+	local user_id = getUserId(source)
+    if Config.base == "cn" then
+        if user_id and GlobalState["Plates"][Plate] == user_id then
+            vRP.GenerateItem(user_id,"vehkey-"..Plate,1,true,false)
+        end
+    elseif Config.base == "summerz" then
+        if user_id and GlobalState["vehPlates"][Plate] == user_id then
+            vRP.generateItem(user_id,"vehkey-"..Plate,1,true,false)
+        end
+	end
+end)
 
 RegisterCommand("chave",function(source, args)
     local source = source
@@ -241,7 +193,10 @@ RegisterCommand("chave",function(source, args)
     keyCommands[args[1]](vehicle, id)
 end)
 
-function canLockVehicle(user_id, vname, owner)
+function canLockVehicle(user_id, vname, owner, plate)
+    if adminVehs[plate] == user_id then
+        return true
+    end
     if user_id and vname and owner then
         local index = "key-"..vname.."-"..owner
         if sharedKeys[index] then
@@ -254,10 +209,10 @@ function canLockVehicle(user_id, vname, owner)
     end
     return false
 end
-
 -----------------------------------------------------------------------------------------------------------------------------------------
--- FUNCTIONS
+-- Spawnar/deletar veiculo
 -----------------------------------------------------------------------------------------------------------------------------------------
+local spawnedWrongVehs = {}
 
 -- Função chamada ao spawnar um veiculo (Server-side)
 function modifiesOnSpawnVehicle(user_id, vehName, data)
@@ -271,9 +226,6 @@ function modifiesOnDeleteVehicle(user_id, vehName, byDv)
     return
 end
 
---########## Spawnar veiculo ##########
-local spawnedWrongVehs = {}
-
 function will.spawnVehicle(vname,x,y,z,h,data,interior,bucket)
     local source = source
     local debugVehicle = 0
@@ -282,7 +234,7 @@ function will.spawnVehicle(vname,x,y,z,h,data,interior,bucket)
 	local nveh = CreateVehicle(mHash, x, y, height, h ,true, true)
     while not DoesEntityExist(nveh) and debugVehicle <= 80 do
         debugVehicle = debugVehicle + 1
-        Citizen.Wait(100)
+        Wait(100)
     end
     if DoesEntityExist(nveh) then
         local netid = NetworkGetNetworkIdFromEntity(nveh)
@@ -290,20 +242,19 @@ function will.spawnVehicle(vname,x,y,z,h,data,interior,bucket)
             spawnedWrongVehs[nveh] = true
             return
         end
-        local vehPlate = data.plate or will.generatePlateNumber()
+        local vehPlate = data.plate or generatePlateNumber()
         SetVehicleNumberPlateText(nveh,vehPlate)
-        TriggerEvent("setPlateEveryone",vehPlate)
         while GetEntityRoutingBucket(nveh) ~= parseInt(bucket) do
             SetEntityRoutingBucket(nveh,parseInt(bucket))
-            Citizen.Wait(100)
+            Wait(100)
         end
         debugVehicle = 0
         while GetVehicleNumberPlateText(nveh) ~= vehPlate and debugVehicle <= 50 do
             SetVehicleNumberPlateText(nveh,vehPlate)
             debugVehicle = debugVehicle + 1
-            Citizen.Wait(100)
+            Wait(100)
         end
-        Citizen.Wait(100)
+        Wait(100)
         SetEntityCoords(nveh, x, y, z, false, false, false, true)
         SetEntityHeading(nveh, h)
         if data.body then
@@ -318,6 +269,7 @@ function will.spawnVehicle(vname,x,y,z,h,data,interior,bucket)
                 end
             end
         end
+        registerPlate(vehPlate, getUserId(source))
         if interior then
             SetVehicleDoorsLocked(nveh,1)   -- Destrancado
             if not spawnedVehsInside[source] then spawnedVehsInside[source] = {} end
@@ -331,9 +283,9 @@ function will.spawnVehicle(vname,x,y,z,h,data,interior,bucket)
     end
 end
 
-Citizen.CreateThread(function()
+CreateThread(function()
     while true do
-        Citizen.Wait(1000)
+        Wait(1000)
         for k,v in pairs(spawnedWrongVehs) do
             if DoesEntityExist(k) then
                 vCLIENT.deleteVehicle(-1,k,true)
@@ -358,6 +310,11 @@ function getTunning(user_id,veiculo,vehPlate)
 		if custom[1] then
 			tunagem = custom[1]["dvalue"]
 		end
+    elseif Config.base == "cn" then
+        local Datatable = query("entitydata/GetData",{ dkey = "Mods:"..user_id..":"..veiculo })
+        if parseInt(#Datatable) > 0 then
+            tunagem = Datatable[1]["dvalue"]
+        end
 	end
     if GetResourceState("will_tunners") == "started" then
         tunagem = getSData("custom:"..vehPlate)
@@ -380,30 +337,7 @@ end
 
 function getNewHomes()
 	local result = {}
-
     -- ### Função para setar garagem com outro script de casas ###
-
-    --prepare("homes/fullGarages","SELECT * FROM mrlt_residences WHERE residence_garage_active = 1")
-    --local homes = query("homes/fullGarages") or {}
-    --[[ for i,v in pairs(homes) do 
-        if v then
-			local home = {}
-            home.entrada = {}
-            local a = json.decode(v.residence_garage_blip)
-            local b = json.decode(v.residence_garage_spawn)
-            local x,y,z = a[1],a[2],a[3]
-            local x2,y2,z2,h = b[1],b[2],b[3],b[4]
-            if x and x2 then
-              home.name = v.residence_name
-              home.payment = false
-              home.perm = false
-              home.entrada['blip'] = { x,y,z,h }
-              home.entrada['veiculo'] = { x2,y2,z2,h }
-              home.interior = v.garage_interior or "Garagem_menor"
-              table.insert(result, { home })
-            end
-        end
-    end ]]
 	return result
 end
 
@@ -423,7 +357,7 @@ end
 
 function sellVehicle(source, vehicle, price, plate)
     local user_id = getUserId(source)
-    if vRP.vehicleType(vehicle) ~= "vip" then
+    if will.getVehicleType(vehicle) ~= "vip" then
         if request(source, "Deseja vender o veiculo "..vehicle.." por R$"..price.."?", 30) then
             local vehData = query("will/get_user_plate", { plate = plate })
             if vehData[1] and parseInt(vehData[1]['user_id']) == user_id then
@@ -478,11 +412,13 @@ end
 
 function checkArrestedVehicle(source,user_id,data,vname)
     local arrested = false
-    if Config.base == "vrpex" and (parseInt(data.detido) >= 1 or parseInt(os.time()) <= (parseInt(data.time)+24*60*60)) then
+    if Config.base == "vrpex" and (parseInt(data.detido) >= 1 or os.time() >= (parseInt(data.time)+24*60*60)) then
         arrested = true
-    elseif Config.base == "creative" and (parseInt(data.arrest) >= 1 or parseInt(os.time()) <= (parseInt(data.time)+24*60*60)) then
+    elseif Config.base == "creative" and (parseInt(data.arrest) >= 1 or os.time() >= (parseInt(data.time)+24*60*60)) then
         arrested = true
-    elseif Config.base == "summerz" and (parseInt(data.arrest) >= 1 or parseInt(os.time()) <= (parseInt(data.tax)+24*60*60)) then
+    elseif Config.base == "summerz" and (parseInt(data.arrest) >= 1 or os.time() >= (parseInt(data.tax)+24*60*60)) then
+        arrested = true
+    elseif Config.base == "cn" and (parseInt(data.arrest) >= 1 or os.time() >= (parseInt(data.tax)+24*60*60)) then
         arrested = true
     end
     if arrested then
@@ -497,7 +433,7 @@ function checkArrestedVehicle(source,user_id,data,vname)
         local status = request(source,"O veículo "..vname.." está detido, deseja acionar o seguro pagando <b>R$"..tostring(vehPrice).."</b>?",60)
         if status then
             if paymentMethod(user_id, vehPrice) then
-                execute("will/set_arrest",{ plate = data.plate, arrest = 0, time = 0 })
+                execute("will/set_arrest",{ plate = data.plate, arrest = 0, time = os.time() + 7*24*60*60 })
                 return true
             else
                 TriggerClientEvent("Notify",source,"negado","Dinheiro insuficiente.",5000)
@@ -526,65 +462,35 @@ AddEventHandler("will_garages:setVehStatus",function(nuser_id, vehname, status, 
 	end
 end)
 
---########## GENERATE PLATE NUMBER ##########
-
-function generateStringNumber(format)
-	local abyte = string.byte("A")
-	local zbyte = string.byte("0")
-	local number = ""
-	for i = 1,#format do
-		local char = string.sub(format,i,i)
-    	if char == "D" then
-    		number = number..string.char(zbyte+math.random(0,9))
-		elseif char == "L" then
-			number = number..string.char(abyte+math.random(0,25))
-		else
-			number = number..char
-		end
-	end
-	return number
-end
-
-function will.generatePlateNumber()
-	local user_id = nil
-	local plate = ""
-	repeat
-		Citizen.Wait(10)
-		plate = generateStringNumber("DDLLLDDD")
-		user_id = getUserByPlate(plate)
-	until not user_id
-	return plate
-end
-
---########## Funções ##########
+--########## Funções dos veiculos ##########
 
 function will.getVehicleGlobal()
-    return vehicleGlobal
+    return GlobalState['VehicleGlobal']
 end
 
 function will.getVehicleName(name)
 	local vname = name
-    if vehicleGlobal[name] then
-        vname = vehicleGlobal[name].name
+    if GlobalState['VehicleGlobal'][name] then
+        vname = GlobalState['VehicleGlobal'][name].name
     end
     return vname
 end
 
 function will.getVehiclePrice(name)
 	local vprice = 50000    
-    if vehicleGlobal[name] then
-        vprice = vehicleGlobal[name].price
+    if GlobalState['VehicleGlobal'][name] then
+        vprice = GlobalState['VehicleGlobal'][name].price
     end
     return vprice
 end
 
 function will.getVehicleChest(name)
     local vchest = 40
-    if vehicleGlobal[name] then
-        if vehicleGlobal[name].chest then
-            vchest = vehicleGlobal[name].chest
-        elseif vehicleGlobal[name].mala then
-            vchest = vehicleGlobal[name].mala
+    if GlobalState['VehicleGlobal'][name] then
+        if GlobalState['VehicleGlobal'][name].chest then
+            vchest = GlobalState['VehicleGlobal'][name].chest
+        elseif GlobalState['VehicleGlobal'][name].mala then
+            vchest = GlobalState['VehicleGlobal'][name].mala
         end
     end
     return parseInt(vchest)
@@ -592,50 +498,34 @@ end
 
 function will.getVehicleType(name)
     local vtype = "carros"
-    if vehicleGlobal[name] then
-        vtype = vehicleGlobal[name].type
-        if vehicleGlobal[name].tipo then
-            vtype = vehicleGlobal[name].tipo
+    if GlobalState['VehicleGlobal'][name] then
+        vtype = GlobalState['VehicleGlobal'][name].type
+        if GlobalState['VehicleGlobal'][name].tipo then
+            vtype = GlobalState['VehicleGlobal'][name].tipo
         end
     end
     return vtype
 end
-
-function SendDiscord(webhook, color, title, subtitle, text, target)
-	local ts = os.time()
-	local time = os.date('%Y-%m-%d %H:%M:%S', ts)
-	local connect = {
-	    {
-	        ["color"] = color,
-	        ["title"] = title,
-	        ["description"] = text,
-	        ["footer"] = {
-				["text"] = subtitle,
-				["icon_url"] = Config.IconURL,
-	        },
-	    }
-	}
-	PerformHttpRequest(webhook, function(err, text, headers) end, 'POST', json.encode({username = Config.Botname, embeds = connect, avatar_url = Config.Logo}), { ['Content-Type'] = 'application/json' })
-end
 -----------------------------------------------------------------------------------------------------------------------------------------
--- EVENTS
+-- LOCK VEHICLE
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterServerEvent("will_garages_v2:vehicleLock")
-AddEventHandler("will_garages_v2:vehicleLock",function()
+AddEventHandler("will_garages_v2:vehicleLock",function(vehNet,vehPlate)
 	local source = source
 	local user_id = getUserId(source)
 	if user_id then
-		local vehicle,vehNet,vehPlate,vehName,vehLock = vCLIENT.vehList(source,4)
-		if vehicle and vehPlate then
+		local _,vehNet,vehPlate,vehName = vCLIENT.vehList(source,4)
+		if vehName and vehPlate then
 			local plateUserId = getUserByPlate(vehPlate)
-			if user_id == plateUserId or canLockVehicle(user_id, vehName, plateUserId) then
+			if user_id == plateUserId or canLockVehicle(user_id, vehName, plateUserId, vehPlate) then
                 if not vCLIENT.inVehicle(source) then
                     playAnim(source)
                 end
                 local networkVeh = NetworkGetEntityFromNetworkId(vehNet)
+                local vehLock = GetVehicleDoorLockStatus(networkVeh)
                 if vehLock >= 2 then
                     TriggerClientEvent("Notify",source,"importante","Veículo <b>destrancado</b> com sucesso.",5000)
-                    TriggerClientEvent("vrp_sound:source",source,"unlock",0.3)
+                    TriggerClientEvent("vrp_sound:source",source,"lock",0.3)
                     SetVehicleDoorsLocked(networkVeh,1)   -- Destrancado
                 else
                     TriggerClientEvent("Notify",source,"importante","Veículo <b>trancado</b> com sucesso.",5000)
@@ -646,25 +536,29 @@ AddEventHandler("will_garages_v2:vehicleLock",function()
 		end
 	end
 end)
-
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- REGISTER PLATE
+-----------------------------------------------------------------------------------------------------------------------------------------
 RegisterServerEvent("setPlateEveryone")
 AddEventHandler("setPlateEveryone",function(plate)
-	trydoors[plate] = true
-	TriggerClientEvent("will_garages_v2:syncTrydoors",-1,trydoors)
-    if Config.base == "summerz" then
-        GlobalState["vehPlates"] = trydoors
+    local source = source
+    if source then
+        registerPlate(vehPlate, getUserId(source))
+    else
+        registerPlate(vehPlate, nil)
     end
 end)
 
-AddEventHandler("playerDropped",function()
-    local source = source
-    playerDropped(source)
-end)
-
-AddEventHandler("vRP:playerSpawn",function(user_id,source)
-    local homes = getNewHomes()
-    TriggerClientEvent("will_garages:setHomes",source,homes)
-end)
+function registerPlate(vehPlate, user_id)
+    if vehPlate then
+        local vehPlates = GlobalState["vehPlates"]
+        local Plates = GlobalState["Plates"]
+        vehPlates[vehPlate] = user_id or true
+        Plates[vehPlate] = user_id or true
+        GlobalState["vehPlates"] = vehPlates
+        GlobalState["Plates"] = Plates
+    end
+end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- EXPORTS
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -673,7 +567,7 @@ exports('getVehicleName', will.getVehicleName)
 exports('getVehiclePrice', will.getVehiclePrice)
 exports('getVehicleChest', will.getVehicleChest)
 exports('getVehicleType', will.getVehicleType)
-exports('generatePlateNumber', will.generatePlateNumber)
+exports('generatePlateNumber', generatePlateNumber)
 
 --########## Export para adicionar veiculo na garagem ##########
 
@@ -689,52 +583,110 @@ local maxVehs = {
     ['Prata'] = 6
 }
 
-exports("checkMaxVehs",function(user_id)
-    if not enableMaxVehs then return true end
-    local maxVeh = 5
-    local myvehicles = query("will/get_vehicles", {user_id = user_id}) or {}
-    for perm, veh in pairs(maxVehs) do
-        if hasPermission(user_id, perm) then
-            maxVeh = veh
-        end
-    end
-    local vehQnt = 0
-    for k,v in pairs(myvehicles) do
-        if tostring(v.work) == "false" then
-            vehQnt = vehQnt + 1
-        end
-    end
-    if vehQnt < maxVeh then
-        return true
-    end
-    local nplayer = getUserSource(user_id)
-    TriggerClientEvent("Notify",nplayer,"negado","Máximo de veículos atingido.",5000)
-end)
-
 exports('addVehicle', function(user_id, vehicle)
-    local plate = will.generatePlateNumber()
-    local infos = { user_id = user_id, vehicle = vehicle, plate = plate, engine = 1000, body = 1000, fuel = 100, work = 'false' }
-    execute("will/add_vehicle", infos)
+    local myvehicles = enableMaxVehs and #query("will/get_vehicles", {user_id = user_id}) or {}
+    local maxVeh = 5
+    if enableMaxVehs then
+        for perm, veh in pairs(maxVehs) do
+            if hasPermission(user_id, perm) then
+                maxVeh = veh
+            end
+        end
+    end
+    if #myvehicles < maxVeh or not enableMaxVehs then
+        local plate = generatePlateNumber()
+        local infos = { user_id = user_id, vehicle = vehicle, plate = plate, engine = 1000, body = 1000, fuel = 100, work = 'false' }
+        execute("will/add_vehicle", infos)
+    else
+        local nplayer = getUserSource(user_id)
+        TriggerClientEvent("Notify",nplayer,"negado","Máximo de veículos atingido.",5000)
+    end
 end)
 
 -- ## exports['will_garages_v2']:addVehicle(user_id, vehicle)
 
-function createHouseGarage(coords, spawns, permissions, garageType)
-    local result = {}
-    local home = {}
-    home.name = garageType
-    home.payment = false
-    home.perm = false
-    home.entrada = {}
-    home.entrada['blip'] = { coords.x,coords.y,coords.z }
-    home.spawns = {}
-    for k,v in pairs(spawns) do
-        if v.coordinates.x then
-            table.insert(home.spawns,{ v.coordinates.x, v.coordinates.y, v.coordinates.z, v.heading })
-        end
-    end
-    table.insert(result, { home })
-    TriggerClientEvent("will_garages:setHomes", -1, result)
-end
+exports('remVehicle',function(user_id, vehicle)
+    execute("will/rem_vehicle", { user_id = user_id, vehicle = vehicle })
+end)
 
-exports("createHouseGarage",createHouseGarage)
+-- ## exports['will_garages_v2']:remVehicle(user_id, vehicle)
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- PREPARES
+-----------------------------------------------------------------------------------------------------------------------------------------
+CreateThread(function()
+	prepare("will/add_vehicle","INSERT IGNORE INTO "..Config.vehicleDB.."(user_id,vehicle,plate,engine,body,fuel,work) VALUES(@user_id,@vehicle,@plate,@engine,@body,@fuel,@work)")
+	prepare("will/add_work_veh","INSERT IGNORE INTO "..Config.vehicleDB.."(user_id,vehicle,plate,engine,body,fuel,work) VALUES(@user_id,@vehicle,@plate,@engine,@body,@fuel,'true')")
+	prepare("will/rem_vehicle","DELETE FROM "..Config.vehicleDB.." WHERE user_id = @user_id AND vehicle = @vehicle")
+	prepare("will/get_vehicle","SELECT * FROM "..Config.vehicleDB.." WHERE user_id = @user_id AND vehicle = @vehicle")
+	prepare("will/get_vehicles","SELECT * FROM "..Config.vehicleDB.." WHERE user_id = @user_id")
+	prepare("will/get_user_plate","SELECT * FROM "..Config.vehicleDB.." WHERE plate = @plate")
+	prepare("will/update_vehicles_plates","UPDATE "..Config.vehicleDB.." SET plate = @plate WHERE user_id = @user_id AND vehicle = @vehicle")
+	prepare("will/update_vehicles","UPDATE "..Config.vehicleDB.." SET engine = @engine, body = @body, fuel = @fuel, doors = @doors, windows = @windows, tyres = @tyres WHERE plate = @plate")
+	prepare("will/move_vehicle","UPDATE "..Config.vehicleDB.." SET user_id = @nuser_id WHERE plate = @plate")
+	prepare("will/set_garage","UPDATE "..Config.vehicleDB.." SET garage = @garage WHERE plate = @plate")
+	prepare("will/get_stoled_vehs","SELECT * FROM "..Config.vehicleDB.." WHERE theft LIKE '%thief%'")
+	prepare("will/get_shared_vehs","SELECT * FROM "..Config.vehicleDB.." WHERE garage LIKE CONCAT('shared:', @garage)")
+	prepare("will/set_veh_stoled","UPDATE "..Config.vehicleDB.." SET theft = @theft WHERE plate = @plate")
+
+    AddEventHandler("vRP:playerSpawn",function(user_id,source)
+        playerSpawn(user_id,source)
+        local homes = getNewHomes()
+        TriggerClientEvent("will_garages:setHomes",source,homes)
+    end)
+
+	if Config.base == "creative" then
+		prepare("will/set_arrest","UPDATE "..Config.vehicleDB.." SET arrest = @arrest, time = @time WHERE plate = @plate")
+		prepare("will/get_arrested_vehs","SELECT * FROM "..Config.vehicleDB.." WHERE arrest > 0")
+        prepare("will/get_homeuser","SELECT * FROM vrp_homes WHERE user_id = @user_id AND home = @home")
+        prepare("will/rem_srv_data","DELETE FROM vrp_srv_data WHERE dkey = @dkey")
+        prepare("will/set_srvdata","REPLACE INTO vrp_srv_data(dkey,dvalue) VALUES(@key,@value)")
+    elseif Config.base == "summerz" then
+        prepare("will/set_arrest","UPDATE "..Config.vehicleDB.." SET arrest = @arrest, tax = @time WHERE plate = @plate")
+		prepare("will/get_arrested_vehs","SELECT * FROM "..Config.vehicleDB.." WHERE arrest > 0")
+        prepare("will/get_homeuser","SELECT * FROM summerz_propertys WHERE id = @user_id AND name = @home")
+        prepare("will/rem_srv_data","DELETE FROM summerz_entitydata WHERE dkey = @dkey")
+        prepare("will/set_srvdata","REPLACE INTO summerz_entitydata(dkey,dvalue) VALUES(@key,@value)")
+
+        AddEventHandler("playerConnect",function(user_id,source)
+            playerSpawn(user_id,source)
+            local homes = getNewHomes()
+            TriggerClientEvent("will_garages:setHomes",source,homes)
+        end)
+    elseif Config.base == "cn" then
+        prepare("will/set_arrest","UPDATE "..Config.vehicleDB.." SET arrest = @arrest, tax = @time WHERE plate = @plate")
+		prepare("will/get_arrested_vehs","SELECT * FROM "..Config.vehicleDB.." WHERE arrest > 0")
+        prepare("will/get_homeuser","SELECT * FROM propertys WHERE Passport = @user_id AND Name = @home")
+        prepare("will/rem_srv_data","DELETE FROM entitydata WHERE dkey = @dkey")
+        prepare("will/set_srvdata","REPLACE INTO entitydata(dkey,dvalue) VALUES(@key,@value)")
+
+        AddEventHandler("Connect",function(user_id,source)
+            playerSpawn(user_id,source)
+            local homes = getNewHomes()
+            TriggerClientEvent("will_garages:setHomes",source,homes)
+        end)
+    else
+		prepare("will/set_arrest","UPDATE "..Config.vehicleDB.." SET detido = @arrest, time = @time WHERE plate = @plate")
+		prepare("will/get_arrested_vehs","SELECT * FROM "..Config.vehicleDB.." WHERE detido > 0")
+        prepare("will/get_homeuser","SELECT * FROM will_homes WHERE owner = @user_id AND name = @home")
+        prepare("will/set_srvdata","REPLACE INTO vrp_srv_data(dkey,dvalue) VALUES(@key,@value)")
+        prepare("will/rem_srv_data","DELETE FROM vrp_srv_data WHERE dkey = @dkey")
+	end
+end)
+
+function SendDiscord(title, text, subtitle)
+	local ts = os.time()
+	local time = os.date('%Y-%m-%d %H:%M:%S', ts)
+	local connect = {
+	    {
+	        ["color"] = 12422,
+	        ["title"] = title,
+	        ["description"] = text,
+	        ["footer"] = {
+				["text"] = subtitle,
+				["icon_url"] = Config.IconURL,
+	        },
+	    }
+	}
+	PerformHttpRequest(Config.Weebhok, function(err, text, headers) end, 'POST', json.encode({username = Config.Botname, embeds = connect, avatar_url = Config.Logo}), { ['Content-Type'] = 'application/json' })
+end

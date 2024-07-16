@@ -340,7 +340,8 @@ Citizen.CreateThread(function()
 	while true do
 		local coords = GetEntityCoords(PlayerPedId())
 		local will = 700
-		for k,v in pairs(Config.garages) do
+		local garagesGlobal = GlobalState['GaragesGlobal']
+		for k,v in pairs(garagesGlobal) do
 			local x,y,z = getBlip(v)
 			local distance = #(coords - vector3(x, y, z))
 			if distance <= Config.blip_distance['Normal'] then
@@ -384,24 +385,15 @@ end
 --##  TRYDOORS  ##--
 --################--
 
-local trydoors = {}
--- ## Desativar veiculos de npc ##
-local disable_veh_peds = false
-
-RegisterNetEvent("will_garages_v2:syncTrydoors")
-AddEventHandler("will_garages_v2:syncTrydoors",function(doors)
-	trydoors = doors
-end)
-
 Citizen.CreateThread(function()
 	while true do
 		local timeDistance = 1000
 		local ped = PlayerPedId()
-        if disable_veh_peds then
+        if Config.disable_veh_peds then
             if IsPedInAnyVehicle(ped) then
                 local vehicle = GetVehiclePedIsUsing(ped)
                 local platext = GetVehicleNumberPlateText(vehicle)
-                if GetPedInVehicleSeat(vehicle,-1) == ped and not trydoors[platext] or GetEntityHealth(ped) <= 101 then
+                if GetPedInVehicleSeat(vehicle,-1) == ped and not GlobalState["vehPlates"][platext] or GetEntityHealth(ped) <= 101 then
                     SetVehicleEngineOn(vehicle,false,true,true)
                     DisablePlayerFiring(ped,true)
                     timeDistance = 4
@@ -413,6 +405,96 @@ Citizen.CreateThread(function()
 		Citizen.Wait(timeDistance)
 	end
 end)
+
+--#####################--
+--##  GET SPAWN CDS  ##--
+--#####################--
+
+function GetCoordsFromCam(distance,coords)
+	local rotation = GetGameplayCamRot()
+	local adjustedRotation = vector3((math.pi / 180) * rotation["x"],(math.pi / 180) * rotation["y"],(math.pi / 180) * rotation["z"])
+	local direction = vector3(-math.sin(adjustedRotation[3]) * math.abs(math.cos(adjustedRotation[1])),math.cos(adjustedRotation[3]) * math.abs(math.cos(adjustedRotation[1])),math.sin(adjustedRotation[1]))
+
+	return vector3(coords[1] + direction[1] * distance, coords[2] + direction[2] * distance, coords[3] + direction[3] * distance)
+end
+
+function getBlipCoords()
+	local ped = PlayerPedId()
+	local objectProgress = true
+	local aplicationObject = false
+	local mHash = GetHashKey("zentorno")
+
+	RequestModel(mHash)
+	while not HasModelLoaded(mHash) do
+		Citizen.Wait(1)
+	end
+
+	local coords = GetEntityCoords(ped)
+	local pedHeading = GetEntityHeading(ped)
+	local newVehicle = CreateVehicle(mHash,coords["x"],coords["y"],coords["z"],false,false,false)
+	SetEntityCollision(newVehicle,false,false)
+	SetEntityHeading(newVehicle,pedHeading)
+	SetEntityAlpha(newVehicle,100,false)
+
+	while objectProgress do
+		local ped = PlayerPedId()
+		local cam = GetGameplayCamCoord()
+		local handle = StartExpensiveSynchronousShapeTestLosProbe(cam,GetCoordsFromCam(20.0,cam),-1,ped,4)
+		local _,_,coords = GetShapeTestResult(handle)
+		HideHudComponentThisFrame(19)
+		SetEntityCoordsNoOffset(newVehicle,coords["x"],coords["y"],coords["z"]+0.6,1,0,0)
+
+		dwText("~g~F~w~  CANCELAR",4,0.015,0.56,0.38,255,255,255,255)
+		dwText("~g~E~w~  CONFIRMAR",4,0.015,0.59,0.38,255,255,255,255)
+		dwText("~y~SCROLL UP~w~  GIRA ESQUERDA",4,0.015,0.62,0.38,255,255,255,255)
+		dwText("~y~SCROLL DOWN~w~  GIRA DIREITA",4,0.015,0.65,0.38,255,255,255,255)
+
+		if IsControlJustPressed(1,38) then
+			aplicationObject = true
+			objectProgress = false
+		end
+
+		if IsControlJustPressed(1,49) then
+			objectProgress = false
+		end
+
+		if IsControlJustPressed(1,180) then
+			local headObject = GetEntityHeading(newVehicle)
+			SetEntityHeading(newVehicle,headObject + 2.5)
+		end
+
+		if IsControlJustPressed(1,181) then
+			local headObject = GetEntityHeading(newVehicle)
+			SetEntityHeading(newVehicle,headObject - 2.5)
+		end
+
+		Citizen.Wait(1)
+	end
+
+	local headObject = GetEntityHeading(newVehicle)
+	local coordsObject = GetEntityCoords(newVehicle)
+	local _,GroundZ = GetGroundZFor_3dCoord(coordsObject["x"],coordsObject["y"],coordsObject["z"])
+
+	local newCoords = {
+		["x"] = coordsObject["x"],
+		["y"] = coordsObject["y"],
+		["z"] = GroundZ ~= 0.0 and GroundZ or coordsObject["z"]
+	}
+
+	DeleteEntity(newVehicle)
+
+	return aplicationObject,newCoords,headObject
+end
+
+function dwText(text,font,x,y,scale,r,g,b,a)
+	SetTextFont(font)
+	SetTextScale(scale,scale)
+	SetTextColour(r,g,b,a)
+	SetTextOutline()
+	SetTextEntry("STRING")
+	AddTextComponentString(text)
+	DrawText(x,y)
+end
 
 --#####################--
 --##  Anim Hotwired  ##--
@@ -508,19 +590,39 @@ function will.vehList(radius)
 	else
 		veh = will.getNearVehicle(radius)
 	end
-	local vehname = getModelName(veh)
-	if IsEntityAVehicle(veh) and vehname then
-		local model = GetEntityModel(veh)
-		return veh,VehToNet(veh),GetVehicleNumberPlateText(veh),vehname,GetVehicleDoorLockStatus(veh),false,GetVehicleBodyHealth(veh),model,GetVehicleClass(veh)
+	if veh and IsEntityAVehicle(veh) then
+		local vehname = getModelName(veh)
+		if vehname then
+			local model = GetEntityModel(veh)
+			return veh,VehToNet(veh),GetVehicleNumberPlateText(veh),vehname,GetVehicleDoorLockStatus(veh),false,GetVehicleBodyHealth(veh),model,GetVehicleClass(veh)
+		end
 	end
 end
 
 function getModelName(vehicle)
-    for k,v in pairs(vehicleGlobal) do
-        if GetHashKey(k) == GetEntityModel(vehicle) then
+	local hasFound = false
+	local vehicleHash = GetEntityModel(vehicle)
+	local vehsGlobal = GlobalState['VehicleGlobal']
+    for k,v in pairs(vehsGlobal) do
+        if GetHashKey(k) == vehicleHash then
+			hasFound = true
             return k
         end
     end
+	if not hasFound then
+		local vehName = nil
+		local manufacturer = GetMakeNameFromVehicleModel(vehicleHash)
+		if manufacturer == "CARNOTFOUND" then
+			manufacturer = GetDisplayNameFromVehicleModel(vehicleHash)
+		end
+		if manufacturer ~= "CARNOTFOUND" then
+			vehName = manufacturer
+		end
+		if vehName then
+			TriggerServerEvent("will_garages_v2:registerVehicle", vehName, GetVehicleType(vehicle))
+		end
+		return vehName
+	end
 end
 
 --###############--
