@@ -1,25 +1,57 @@
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- VEHGLOBAL
 -----------------------------------------------------------------------------------------------------------------------------------------
-local Proxy = module("vrp","lib/Proxy")
-local Tunnel = module("vrp","lib/Tunnel")
-
 function vRP.vehicleGlobal()
-	return exports['will_garages_v2']:getVehicleGlobal()
+	if GetResourceState("will_garages_v2") == "started" then
+		return exports['will_garages_v2']:getVehicleGlobal()
+	end
+	return Reborn.vehList()
 end
 
 function vRP.vehicleName(vname)
-	return exports['will_garages_v2']:getVehicleName(vname)
+	if GetResourceState("will_garages_v2") == "started" then
+		return exports['will_garages_v2']:getVehicleName(vname)
+	end
+	local vehList = Reborn.vehList()
+	for k,v in pairs(vehList) do
+		if v.hash == GetEntityModel(vname) then
+			return v.name
+		end
+	end
 end
 
 function vRP.vehicleChest(vname)
-	return exports['will_garages_v2']:getVehicleChest(vname)
+	if GetResourceState("will_garages_v2") == "started" then
+		return exports['will_garages_v2']:getVehicleChest(vname)
+	end
+	local vehList = Reborn.vehList()
+	for k,v in pairs(vehList) do
+		if v.hash == GetEntityModel(vname) then
+			return v.capacidade
+		end
+	end
 end
 
 function vRP.vehiclePrice(vname)
-	return exports['will_garages_v2']:getVehiclePrice(vname)
+	if GetResourceState("will_garages_v2") == "started" then
+		return exports['will_garages_v2']:getVehiclePrice(vname)
+	end
+	local vehList = Reborn.vehList()
+	for k,v in pairs(vehList) do
+		if v.hash == GetEntityModel(vname) then
+			return v.price
+		end
+	end
 end
 
 function vRP.vehicleType(vname)
-	return exports['will_garages_v2']:getVehicleType(vname)
+	if GetResourceState("will_garages_v2") == "started" then
+		return exports['will_garages_v2']:getVehicleType(vname)
+	end
+	local vehList = Reborn.vehList()
+	for k,v in pairs(vehList) do
+		if v.hash == GetEntityModel(vname) then
+			return v.tipo
+		end
+	end
 end

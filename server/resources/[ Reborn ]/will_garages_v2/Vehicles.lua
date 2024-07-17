@@ -635,5 +635,4 @@ vehicleGlobal = {
   ['trash'] = { ['name'] = 'Caminhao do lixo', ['price'] = -1, ['type'] = 'work',  ['chest'] = 40 },
   ['ratloader'] = { ['name'] = 'Lenhador', ['price'] = -1, ['type'] = 'work',  ['chest'] = 40 },
   ['flatbed'] = { ['name'] = 'Guincho', ['price'] = -1, ['type'] = 'work',  ['chest'] = 40 },
-
-  }
+}

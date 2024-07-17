@@ -63,6 +63,14 @@ function QBCore.Functions.GetSource(identifier)
     return 0
 end
 
+function QBCore.Functions.GetSourceByUserId(user_id)
+    for src, v in pairs(QBCore.Players) do
+        if user_id == v.user_id then
+            return src
+        end
+    end
+end
+
 function QBCore.Functions.GetPlayer(source)
     if type(source) == 'number' then
         return QBCore.Players[source]
@@ -447,7 +455,8 @@ function QBCore.Player.Login(source, citizenid, newData)
                 else
                     UserData.gang = {}
                 end
-                QBCore.Player.CheckPlayerData(source, UserData)
+                local Player = QBCore.Player.CheckPlayerData(source, UserData)
+                print(('[^2INFO QBCore^0] Player ^5"%s" ^0has connected to the server. Identifier: ^5%s^7'):format(UserData.charinfo.name.." "..UserData.charinfo.name2, citizenid))
             else
                 DropPlayer(source, Lang:t("info.exploit_dropped"))
                 TriggerEvent('qb-log:server:CreateLog', 'anticheat', 'Anti-Cheat', 'white', GetPlayerName(source) .. ' Has Been Dropped For Character Joining Exploit', false)

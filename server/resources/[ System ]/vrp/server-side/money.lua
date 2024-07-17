@@ -1,11 +1,18 @@
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- ADDBANK
 -----------------------------------------------------------------------------------------------------------------------------------------
-function vRP.addBank(user_id,amount)
+function vRP.addBank(user_id,amount,reason)
 	if amount > 0 then
 		vRP.execute("vRP/add_bank",{ id = parseInt(user_id), bank = parseInt(amount) })
 		if usersIdentity and usersIdentity[user_id] then
 			usersIdentity[user_id]['bank'] = usersIdentity[user_id]['bank'] + parseInt(amount)
+		end
+		local nplayer = vRP.getUserSource(user_id)
+		if nplayer then
+			local Player = QBCore.Functions.GetPlayer(nplayer)
+			local xPlayer = ESX.GetPlayerFromId(nplayer)
+			if xPlayer then	xPlayer.addMoney(amount,reason) end
+			if Player then Player.Functions.AddMoney("bank", amount, reason) end
 		end
 	end
 end
@@ -18,6 +25,13 @@ function vRP.setBank(user_id,amount)
 		if usersIdentity and usersIdentity[user_id] then
 			usersIdentity[user_id]['bank'] = parseInt(amount)
 		end
+		local nplayer = vRP.getUserSource(user_id)
+		if nplayer then
+			local Player = QBCore.Functions.GetPlayer(nplayer)
+			local xPlayer = ESX.GetPlayerFromId(nplayer)
+			if xPlayer then	xPlayer.setMoney(amount,reason) end
+			if Player then Player.Functions.SetMoney("bank", amount, reason) end
+		end
 	end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -28,6 +42,13 @@ function vRP.delBank(user_id,amount)
 		vRP.execute("vRP/del_bank",{ id = parseInt(user_id), bank = parseInt(amount) })
 		if usersIdentity and usersIdentity[user_id] then
 			usersIdentity[user_id]['bank'] = usersIdentity[user_id]['bank'] - parseInt(amount)
+		end
+		local nplayer = vRP.getUserSource(user_id)
+		if nplayer then
+			local Player = QBCore.Functions.GetPlayer(nplayer)
+			local xPlayer = ESX.GetPlayerFromId(nplayer)
+			if xPlayer then	xPlayer.removeMoney(amount,reason) end
+			if Player then Player.Functions.RemoveMoney("bank", amount, reason) end
 		end
 	end
 end

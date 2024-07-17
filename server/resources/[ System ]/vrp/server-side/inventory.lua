@@ -108,6 +108,27 @@ function vRP.giveInventoryItem(user_id,idname,amount,slot,notify)
 			slot = notify
 			notify = backupslot
 		end
+		local nplayer = vRP.getUserSource(user_id)
+		if nplayer then
+			local Player = QBCore.Functions.GetPlayer(nplayer)
+			local xPlayer = ESX.GetPlayerFromId(nplayer)
+			if xPlayer then
+				if idname == "dollars" then
+					xPlayer.addAccountMoney("money", amount)
+				elseif idname == "dollars2" then
+					xPlayer.addAccountMoney("black_money", amount)
+				else
+					xPlayer.addInventoryItem(idname, amount)
+				end
+			end
+			if Player then
+				if idname == "dollars" then
+					Player.Functions.AddMoney("money", amount)
+				else
+					Player.Functions.AddItem(idname, amount)
+				end
+			end
+		end
 		if not slot or slot == nil then
 			local initial = 12
 			
@@ -162,6 +183,27 @@ function vRP.tryGetInventoryItem(user_id,idname,amount,slot,notify)
 			slot = notify
 			notify = backupslot
 		end
+		local nplayer = vRP.getUserSource(user_id)
+		if nplayer then
+			local Player = QBCore.Functions.GetPlayer(nplayer)
+			local xPlayer = ESX.GetPlayerFromId(nplayer)
+			if xPlayer then
+				if idname == "dollars" then
+					xPlayer.removeAccountMoney("money", amount)
+				elseif idname == "dollars2" then
+					xPlayer.removeAccountMoney("black_money", amount)
+				else
+					xPlayer.removeInventoryItem(idname, amount)
+				end
+			end
+			if Player then
+				if idname == "dollars" then
+					Player.Functions.RemoveMoney("money", amount)
+				else
+					Player.Functions.RemoveItem(idname, amount)
+				end
+			end
+		end
 		if not slot or slot == nil then
 			for k,v in pairs(data) do
 				if v.item == idname and parseInt(v.amount) >= parseInt(amount) then
@@ -196,7 +238,6 @@ function vRP.tryGetInventoryItem(user_id,idname,amount,slot,notify)
 			end
 		end
 	end
-
 	return false
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -235,6 +276,27 @@ end
 function vRP.removeInventoryItem(user_id,idname,amount,notify)
 	local data = vRP.getInventory(user_id)
 	if data then
+		local nplayer = vRP.getUserSource(user_id)
+		if nplayer then
+			local Player = QBCore.Functions.GetPlayer(nplayer)
+			local xPlayer = ESX.GetPlayerFromId(nplayer)
+			if xPlayer then
+				if idname == "dollars" then
+					xPlayer.removeAccountMoney("money", amount)
+				elseif idname == "dollars2" then
+					xPlayer.removeAccountMoney("black_money", amount)
+				else
+					xPlayer.removeInventoryItem(idname, amount)
+				end
+			end
+			if Player then
+				if idname == "dollars" then
+					Player.Functions.RemoveMoney("money", amount)
+				else
+					Player.Functions.RemoveItem(idname, amount)
+				end
+			end
+		end
 		for k,v in pairs(data) do
 			if v.item == idname and parseInt(v.amount) >= parseInt(amount) then
 				v.amount = parseInt(v.amount) - parseInt(amount)

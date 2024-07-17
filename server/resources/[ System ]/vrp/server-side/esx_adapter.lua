@@ -414,49 +414,11 @@ end)
 function onPlayerJoined(playerId)
   local identifier = ESX.GetIdentifier(playerId)
   if identifier then
-    if ESX.GetPlayerFromIdentifier(identifier) then
-      DropPlayer(playerId,
-        ('there was an error loading your character!\nError code: identifier-active-ingame\n\nThis error is caused by a player on this server who has the same identifier as you have. Make sure you are not playing on the same Rockstar account.\n\nYour Rockstar identifier: %s'):format(
-          identifier))
-    else
-      --local result = MySQL.scalar.await('SELECT 1 FROM users WHERE identifier = ?', {identifier})
-      --if result then
+    if not ESX.GetPlayerFromIdentifier(identifier) then
       loadESXPlayer(identifier, playerId, false)
-      --[[ else
-        createESXPlayer(identifier, playerId)
-      end ]]
     end
-  else
-    DropPlayer(playerId,
-      'there was an error loading your character!\nError code: identifier-missing-ingame\n\nThe cause of this error is not known, your identifier could not be found. Please come back later or report this problem to the server administration team.')
   end
 end
-
---[[ function createESXPlayer(identifier, playerId, data)
-  local accounts = {}
-
-  for account, money in pairs(Config.StartingAccountMoney) do
-    accounts[account] = money
-  end
-
-  if Core.IsPlayerAdmin(playerId) then
-    print(('^2[INFO] ^0 Player ^5%s ^0Has been granted admin permissions via ^5Ace Perms.^7'):format(playerId))
-    defaultGroup = "admin"
-  else
-    defaultGroup = "user"
-  end
-
-  if not Config.Multichar then
-    MySQL.prepare(newPlayer, {json.encode(accounts), identifier, defaultGroup}, function()
-      loadESXPlayer(identifier, playerId, true)
-    end)
-  else
-    MySQL.prepare(newPlayer,
-      {json.encode(accounts), identifier, defaultGroup, data.firstname, data.lastname, data.dateofbirth, data.sex, data.height}, function()
-        loadESXPlayer(identifier, playerId, true)
-      end)
-  end
-end ]]
 
 --[[ if not Config.Multichar then
   AddEventHandler('playerConnecting', function(name, setCallback, deferrals)
@@ -666,6 +628,7 @@ function loadESXPlayer(identifier, playerId, isNew)
 
   local xPlayer = Reborn.CreateExtendedPlayer(playerId, identifier, userData.group, userData.accounts, userData.inventory, userData.weight, userData.job,
     userData.loadout, userData.playerName, userData.coords, user_id)
+  print(('[^2INFO ESX^0] Player ^5"%s" ^0has connected to the server. Identifier: ^5%s^7'):format(xPlayer.getName(), identifier))
   ESX.Players[playerId] = xPlayer
 
   if userData.firstname then
