@@ -18,7 +18,7 @@ QBConfig.Server.Closed = false -- Set server closed (no one can join except peop
 QBConfig.Server.ClosedReason = "Server Closed" -- Reason message to display when people can't join the server
 QBConfig.Server.Whitelist = false -- Enable or disable whitelist on the server
 QBConfig.Server.WhitelistPermission = 'Admin' -- Permission that's able to enter the server when the whitelist is on
-QBConfig.Server.Discord = "" -- Discord invite link
+QBConfig.Server.Discord = GlobalState['Basics']['Discord'] -- Discord invite link
 QBConfig.Server.CheckDuplicateLicense = true -- Check for duplicate rockstar license on join
 QBConfig.Server.Permissions = { 'Owner', 'Admin', 'Mod' } -- Add as many groups as you want here after creating them in your server.cfg
 

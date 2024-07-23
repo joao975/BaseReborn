@@ -74,7 +74,14 @@ end
 -- VEHLIST
 -----------------------------------------------------------------------------------------------------------------------------------------
 function tvRP.vehList(radius)
-    return exports['will_garages_v2']:vehList(radius)
+	if GetResourceState("will_garages_v2") == "started" then
+		return exports['will_garages_v2']:vehList(radius)
+	end
+	local veh = tvRP.getNearVehicle(radius)
+	local vehname = tvRP.getModelName(veh)
+	if vehname then
+		return veh,VehToNet(veh),GetVehicleNumberPlateText(veh),vehname,GetVehicleDoorLockStatus(veh),false,GetVehicleBodyHealth(veh),GetEntityModel(veh),GetVehicleClass(veh)
+	end
 end
 
 function tvRP.vehiclePlate()

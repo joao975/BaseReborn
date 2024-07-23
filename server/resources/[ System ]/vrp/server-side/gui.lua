@@ -136,7 +136,7 @@ function vRP.request(source,text,time)
 	local id = request_ids:gen()
 	local request = { source = source, cb_ok = r, done = false }
 	requests[id] = request
-
+	if time == nil then time = 30 end
 	vRPclient.request(source,id,text,time)
 
 	SetTimeout(time*1000,function()

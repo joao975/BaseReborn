@@ -175,7 +175,7 @@ function SendDiscord(webhook, text, text2)
     local embeds = {
         { 
             ["title"] = "Ficha v3",
-            ["type"] = "Reborn Shop",
+            ["type"] = GlobalState['Basics']['ServerName'],
 
             ["thumbnail"] = {
             	["url"] = avatar
@@ -197,7 +197,7 @@ function SendDiscord(webhook, text, text2)
 
         }
     }
-    PerformHttpRequest(webhook, function(Error, Content, Hand) end, 'POST', json.encode({username = "Reborn Shop", embeds = embeds, avatar_url = avatar}), { ['Content-Type'] = 'application/json' })
+    PerformHttpRequest(webhook, function(Error, Content, Hand) end, 'POST', json.encode({username = GlobalState['Basics']['ServerName'], embeds = embeds, avatar_url = avatar}), { ['Content-Type'] = 'application/json' })
 end
 
 -----------------------------------------------------------------------------------------------------------------------------------------

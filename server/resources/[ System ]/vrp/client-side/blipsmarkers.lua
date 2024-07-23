@@ -83,10 +83,10 @@ end)
 CreateThread(function()
     while true do
         SetDiscordAppId(0)
-        SetDiscordRichPresenceAsset('nomedoserver')
+        SetDiscordRichPresenceAsset(GlobalState['Basics']['ServerName'])
         SetDiscordRichPresenceAssetText('nomedoserver(aparecer no discord)')
 		SetDiscordRichPresenceAction(0, "Conectar No Servidor", "fivem://connect/(ip))")         
-		SetDiscordRichPresenceAction(1, "Entrar No Discord", "https://discord.com/...")
+		SetDiscordRichPresenceAction(1, "Entrar No Discord", GlobalState['Basics']['Discord'])
 		
 		local playerCount = 0
 

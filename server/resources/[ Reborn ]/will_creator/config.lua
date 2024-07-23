@@ -22,9 +22,9 @@ rbnConfig = GlobalState["RebornConfig"]
 Config.EnableMultichar = rbnConfig and rbnConfig.multiChar["Enabled"] or true
 
 -- Nome da cidade
-Config.ServerName = "REBORN STUDIOS"
+Config.ServerName = GlobalState['Basics']['ServerName']
 -- Loja da cidade
-Config.ServerStore = "https://reborn-shop.tebex.io/"
+Config.ServerStore = GlobalState['Basics']['ServerStore']
 -- Imagem com fundo transparente
 Config.ServerLogo = "https://cdn.discordapp.com/attachments/815987015245889616/1243318638191181894/Logo_PNG.png?ex=66510a37&is=664fb8b7&hm=9a8fe37913c005543c5a918276186ed0348099650ecc089ebc70248893d3ab1c&"
 Config.ServerDescription = "Reborn Studios é uma loja de serviços e produtos voltados ao FiveM. Focamos no diferencial e no atendimento ao cliente."

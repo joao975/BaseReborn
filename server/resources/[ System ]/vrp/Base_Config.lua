@@ -20,6 +20,14 @@ end
 --##   VARIABLES   ##--
 --####----####----####----
 
+GlobalState['Basics'] = {
+    ['ServerName'] = "Reborn Studios",
+    ['Discord'] = "https://discord.gg/F2K5CCqcaZ",
+    ['ServerStore'] = "",
+    ['Whitelist'] = true,
+    ['BaseMode'] = "steam",
+}
+
 GlobalState['Inventory'] = "ld_inventory"       -- "ld_inventory" / "will_inventory"
 
 ----####----####----####----##
@@ -27,7 +35,7 @@ GlobalState['Inventory'] = "ld_inventory"       -- "ld_inventory" / "will_invent
 ----####----####----####----##
 
 Reborn.images = function()
-    return "http://localhost/imagens"
+    return "http://212.18.114.101/imagens/"
 end
 
 ----####----####----####----##
@@ -47,7 +55,7 @@ end
 
 Reborn.first_login = function()
     return {
-        ['Mensagem'] = "Seja bem-vindo a <b>Base Reborn</b>. A cidade foi desenvolvida pensando especialmente em você, faça sua historia.",
+        ['Mensagem'] = "Seja bem-vindo a <b>"..GlobalState['Basics']['ServerName'].."</b>. A cidade foi desenvolvida pensando especialmente em você, faça sua historia.",
         -- Itens inicias
         ['Itens'] = {
             ['celular'] = 1,
@@ -196,7 +204,7 @@ Reborn.Language = function()
         pos = "Você é o %d/%d da fila, aguarde sua conexão",
         connectingerr = "Não foi possível adiciona-lo na fila.",
         steam = "Você precisa estar com a Steam aberta para conectar.",
-        whitelist = "Você não é está aprovado, entre em nosso Discord para mais informações: https://discord.gg/8unYr9MUdx"
+        whitelist = "Você não é está aprovado, entre em nosso Discord para mais informações: "..GlobalState['Basics']['Discord']
     }
 end
 

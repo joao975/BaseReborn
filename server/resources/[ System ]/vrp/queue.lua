@@ -538,6 +538,9 @@ end
 AddEventHandler("queue:playerConnecting",function(source,ids,name,setKickReason,deferrals)
 	deferrals.defer()
 	local source = source
+	if not GlobalState['Basics']['Whitelist'] then
+		return deferrals.done()
+	end
     local languages = Reborn.Language()
     local steam = vRP.getSteam(source)
 	local maintenance = Reborn.maintenance()
@@ -566,7 +569,7 @@ AddEventHandler("queue:playerConnecting",function(source,ids,name,setKickReason,
                                 ["items"] = {
                                     {
                                         ["type"] = "TextBlock",
-                                        ["text"] = "Bem-vindo à Base Reborn",
+                                        ["text"] = "Bem-vindo à "..GlobalState['Basics']['ServerName'],
                                         ["weight"] = 'bolder',
                                         ["size"] = 'extraLarge', 
                                     },
@@ -695,8 +698,8 @@ AddEventHandler("queue:playerConnecting",function(source,ids,name,setKickReason,
                                             {
                                                 ["type"] = "Action.OpenUrl",
                                                 ["id"] = 'copy_to_discord',
-                                                ["title"] = 'https://discord.gg/F2K5CCqcaZ',
-                                                ["url"] = 'https://discord.gg/F2K5CCqcaZ',
+                                                ["title"] = GlobalState['Basics']['Discord'],
+                                                ["url"] = GlobalState['Basics']['Discord'],
                                                 ["iconUrl"] = 'https://cdn.discordapp.com/attachments/1128809150508449934/1159211818854658108/discord.png'
                                             },
                                         },

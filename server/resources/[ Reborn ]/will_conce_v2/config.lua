@@ -8,7 +8,7 @@ config = {}
 config.base = "creative"
 
 -- LOCAL ONDE IRA PUXAR AS IMAGENS
-config.ip =  "http://212.18.114.101/imagens/" --Reborn.images()
+config.ip =  Reborn.images()
 
 basesVehDB = {
     ['vrpex'] = "vrp_user_vehicles",

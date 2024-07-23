@@ -15,7 +15,7 @@ Config.base = "creative"
 Config.cooldown = 60
 
 -- // Diretorio das imagens
-Config.imageDirect = Reborn.images().."/"
+Config.imageDirect = Reborn.images()
 
 -- // Taxa ao vender a loja
 Config.sellTax = 0.85
