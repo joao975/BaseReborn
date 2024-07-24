@@ -84,3 +84,42 @@ function playAnim(source)
     Citizen.Wait(400)
     vRPclient.stopAnim(source)
 end
+----------------------------------
+--########## Utilidades ##########
+-----------------------------------
+
+--########## GENERATE PLATE NUMBER ##########
+
+function generateStringNumber(format)
+	local abyte = string.byte("A")
+	local zbyte = string.byte("0")
+	local number = ""
+	for i = 1,#format do
+		local char = string.sub(format,i,i)
+    	if char == "D" then
+    		number = number..string.char(zbyte+math.random(0,9))
+		elseif char == "L" then
+			number = number..string.char(abyte+math.random(0,25))
+		else
+			number = number..char
+		end
+	end
+	return number
+end
+
+function generatePlateNumber()
+	local user_id = nil
+	local plate = ""
+	repeat
+		Wait(10)
+		plate = generateStringNumber("DDLLLDDD")
+		user_id = getUserByPlate(plate)
+	until not user_id
+	return plate
+end
+
+function tD(n)
+	local n = n or 0
+    n = math.ceil(n * 100) / 100
+    return n
+end
