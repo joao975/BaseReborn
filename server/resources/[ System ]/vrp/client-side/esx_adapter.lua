@@ -37,10 +37,9 @@ exports('getSharedObject', function()
 end)
 
 CreateThread(function()
-    Citizen.Wait(5000)
+    Wait(5000)
     TriggerServerEvent("esx:onPlayerJoined")
 end)
-
 
 function ESX.SetTimeout(msec, cb)
     table.insert(Core.TimeoutCallbacks, {

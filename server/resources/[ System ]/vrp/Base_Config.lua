@@ -1,6 +1,7 @@
 local Proxy = module("lib/Proxy")
 local Tunnel = module("lib/Tunnel")
 Reborn = {}
+Reborn.debug = false -- Debug mode
 Proxy.addInterface("Reborn",Reborn)
 Tunnel.bindInterface("Reborn",Reborn)
 
@@ -25,10 +26,9 @@ GlobalState['Basics'] = {
     ['Discord'] = "https://discord.gg/F2K5CCqcaZ",
     ['ServerStore'] = "",
     ['Whitelist'] = true,
-    ['BaseMode'] = "steam",
 }
 
-GlobalState['Inventory'] = "ld_inventory"       -- "ld_inventory" / "will_inventory"
+GlobalState['Inventory'] = "ld_inventory"       -- "ld_inventory" / "will_inventory" / "ox_inventory" / "custom"
 
 ----####----####----####----##
 ----##    IMG DIRETORIO    -##
@@ -79,7 +79,7 @@ end
 Reborn.needs = function()
     return {
         ['Tempo'] = 90,         -- Segundos
-        ['Fome'] = 1,           -- Total de 100
+        ['Fome'] = 2,           -- Total de 100
         ['Sede'] = 1,           -- Total de 100
     }
 end
@@ -139,8 +139,6 @@ Reborn.segurity_code = function()
             'vrp_users',
             'vrp_user_data',
             'vrp_user_ids',
-            'playerskins',
-            'saved_skins',
             'smartbank_accounts',
             'smartbank_cards',
             'smartbank_fines',
@@ -157,10 +155,8 @@ Reborn.segurity_code = function()
             'ld_orgs_daily',
             'ld_orgs_monthly',
             'ld_orgs_farm',
-            'will_shops_jobs',
-            'will_shops_stock',
-            'will_shops',
-
+            'playerskins',
+            'saved_skins',
             'smartphone_uber_trips',
             'smartphone_ifood_orders',
             'smartphone_contacts',
@@ -187,6 +183,9 @@ Reborn.segurity_code = function()
             'smartphone_casino',
             'smartphone_calls',
             'smartphone_bank_invoices',
+            'will_shops_jobs',
+            'will_shops_stock',
+            'will_shops',
         }
     }
 end

@@ -254,10 +254,12 @@ function ESX.GetExtendedPlayers(key, val)
 end
   
 function ESX.GetPlayerFromId(source)
+    -- print('ESX :: GetPlayerFromId',source,GetInvokingResource())
     return ESX.Players[tonumber(source)]
 end
   
 function ESX.GetPlayerFromIdentifier(identifier)
+    -- print('ESX :: GetPlayerFromIdentifier',source,GetInvokingResource())
     for k, v in pairs(ESX.Players) do
         if v.identifier == identifier then
             return v
@@ -289,9 +291,9 @@ function ESX.RefreshJobs()
 
   for k, v in pairs(allJobs) do
     Jobs[k] = v
-    Jobs[k].label = v._config and v._config.gtype or k
+    Jobs[k].label = v._config and v._config.title or k
     Jobs[k].name = k
-    Jobs[k].grades = { ['0'] = {grade = 0, label = v._config and v._config.gtype or k, salary = v._config and v._config.salary or 0, skin_male = {}, skin_female = {}} }
+    Jobs[k].grades = { ['0'] = {grade = 0, label = v._config and v._config.title or k, salary = v._config and v._config.salary or 0, skin_male = {}, skin_female = {}} }
   end
   
   if Jobs then

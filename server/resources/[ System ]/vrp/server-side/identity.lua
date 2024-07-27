@@ -1,36 +1,18 @@
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- GETUSERIDENTITY
 -----------------------------------------------------------------------------------------------------------------------------------------
-usersIdentity = {}
-
 function vRP.getUserIdentity(user_id,refresh)
-	if not user_id then return {} end
-	if not usersIdentity[user_id] or refresh then
-		usersIdentity[user_id] = {}
-		local rows = vRP.getInformation(user_id)
-		if rows[1] then
-			local nplayer = vRP.getUserSource(user_id)
-			local sex = 'm'
-			if nplayer then
-				if vRP.modelPlayer(nplayer) == 'mp_f_freemode_01' then sex = 'f' end
-			end
-			usersIdentity[user_id] = rows[1]
-			usersIdentity[user_id]["firstname"] = rows[1]["name2"]
-			usersIdentity[user_id]["sex"] = sex
-			usersIdentity[user_id]["port"] = 0
-			usersIdentity[user_id]["blood"] = 1
-			usersIdentity[user_id]["fines"] = vRP.getFines(user_id)
-			usersIdentity[user_id]["serial"] = rows[1]["registration"]
-		end
-	end
-	return usersIdentity[user_id]
+	local source = vRP.getUserSource(user_id)
+	return Reborn.getIdentity(source,refresh)
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- GETUSERREGISTRATION
 -----------------------------------------------------------------------------------------------------------------------------------------
 function vRP.getUserRegistration(user_id)
-	if usersIdentity[user_id] then
-		return usersIdentity[user_id]['registration']
+	local source = vRP.getUserSource(user_id)
+	local identity = Reborn.getIdentity(source)
+	if identity then
+		return identity['registration']
 	end
 	local rows = vRP.getInformation(user_id)
 	return rows[1].registration
@@ -49,7 +31,6 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 function vRP.initPrison(user_id,amount)
 	vRP.execute("vRP/set_prison",{ user_id = user_id, prison = parseInt(amount), locate = 1 })
-
 	if usersIdentity[user_id] then
 		usersIdentity[user_id]["prison"] = parseInt(amount)
 	end

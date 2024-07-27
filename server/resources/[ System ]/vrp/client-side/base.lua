@@ -56,11 +56,9 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 function GetPlayers()
 	local pedList = {}
-
 	for _,_player in ipairs(GetActivePlayers()) do
 		pedList[GetPlayerServerId(_player)] = true
 	end
-
 	return pedList
 end
 
@@ -121,16 +119,10 @@ function tvRP.playAnim(upper,seq,looping)
 		tvRP.stopAnim(upper)
 
 		local flags = 0
+		if upper then flags = flags + 48 end
+		if looping then flags = flags + 1 end
 
-		if upper then
-			flags = flags + 48
-		end
-
-		if looping then
-			flags = flags + 1
-		end
-
-		Citizen.CreateThread(function()
+		CreateThread(function()
 			local dictAnim = nil
 			local nameAnim = nil
 			if type(seq[1]) == "table" then
@@ -143,7 +135,7 @@ function tvRP.playAnim(upper,seq,looping)
 			RequestAnimDict(dictAnim)
 			while not HasAnimDictLoaded(dictAnim) do
 				RequestAnimDict(dictAnim)
-				Citizen.Wait(10)
+				Wait(10)
 			end
 
 			if HasAnimDictLoaded(dictAnim) then
@@ -161,7 +153,7 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- THREADANIM
 -----------------------------------------------------------------------------------------------------------------------------------------
-Citizen.CreateThread(function()
+CreateThread(function()
 	while true do
 		local timeDistance = 1000
 		local ped = PlayerPedId()
@@ -169,13 +161,13 @@ Citizen.CreateThread(function()
 			TaskPlayAnim(ped,animDict,animName,3.0,3.0,-1,animFlags,0,0,0,0)
 			timeDistance = 4
 		end
-		Citizen.Wait(timeDistance)
+		Wait(timeDistance)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- THREADBLOCK
 -----------------------------------------------------------------------------------------------------------------------------------------
-Citizen.CreateThread(function()
+CreateThread(function()
 	while true do
 		local timeDistance = 500
 		if animActived then
@@ -185,7 +177,7 @@ Citizen.CreateThread(function()
 			DisableControlAction(1,24,true)
 			DisableControlAction(1,25,true)
 		end
-		Citizen.Wait(timeDistance)
+		Wait(timeDistance)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -219,13 +211,8 @@ function tvRP.createObjects(dict,anim,prop,flag,mao,altura,pos1,pos2,pos3,pos4,p
 
 	local ped = PlayerPedId()
 	local mHash = GetHashKey(prop)
-
-	RequestModel(mHash)
-	while not HasModelLoaded(mHash) do
-		RequestModel(mHash)
-		Citizen.Wait(10)
-	end
-
+	LoadModel(mHash)
+	
 	if anim ~= "" then
 		tvRP.loadAnimSet(dict)
 		TaskPlayAnim(ped,dict,anim,3.0,3.0,-1,flag,0,0,0,0)
@@ -242,7 +229,6 @@ function tvRP.createObjects(dict,anim,prop,flag,mao,altura,pos1,pos2,pos3,pos4,p
 	end
 	SetEntityAsMissionEntity(object,true,true)
 	SetModelAsNoLongerNeeded(mHash)
-
 	animDict = dict
 	animName = anim
 	animFlags = flag
@@ -284,13 +270,13 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- THREADQUEUE
 -----------------------------------------------------------------------------------------------------------------------------------------
-Citizen.CreateThread(function()
+CreateThread(function()
 	while true do
 		if NetworkIsSessionStarted() then
 			TriggerServerEvent("Queue:playerActivated")
 			return
 		end
-		Citizen.Wait(30000)
+		Wait(30000)
 	end
 end)
 

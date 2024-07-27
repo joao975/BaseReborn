@@ -31,7 +31,7 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- THREADCELULAR
 -----------------------------------------------------------------------------------------------------------------------------------------
-Citizen.CreateThread(function()
+CreateThread(function()
 	while true do
 		local timeDistance = 500
 		if celular then
@@ -57,7 +57,7 @@ Citizen.CreateThread(function()
 			DisableControlAction(1,91,true)
 			DisablePlayerFiring(PlayerPedId(),true)
 		end
-		if cancelando then
+		if cancelando or LocalPlayer["state"]["Commands"] then
 			timeDistance = 4
 			DisableControlAction(1,73,true)
 			DisableControlAction(1,29,true)
@@ -76,13 +76,14 @@ Citizen.CreateThread(function()
 			DisableControlAction(1,38,true)
 			DisablePlayerFiring(PlayerPedId(),true)
 		end
-		Citizen.Wait(timeDistance)
+		Wait(timeDistance)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- REQUEST
 -----------------------------------------------------------------------------------------------------------------------------------------
 function tvRP.request(id,text,time)
+	time = time or 30
 	SendNUIMessage({ act = "request", id = id, text = tostring(text), time = time })
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -131,11 +132,7 @@ end
 -- LOADANIMSET
 -----------------------------------------------------------------------------------------------------------------------------------------
 function tvRP.loadAnimSet(dict)
-	RequestAnimDict(dict)
-	while not HasAnimDictLoaded(dict) do
-		RequestAnimDict(dict)
-		Citizen.Wait(10)
-	end
+	LoadAnim(dict)
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- BLOCKDRUNK
@@ -146,9 +143,9 @@ AddEventHandler("vrp:blockDrunk",function(status)
 	blockDrunk = status
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
--- POINT
+-- APONTAR COM DEDO
 -----------------------------------------------------------------------------------------------------------------------------------------
-Citizen.CreateThread(function()
+CreateThread(function()
 	while true do
 		local timeDistance = 1500
 		if point then
@@ -185,7 +182,7 @@ Citizen.CreateThread(function()
 			Citizen.InvokeNative(0xB0A6CFD2C69C1088,ped,"isFirstPerson",Citizen.InvokeNative(0xEE778F8C7E1142E2,Citizen.InvokeNative(0x19CAFA3C87F7C2FF))==4)
 		end
 
-		Citizen.Wait(timeDistance)
+		Wait(timeDistance)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -413,7 +410,6 @@ RegisterNUICallback("init",function(data,cb)
 	SendNUIMessage({ act = "cfg", cfg = {} })
 	TriggerEvent("vRP:NUIready")
 end)
-
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- MENU
 -----------------------------------------------------------------------------------------------------------------------------------------

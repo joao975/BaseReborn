@@ -5,7 +5,7 @@ AddEventHandler("syncmala",function(index)
 		if DoesEntityExist(v) then
 			if IsEntityAVehicle(v) then
 				SetVehicleDoorOpen(v,5,0,0)
-				Citizen.Wait(1000)
+				Wait(1000)
 				SetVehicleDoorShut(v,5,0)
 			end
 		end
@@ -33,7 +33,7 @@ CreateThread(function()
 			SetPlayerMaxStamina(Pid,200.0)
 		end
 
-		Wait(100)
+		Wait(500)
 	end
 end)
 
@@ -94,18 +94,12 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 function tvRP.applySkin(model)
 	local mHash = model
-
-	RequestModel(mHash)
-	while not HasModelLoaded(mHash) do
-		RequestModel(mHash)
-		Citizen.Wait(10)
-	end
+	LoadModel(mHash)
 
 	if HasModelLoaded(mHash) then
 		SetPlayerModel(PlayerId(),mHash)
 		SetModelAsNoLongerNeeded(mHash)
 	end
-
 	SetPedComponentVariation(PlayerPedId(),1,0,0,2)
 end
 
@@ -143,7 +137,7 @@ end
 
 function tvRP.setCustomization(custom)
 	local r = async()
-	Citizen.CreateThread(function()
+	CreateThread(function()
 		if custom then
 			local ped = GetPlayerPed(-1)
 			local mhash = nil
@@ -159,7 +153,7 @@ function tvRP.setCustomization(custom)
                 while not HasModelLoaded(mhash) and i < 10000 do
                     i = i + 1
                     RequestModel(mhash)
-                    Citizen.Wait(10)
+                    Wait(10)
                 end
 
                 if HasModelLoaded(mhash) then
@@ -212,7 +206,7 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- THREADNOCLIP
 -----------------------------------------------------------------------------------------------------------------------------------------
-Citizen.CreateThread(function()
+CreateThread(function()
 	while true do
 		local timeDistance = 1500
 
@@ -264,7 +258,7 @@ Citizen.CreateThread(function()
 			SetEntityCoordsNoOffset(ped,x,y,z,true,true,true)
 		end
 
-		Citizen.Wait(timeDistance)
+		Wait(timeDistance)
 	end
 end)
 
@@ -282,4 +276,3 @@ function getCamDirection()
 	end
 	return x,y,z
 end
-

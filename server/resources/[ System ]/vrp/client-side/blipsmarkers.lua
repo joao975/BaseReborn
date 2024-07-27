@@ -7,29 +7,29 @@ vRP = Proxy.getInterface("vRP")
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- THREADGLOBAL - 10
 -----------------------------------------------------------------------------------------------------------------------------------------
-Citizen.CreateThread(function()
+CreateThread(function()
 	SetAudioFlag("DisableFlightMusic",true)
 	SetAudioFlag("PoliceScannerDisabled",true)
 	local npcControl = Reborn.npcControl()
 	while true do
-		Citizen.Wait(0)
+		Wait(0)
 		SetRandomBoats(false)
 		SetGarbageTrucks(false)
 		DisableVehicleDistantlights(true)
 
-		-- peds
+		-- NPC CONTROL
 		SetPedDensityMultiplierThisFrame(npcControl['PedDensity'])
 		SetVehicleDensityMultiplierThisFrame(npcControl['VehicleDensity'])
 		SetParkedVehicleDensityMultiplierThisFrame(npcControl['ParkedVehicle'])
 		
-		-- remove Q
+		-- REMOVE Q
 		local ped = PlayerPedId()
         local health = GetEntityHealth(ped)
         if health >= 101 then
         	DisableControlAction(0,44,true)
         end
 
-		-- agachar
+		-- AGACHAR
         DisableControlAction(0,36,true)
         if not IsPedInAnyVehicle(ped) then
             RequestAnimSet("move_ped_crouched")
@@ -52,16 +52,14 @@ end)
 -- TASERTIME
 -----------------------------------------------------------------------------------------------------------------------------------------
 local tasertime = false
-Citizen.CreateThread(function()
+CreateThread(function()
 	while true do
 		local timeDistance = 1000
 		local ped = PlayerPedId()
-
 		if IsPedBeingStunned(ped) then
 			timeDistance = 4
 			SetPedToRagdoll(ped,7500,7500,0,0,0,0)
 		end
-
 		if IsPedBeingStunned(ped) and not tasertime then
 			tasertime = true
 			timeDistance = 4
@@ -69,36 +67,32 @@ Citizen.CreateThread(function()
 			ShakeGameplayCam("FAMILY5_DRUG_TRIP_SHAKE",1.0)
 		elseif not IsPedBeingStunned(ped) and tasertime then
 			tasertime = false
-			Citizen.Wait(7500)
+			Wait(7500)
 			StopGameplayCamShaking()
 			TriggerEvent("cancelando",false)
 		end
-
-		Citizen.Wait(timeDistance)
+		Wait(timeDistance)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- STATUS DO DISCORD
 -----------------------------------------------------------------------------------------------------------------------------------------
 CreateThread(function()
+	local licenseData = Reborn.license()
     while true do
-        SetDiscordAppId(0)
-        SetDiscordRichPresenceAsset(GlobalState['Basics']['ServerName'])
-        SetDiscordRichPresenceAssetText('nomedoserver(aparecer no discord)')
-		SetDiscordRichPresenceAction(0, "Conectar No Servidor", "fivem://connect/(ip))")         
+        SetDiscordAppId(0) 						-- Discord API App Id - Pode gerar aqui: https://discord.com/developers/applications/
+        SetDiscordRichPresenceAsset("") 		-- Nome do asset registrado do Discordapp Desenvolvedor
+        SetDiscordRichPresenceAssetText(GlobalState['Basics']['ServerName'])
+		SetDiscordRichPresenceAction(0, "Conectar No Servidor", "fivem://connect/"..(licenseData and licenseData['ip'] or "(IP)"))         
 		SetDiscordRichPresenceAction(1, "Entrar No Discord", GlobalState['Basics']['Discord'])
-		
 		local playerCount = 0
-
 		for _, player in ipairs(GetActivePlayers()) do
 			if GetPlayerPed(player) then
-				playerCount = playerCount+1
+				playerCount = playerCount + 1
 			end
 		end
-
 		SetRichPresence(playerCount.." jogadores online")
-
-        Citizen.Wait(30000)
+        Wait(30000)
     end
 end)
 

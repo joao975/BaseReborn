@@ -162,15 +162,5 @@ AddEventHandler("vRP:playerSpawn",function(user_id,source,first_spawn)
 	local consult = vRP.query("vRP/get_perm", { user_id = user_id })
 	for k,v in pairs(consult) do
 		vRP.insertPermission(user_id, v.permiss)
-		if vRP.hasPermission(user_id,"policia.permissao") then
-			TriggerEvent("vrp_blipsystem:serviceEnter",source,"Policial",77)
-			Player(source)["state"]["Police"] = true
-		elseif vRP.hasPermission(user_id,"paramedico.permissao") then
-			TriggerEvent("vrp_blipsystem:serviceEnter",source,"Paramedico",83)
-			Player(source)["state"]["Paramedic"] = true
-		elseif vRP.hasPermission(user_id,"mecanico.permissao") then
-			TriggerEvent("vrp_blipsystem:serviceEnter",source,"Mecanico",51)
-			Player(source)["state"]["Mechanic"] = true
-		end
 	end
 end)

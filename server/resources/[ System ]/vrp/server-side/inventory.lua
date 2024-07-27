@@ -2,6 +2,7 @@
 -- ITEMLIST
 -----------------------------------------------------------------------------------------------------------------------------------------
 local Proxy = module("vrp","lib/Proxy")
+local Tunnel = module("vrp","lib/Tunnel")
 Reborn = Proxy.getInterface("Reborn")
 local items = Reborn.itemList()
 local Webhooks = module("Reborn/webhooks")
@@ -68,66 +69,44 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 function vRP.GetItemBySlot(user_id,slot)
 	local data = vRP.getInventory(user_id)
-	if data then
-		if slot then
-			local slot  = tostring(slot)
-
-			if data[slot] then
-				return data[slot]
-			end
+	if data and slot then
+		local slot = tostring(slot)
+		if data[slot] then
+			return data[slot]
 		end
 	end
-
 	return nil
 end
 
 function vRP.GetSlotByItem(inv,item)
 	local data = inv
-	if data then
-		if item then
-			local item  = tostring(item)
-			for k,v in pairs(data) do
-				if v.item == item then
-					return k
-				end
+	if data and item then
+		for k,v in pairs(data) do
+			if v.item == tostring(item) then
+				return k
 			end
 		end
 	end
-
 	return nil
 end
-
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- GIVEINVENTORYITEM
 -----------------------------------------------------------------------------------------------------------------------------------------
 function vRP.giveInventoryItem(user_id,idname,amount,slot,notify)
+	local nplayer = vRP.getUserSource(tonumber(user_id))
+	if nplayer then
+		Reborn.addItem(nplayer,idname,amount,nil,slot,notify)
+	end
+end
+
+function vRP.giveInventoryItemCustom(source,item,amount,metadata,slot)
+	local user_id = vRP.getUserId(source)
 	local data = vRP.getInventory(user_id)
 	if data and parseInt(amount) > 0 then
 		if type(slot) == "boolean" then 
 			backupslot = slot
 			slot = notify
 			notify = backupslot
-		end
-		local nplayer = vRP.getUserSource(user_id)
-		if nplayer then
-			local Player = QBCore.Functions.GetPlayer(nplayer)
-			local xPlayer = ESX.GetPlayerFromId(nplayer)
-			if xPlayer then
-				if idname == "dollars" then
-					xPlayer.addAccountMoney("money", amount)
-				elseif idname == "dollars2" then
-					xPlayer.addAccountMoney("black_money", amount)
-				else
-					xPlayer.addInventoryItem(idname, amount)
-				end
-			end
-			if Player then
-				if idname == "dollars" then
-					Player.Functions.AddMoney("money", amount)
-				else
-					Player.Functions.AddItem(idname, amount)
-				end
-			end
 		end
 		if not slot or slot == nil then
 			local initial = 12
@@ -176,67 +155,9 @@ end
 -- TRYGETINVENTORYITEM
 -----------------------------------------------------------------------------------------------------------------------------------------
 function vRP.tryGetInventoryItem(user_id,idname,amount,slot,notify)
-	local data = vRP.getInventory(user_id)
-	if data then
-		if type(slot) == "boolean" then 
-			backupslot = slot
-			slot = notify
-			notify = backupslot
-		end
-		local nplayer = vRP.getUserSource(user_id)
-		if nplayer then
-			local Player = QBCore.Functions.GetPlayer(nplayer)
-			local xPlayer = ESX.GetPlayerFromId(nplayer)
-			if xPlayer then
-				if idname == "dollars" then
-					xPlayer.removeAccountMoney("money", amount)
-				elseif idname == "dollars2" then
-					xPlayer.removeAccountMoney("black_money", amount)
-				else
-					xPlayer.removeInventoryItem(idname, amount)
-				end
-			end
-			if Player then
-				if idname == "dollars" then
-					Player.Functions.RemoveMoney("money", amount)
-				else
-					Player.Functions.RemoveItem(idname, amount)
-				end
-			end
-		end
-		if not slot or slot == nil then
-			for k,v in pairs(data) do
-				if v.item == idname and parseInt(v.amount) >= parseInt(amount) then
-					v.amount = parseInt(v.amount) - parseInt(amount)
-
-					if parseInt(v.amount) <= 0 then
-						data[k] = nil
-					end
-					
-					--notify
-					if notify and vRP.itemBodyList(idname) then
-						TriggerClientEvent("itensNotify",vRP.getUserSource(user_id),{ "REMOVIDO",vRP.itemIndexList(idname),vRP.format(parseInt(amount)),vRP.itemNameList(idname) })
-					end
-					return true
-				end
-			end
-		else
-			local slot  = tostring(slot)
-
-			if data[slot] and data[slot].item == idname and parseInt(data[slot].amount) >= parseInt(amount) then
-				data[slot].amount = parseInt(data[slot].amount) - parseInt(amount)
-
-				if parseInt(data[slot].amount) <= 0 then
-					data[slot] = nil
-				end
-				
-				--notify
-				if notify and vRP.itemBodyList(idname) then
-					TriggerClientEvent("itensNotify",vRP.getUserSource(user_id),{ "REMOVIDO",vRP.itemIndexList(idname),vRP.format(parseInt(amount)),vRP.itemNameList(idname) })
-				end
-				return true
-			end
-		end
+	local nplayer = vRP.getUserSource(tonumber(user_id))
+	if nplayer then
+		return Reborn.removeItem(nplayer,idname,amount,slot,notify)
 	end
 	return false
 end
@@ -260,56 +181,62 @@ end
 -- GETINVENTORYITEMAMOUNT
 -----------------------------------------------------------------------------------------------------------------------------------------
 function vRP.getInventoryItemAmount(user_id,idname)
-	local data = vRP.getInventory(user_id)
-	if data then
-		for k,v in pairs(data) do
-			if v.item == idname then
-				return parseInt(v.amount)
-			end
+	local nplayer = vRP.getUserSource(tonumber(user_id))
+	if nplayer then
+		local itemData = Reborn.getItem(nplayer,idname)
+		if itemData then
+			return tonumber(itemData.count) or tonumber(itemData.amount) or 0
 		end
 	end
 	return 0
 end
+
+function vRP.getInventoryItemCustom(source,item)
+	local user_id = vRP.getUserId(source)
+	if user_id then
+		local data = vRP.getInventory(user_id)
+		for k,v in pairs(data) do
+			if v.item == item then
+				return v
+			end
+		end
+	end
+	return {}
+end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- REMOVEINVENTORYITEM
 -----------------------------------------------------------------------------------------------------------------------------------------
-function vRP.removeInventoryItem(user_id,idname,amount,notify)
+function vRP.removeInventoryItem(user_id,idname,amount,slot,notify)
+	local nplayer = vRP.getUserSource(tonumber(user_id))
+	if nplayer then
+		Reborn.removeItem(nplayer,idname,amount,slot,notify)
+	end
+end
+
+function vRP.removeItemCustom(source,item,amount,slot)
+	local user_id = vRP.getUserId(source)
 	local data = vRP.getInventory(user_id)
 	if data then
-		local nplayer = vRP.getUserSource(user_id)
-		if nplayer then
-			local Player = QBCore.Functions.GetPlayer(nplayer)
-			local xPlayer = ESX.GetPlayerFromId(nplayer)
-			if xPlayer then
-				if idname == "dollars" then
-					xPlayer.removeAccountMoney("money", amount)
-				elseif idname == "dollars2" then
-					xPlayer.removeAccountMoney("black_money", amount)
-				else
-					xPlayer.removeInventoryItem(idname, amount)
+		if slot then
+			local slot  = tostring(slot)
+			if data[slot] and data[slot].item == item and parseInt(data[slot].amount) >= parseInt(amount) then
+				data[slot].amount = parseInt(data[slot].amount) - parseInt(amount)
+				if parseInt(data[slot].amount) <= 0 then
+					data[slot] = nil
 				end
+				TriggerClientEvent("itensNotify",source,{ "REMOVIDO",item,amount,vRP.itemNameList(item) })
+				return true
 			end
-			if Player then
-				if idname == "dollars" then
-					Player.Functions.RemoveMoney("money", amount)
-				else
-					Player.Functions.RemoveItem(idname, amount)
+		else
+			for k,v in pairs(data) do
+				if v.item == item and parseInt(v.amount) >= parseInt(amount) then
+					v.amount = parseInt(v.amount) - parseInt(amount)
+					if parseInt(v.amount) <= 0 then
+						data[k] = nil
+					end
+					TriggerClientEvent("itensNotify",source,{ "REMOVIDO",item,amount,vRP.itemNameList(item) })
+					return true
 				end
-			end
-		end
-		for k,v in pairs(data) do
-			if v.item == idname and parseInt(v.amount) >= parseInt(amount) then
-				v.amount = parseInt(v.amount) - parseInt(amount)
-
-				if parseInt(v.amount) <= 0 then
-					data[k] = nil
-				end
-
-				if notify and vRP.itemBodyList(idname) then
-					TriggerClientEvent("itensNotify",vRP.getUserSource(user_id),{ "REMOVIDO",vRP.itemIndexList(idname),vRP.format(parseInt(amount)),vRP.itemNameList(idname) })
-				end
-
-				break
 			end
 		end
 	end
@@ -346,27 +273,19 @@ function vRP.tryChestItem(user_id,chestData,itemName,amount,slot)
 		local items = json.decode(data) or {}
 		if data and items ~= nil then
 			if items[itemName] ~= nil and parseInt(items[itemName].amount) >= parseInt(amount) then
-
 				if parseInt(amount) > 0 then
 					activedAmount[user_id] = parseInt(amount)
 				else
 					activedAmount[user_id] = parseInt(items[itemName].amount)
 				end
-
 				local new_weight = vRP.computeInvWeight(user_id) + vRP.itemWeightList(itemName) * parseInt(activedAmount[user_id])
 				if new_weight <= vRP.getBackpack(user_id) then
 					vRP.giveInventoryItem(user_id,itemName,parseInt(activedAmount[user_id]),true,slot)
-
 					items[itemName].amount = parseInt(items[itemName].amount) - parseInt(activedAmount[user_id])
-
-					 
 					vRP.createWeebHook(Webhooks.retiradadeitens,"```PASSAPORTE: "..user_id.." ( RETIROU )\nBAU:"..chestData.." \nITEM: "..vRP.format(parseInt(activedAmount[user_id])).."x "..vRP.itemNameList(itemName).."```")
-					
-
 					if parseInt(items[itemName].amount) <= 0 then
 						items[itemName] = nil
 					end
-
 					vRP.setSData(chestData,json.encode(items))
 					return true
 				end
@@ -385,7 +304,6 @@ function vRP.storeChestItem(user_id,chestData,itemName,amount,chestWeight,slot)
 		local data = vRP.getSData(chestData)
 		local items = json.decode(data) or {}
 		if data and items ~= nil then
-
 			if parseInt(amount) > 0 then
 				activedAmount[user_id] = parseInt(amount)
 			else
@@ -394,7 +312,6 @@ function vRP.storeChestItem(user_id,chestData,itemName,amount,chestWeight,slot)
 					activedAmount[user_id] = parseInt(inv[slot].amount)
 				end
 			end
-
 			local new_weight = vRP.computeChestWeight(items) + vRP.itemWeightList(itemName) * parseInt(activedAmount[user_id])
 			if new_weight <= chestWeight then
 				if vRP.tryGetInventoryItem(user_id,itemName,parseInt(activedAmount[user_id]),true,slot) then
@@ -403,11 +320,7 @@ function vRP.storeChestItem(user_id,chestData,itemName,amount,chestWeight,slot)
 					else
 						items[itemName] = { amount = parseInt(activedAmount[user_id]) }
 					end
-
-					
 					vRP.createWeebHook(Webhooks.colocouitens,"```PASSAPORTE: "..user_id.." ( GUARDOU )\nBAU:"..chestData.."\nITEM: "..vRP.format(parseInt(activedAmount[user_id])).."x "..vRP.itemNameList(itemName).."```")
-					
-
 					vRP.setSData(chestData,json.encode(items))
 					return true
 				end
@@ -421,11 +334,9 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 function vRP.computeChestWeight(chestData)
 	local totalWeight = 0
-
 	for k,v in pairs(chestData) do
 		totalWeight = totalWeight + vRP.itemWeightList(v["item"]) * parseInt(v["amount"])
 	end
-
 	return totalWeight
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -436,7 +347,6 @@ function vRP.getBackpack(user_id)
 	if data.backpack == nil then
 		data.backpack = 5
 	end
-
 	return data.backpack
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -456,7 +366,6 @@ function vRP.bonusDelivery(user_id)
 	if data.delivery == nil then
 		data.delivery = 0
 	end
-
 	return data.delivery
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -478,7 +387,6 @@ function vRP.bonusPostOp(user_id)
 	if data.postop == nil then
 		data.postop = 0
 	end
-
 	return data.postop
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -492,7 +400,6 @@ function vRP.setbonusPostOp(user_id,amount)
 		data.postop = amount
 	end
 end
-
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- UPDATEHOMEPOSITION
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -502,90 +409,5 @@ function vRP.updateHomePosition(user_id,x,y,z)
 		if data then
 			data.position = { x = tvRP.mathLegth(x), y = tvRP.mathLegth(y), z = tvRP.mathLegth(z) }
 		end
-	end
-end
-
------------------------------------------------------------------------------
---##################### Funções vRP || will_inventory ######################--
------------------------------------------------------------------------------
-
-if GlobalState['Inventory'] == "will_inventory" then
-	vRP.getInventory = function(inventory)
-		if tonumber(inventory) > 0 then
-			inventory = 'content-'..inventory
-		end
-		return exports['will_inventory']:getInventory(inventory)
-	end
-	
-	vRP.getInventoryItemAmount = function(inventory, idname)
-		if parseInt(inventory) > 0 then
-			inventory = 'content-'..inventory
-		end
-		return exports['will_inventory']:getItemAmount(inventory, idname)
-	end
-	
-	vRP.tryGetInventoryItem = function(inventory,item,amount,notify)
-		local source = 0
-		if parseInt(inventory) > 0 then
-			source = vRP.getUserSource(parseInt(inventory))
-			inventory = 'content-'..inventory
-		end
-		if exports['will_inventory']:removeItem(inventory, item, amount) then
-			if source and notify and vRP.itemBodyList(item) then
-				TriggerClientEvent("itensNotify",source,{ "REMOVIDO",vRP.itemIndexList(item),parseInt(amount),vRP.itemNameList(item) })
-			end
-			return true
-		end
-		return false 
-	end
-	
-	vRP.giveInventoryItem = function(inventory,item,amount,notify)
-		local metadata = {}
-		local source = 0
-		if parseInt(inventory) > 0 then
-			source = vRP.getUserSource(parseInt(inventory))
-			inventory = 'content-'..inventory
-		end
-		if exports['will_inventory']:addItem(inventory, item, amount, metadata) then
-			if notify and vRP.itemBodyList(item) then
-				TriggerClientEvent("itensNotify",source,{ "ADICIONADO",vRP.itemIndexList(item),parseInt(amount),vRP.itemNameList(item) })
-			end
-			return true
-		end
-		return false
-	end
-	
-	vRP.removeInventoryItem = function(inventory, item, count)
-		if parseInt(inventory) > 0 then
-			inventory = 'content-'..inventory
-		end
-		return exports['will_inventory']:removeItem(inventory, item, count)
-	end
-
-	vRP.getInventoryMaxWeight = function(user_id)
-		return exports['will_inventory']:getInvWeight(user_id) or 0
-	end
-
-	vRP.getInventoryWeight = function(inventory)
-		if parseInt(inventory) > 0 then
-			inventory = 'content-'..inventory
-		end
-		return exports['will_inventory']:computeInvWeight(inventory)
-	end
-
-	vRP.computeItemsWeight = function(itemslist)
-		local weight = 0
-		for k,v in pairs(itemslist) do
-			local name = v.name and v.name:lower() or ''
-			local item = items[v.item] or items[name]
-			if item then
-				weight = weight + (item.weight or 0) * parseInt(v.amount)
-			end
-		end
-		return weight
-	end
-
-	vRP.getBackpack = function(user_id)
-		return exports['will_inventory']:getInvWeight(user_id) or 0
 	end
 end

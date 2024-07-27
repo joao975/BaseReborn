@@ -1,31 +1,27 @@
 local vehList = Reborn.vehList()
-
 local pedInSameVehicleLast = false
 local vehicle = nil
 local lastVehicle = nil
 local vehicleClass = nil
-
 local healthEngineLast = 1000.0
 local healthEngineCurrent = 1000.0
 local healthEngineNew = 1000.0
 local healthEngineDelta = 0.0
 local healthEngineDeltaScaled = 0.0
-
 local healthBodyLast = 1000.0
 local healthBodyCurrent = 1000.0
 local healthBodyNew = 1000.0
 local healthBodyDelta = 0.0
 local healthBodyDeltaScaled = 0.0
-
 local classDamageMultiplier = { [0] = 1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0 }
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- GETNEARVEHICLES
 -----------------------------------------------------------------------------------------------------------------------------------------
 function tvRP.getNearVehicles(radius)
 	local r = {}
+	local vehs = {}
 	local coords = GetEntityCoords(PlayerPedId())
 
-	local vehs = {}
 	local it,veh = FindFirstVehicle()
 	if veh then
 		table.insert(vehs,veh)
@@ -63,7 +59,6 @@ function tvRP.getNearVehicle(radius)
 	end
 	return veh 
 end
-
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- INVEHICLE
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -83,7 +78,9 @@ function tvRP.vehList(radius)
 		return veh,VehToNet(veh),GetVehicleNumberPlateText(veh),vehname,GetVehicleDoorLockStatus(veh),false,GetVehicleBodyHealth(veh),GetEntityModel(veh),GetVehicleClass(veh)
 	end
 end
-
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- VEHPLATE
+-----------------------------------------------------------------------------------------------------------------------------------------
 function tvRP.vehiclePlate()
 	local ped = PlayerPedId()
 	local veh = GetVehiclePedIsUsing(ped)
@@ -106,7 +103,9 @@ function tvRP.getModelName(veh)
 	end
 	return false
 end
-
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- BANNED
+-----------------------------------------------------------------------------------------------------------------------------------------
 function tvRP.isVehicleBanned(veh)
 	if IsEntityAVehicle(veh) then
 		for k, v in pairs(vehList) do
@@ -116,7 +115,9 @@ function tvRP.isVehicleBanned(veh)
 		end
 	end
 end
-
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- REGISTRATION NUMBER
+-----------------------------------------------------------------------------------------------------------------------------------------
 local registration_number = "00AAA000"
 
 function tvRP.setRegistrationNumber(registration)
@@ -148,9 +149,8 @@ function vehicleTyreBurst(vehicle)
 			SetVehicleTyreBurst(vehicle,5,true,1000.0)
 		end
 	end
-
 	if math.random(100) < 30 then
-		Citizen.Wait(10)
+		Wait(10)
 		vehicleTyreBurst(vehicle)
 	end
 end
@@ -164,7 +164,6 @@ function tvRP.vehSitting()
 		local vehModel = GetEntityModel(vehicle)
 		local vehPlate = GetVehicleNumberPlateText(vehicle)
 		local vehNet = VehToNet(vehicle)
-
 		return vehicle,vehNet,vehPlate,vehList[vehModel][1]
 	end
 end
@@ -176,7 +175,6 @@ function tvRP.vehicleName()
 	if IsPedInAnyVehicle(ped) then
 		local vehicle = GetVehiclePedIsUsing(ped)
 		local vehModel = GetEntityModel(vehicle)
-
 		return vehList[vehModel][1]
 	end
 end
@@ -219,8 +217,10 @@ function tvRP.lastVehicle(vehName)
 
 	return false
 end
-
-Citizen.CreateThread(function()
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- ESTOURA PNEU AO CAPOTAR
+-----------------------------------------------------------------------------------------------------------------------------------------
+CreateThread(function()
 	while true do
 		local roll = GetEntityRoll(vehicle)
 		if roll > 75.0 or roll < -75.0 then
@@ -228,11 +228,11 @@ Citizen.CreateThread(function()
 				vehicleTyreBurst(vehicle)
 			end
 		end
-		Citizen.Wait(1500)
+		Wait(1500)
 	end
 end)
 
-Citizen.CreateThread(function()
+CreateThread(function()
 	while true do
 		local timeDistance = 500
 		if IsPedInAnyVehicle(ped) then
@@ -251,11 +251,13 @@ Citizen.CreateThread(function()
 				DisableControlAction(2,60,true)
 			end
 		end
-		Citizen.Wait(timeDistance)
+		Wait(timeDistance)
 	end
 end)
-
-Citizen.CreateThread(function()
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- DANO NOS VEICULOS
+-----------------------------------------------------------------------------------------------------------------------------------------
+CreateThread(function()
 	while true do
 		local timeDistance = 1000
 		local ped = PlayerPedId()
@@ -344,6 +346,6 @@ Citizen.CreateThread(function()
 			pedInSameVehicleLast = false
 		end
 
-		Citizen.Wait(timeDistance)
+		Wait(timeDistance)
 	end
 end)

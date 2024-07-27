@@ -8,17 +8,14 @@ function tvRP.addBlips(x,y,z,sprite,color,text,scale,route)
 	SetBlipAsShortRange(blip,true)
 	SetBlipColour(blip,color)
 	SetBlipScale(blip,scale)
-
 	if route then
 		SetBlipRoute(blip,true)
 	end
-
 	if text then
 		BeginTextCommandSetBlipName("STRING")
 		AddTextComponentString(text)
 		EndTextCommandSetBlipName(blip)
 	end
-
 	return blip
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -30,7 +27,6 @@ function tvRP.addBlipsAlpha(x,y,z,color)
 	SetBlipColour(blip,color)
 	SetBlipAlpha(blip,150)
 	SetBlipAsShortRange(blip,true)
-
 	return blip
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -131,7 +127,7 @@ function tvRP.removeNamedMarker(name)
 	end
 end
 
-Citizen.CreateThread(function()
+CreateThread(function()
 	while true do
 		local timeDistance = 3000
 		for k,v in pairs(markers) do
@@ -141,7 +137,7 @@ Citizen.CreateThread(function()
 				DrawMarker(v.m,v.x,v.y,v.z,0,0,0,0,0,0,v.sx,v.sy,v.sz,v.r,v.g,v.b,v.a,0,0,0,1)
 			end
 		end
-		Citizen.Wait(timeDistance)
+		Wait(timeDistance)
 	end
 end)
 

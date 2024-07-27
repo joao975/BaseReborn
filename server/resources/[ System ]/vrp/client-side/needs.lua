@@ -11,7 +11,7 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- THREADREADY
 -----------------------------------------------------------------------------------------------------------------------------------------
-Citizen.CreateThread(function()
+CreateThread(function()
 	NetworkSetFriendlyFireOption(true)
 	SetCanAttackFriendly(PlayerPedId(),true,true)
 	while true do
@@ -21,7 +21,7 @@ Citizen.CreateThread(function()
 			vRPserver._updateHealth(GetEntityHealth(PlayerPedId()))
 			vRPserver._updateArmour(GetPedArmour(PlayerPedId()))
 		end
-		Citizen.Wait(30000)
+		Wait(30000)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -52,7 +52,6 @@ end
 function tvRP.downHealth(number)
 	local ped = PlayerPedId()
 	local health = GetEntityHealth(ped)
-
 	SetEntityHealth(ped,parseInt(health-number))
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -70,7 +69,6 @@ function tvRP.setArmour(amount)
 	amount = tonumber(amount) or 0
 	SetPedArmour(ped,parseInt(armour+amount))
 end
-
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- UPDATENEEDS
 -----------------------------------------------------------------------------------------------------------------------------------------

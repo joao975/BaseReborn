@@ -3,66 +3,34 @@
 -----------------------------------------------------------------------------------------------------------------------------------------
 function vRP.addBank(user_id,amount,reason)
 	if amount > 0 then
-		vRP.execute("vRP/add_bank",{ id = parseInt(user_id), bank = parseInt(amount) })
-		if usersIdentity and usersIdentity[user_id] then
-			usersIdentity[user_id]['bank'] = usersIdentity[user_id]['bank'] + parseInt(amount)
-		end
-		local nplayer = vRP.getUserSource(user_id)
-		if nplayer then
-			local Player = QBCore.Functions.GetPlayer(nplayer)
-			local xPlayer = ESX.GetPlayerFromId(nplayer)
-			if xPlayer then	xPlayer.addMoney(amount,reason) end
-			if Player then Player.Functions.AddMoney("bank", amount, reason) end
-		end
+		local source = vRP.getUserSource(user_id)
+		Reborn.addMoney(source, amount, reason)
 	end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- SETBANK
 -----------------------------------------------------------------------------------------------------------------------------------------
-function vRP.setBank(user_id,amount)
+function vRP.setBank(user_id,amount,reason)
 	if amount >= 0 then
-		vRP.execute("vRP/set_bank",{ id = parseInt(user_id), bank = parseInt(amount) })
-		if usersIdentity and usersIdentity[user_id] then
-			usersIdentity[user_id]['bank'] = parseInt(amount)
-		end
-		local nplayer = vRP.getUserSource(user_id)
-		if nplayer then
-			local Player = QBCore.Functions.GetPlayer(nplayer)
-			local xPlayer = ESX.GetPlayerFromId(nplayer)
-			if xPlayer then	xPlayer.setMoney(amount,reason) end
-			if Player then Player.Functions.SetMoney("bank", amount, reason) end
-		end
+		local source = vRP.getUserSource(user_id)
+		Reborn.setMoney(source, amount, reason)
 	end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- DELBANK
 -----------------------------------------------------------------------------------------------------------------------------------------
-function vRP.delBank(user_id,amount)
+function vRP.delBank(user_id,amount,reason)
 	if amount > 0 then
-		vRP.execute("vRP/del_bank",{ id = parseInt(user_id), bank = parseInt(amount) })
-		if usersIdentity and usersIdentity[user_id] then
-			usersIdentity[user_id]['bank'] = usersIdentity[user_id]['bank'] - parseInt(amount)
-		end
-		local nplayer = vRP.getUserSource(user_id)
-		if nplayer then
-			local Player = QBCore.Functions.GetPlayer(nplayer)
-			local xPlayer = ESX.GetPlayerFromId(nplayer)
-			if xPlayer then	xPlayer.removeMoney(amount,reason) end
-			if Player then Player.Functions.RemoveMoney("bank", amount, reason) end
-		end
+		local source = vRP.getUserSource(user_id)
+		Reborn.remMoney(source, amount, reason)
 	end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- GETBANK
 -----------------------------------------------------------------------------------------------------------------------------------------
 function vRP.getBank(user_id)
-	if usersIdentity and usersIdentity[user_id] then
-		return usersIdentity[user_id]['bank']
-	end
-	local consult = vRP.getInformation(user_id)
-	if consult[1] then
-		return consult[1].bank
-	end
+	local source = vRP.getUserSource(user_id)
+	return Reborn.getMoney(source)
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- PAYMENTBANK

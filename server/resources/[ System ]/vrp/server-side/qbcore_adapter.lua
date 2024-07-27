@@ -64,6 +64,7 @@ function QBCore.Functions.GetSource(identifier)
 end
 
 function QBCore.Functions.GetSourceByUserId(user_id)
+    -- print('QBCore :: GetSourceByUserId',user_id,GetInvokingResource())
     for src, v in pairs(QBCore.Players) do
         if user_id == v.user_id then
             return src
@@ -72,6 +73,7 @@ function QBCore.Functions.GetSourceByUserId(user_id)
 end
 
 function QBCore.Functions.GetPlayer(source)
+    -- print('QBCore :: GetPlayer',source,GetInvokingResource())
     if type(source) == 'number' then
         return QBCore.Players[source]
     else
@@ -80,6 +82,7 @@ function QBCore.Functions.GetPlayer(source)
 end
 
 function QBCore.Functions.GetPlayerByCitizenId(citizenid)
+    -- print('QBCore :: GetPlayerByCitizenId',citizenid,GetInvokingResource())
     for src in pairs(QBCore.Players) do
         if QBCore.Players[src].PlayerData.citizenid == citizenid then
             return QBCore.Players[src]

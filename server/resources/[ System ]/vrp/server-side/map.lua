@@ -146,11 +146,9 @@ function vRP.getTimersMinimal(seconds)
 		return string.format("<b>%d Seconds</b>",seconds)
 	end
 end
-
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- AREAS
 -----------------------------------------------------------------------------------------------------------------------------------------
-
 local client_areas = {}
 AddEventHandler("vRP:playerLeave",function(user_id,source)
 	local areas = client_areas[source]
@@ -233,7 +231,7 @@ function vRP.createWeebHook(webhook,message)
                         title = "WEBHOOK",
                         description = message,
                         author = {
-                            name = "Reborn Shop",
+                            name = GlobalState['Basics']['ServerName'],
                             icon_url = 'https://cdn.discordapp.com/attachments/929192133011841074/956001692917321778/rbn.png'
                         },
                         footer = {

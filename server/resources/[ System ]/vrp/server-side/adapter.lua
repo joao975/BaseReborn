@@ -199,8 +199,6 @@ end
 --							PERMISSIONS
 -------##########-------##########-------##########-------##########
 
-local groups = Reborn.groups()
-
 vRP.getUsersByPermission = function(group)
     if string.find(group, ".permissao") then
         local users = {}
@@ -218,44 +216,14 @@ vRP.hasGroup = function(user_id,group)
     return vRP.hasPermission(user_id,group)
 end
 
-vRP.addUserGroup = function(user,group)
-    if user and group then
-        if groups[group] then
-            vRP.insertPermission(parseInt(user),group)
-            vRP.execute("vRP/add_group",{ user_id = parseInt(user), permiss = group })
-            local nplayer = vRP.getUserSource(parseInt(user))
-            if nplayer then
-                local Player = QBCore.Functions.GetPlayer(nplayer)
-                if Player then
-                    Player.Functions.SetJob(group)
-                end
-                local xPlayer = ESX.GetPlayerFromId(nplayer)
-                if xPlayer then
-                    xPlayer.setJob(group)
-                end
-            end
-        else
-            print(string.format("Grupo inexistente: (%s). O usuário %s não foi setado", group, user))
-        end
-    end
+vRP.addUserGroup = function(user, group)
+    local source = vRP.getUserSource(parseInt(user))
+    Reborn.setGroup(source, group)
 end
 
 vRP.removeUserGroup = function(user,group)
-    if user and group then
-        vRP.removePermission(parseInt(user),group)
-        vRP.execute("vRP/del_group",{ user_id = parseInt(user), permiss = group })
-        local nplayer = vRP.getUserSource(parseInt(user))
-        if nplayer then
-            local Player = QBCore.Functions.GetPlayer(nplayer)
-            if Player then
-                Player.Functions.SetJob("unemployed")
-            end
-            local xPlayer = ESX.GetPlayerFromId(nplayer)
-            if xPlayer then
-                xPlayer.setJob("unemployed", 0)
-            end
-        end
-    end
+    local source = vRP.getUserSource(parseInt(user))
+    Reborn.remGroup(source,group)
 end
 
 vRP.Source = vRP.getUserSource

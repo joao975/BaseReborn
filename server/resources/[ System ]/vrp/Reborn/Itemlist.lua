@@ -54,15 +54,6 @@ Reborn.itemList = function()
 			y = 1,
 			weight = 1.0
 		},
-	
-		--[[ ["skate"] = {
-			index = "skate",
-			name = "Skate",
-			type = "use",
-			x = 2,
-			y = 1,
-			weight = 1.0
-		}, ]]
 		["cirurgia"] = {
 			index = "cirurgia",
 			name = "Cirurgia",
@@ -341,33 +332,6 @@ Reborn.itemList = function()
 			x = 5,
 			y = 5,
 			weight = 2.0
-		},
-		["small_backpack"] = {
-			index = "backpackp",
-			name = "Mochila Pequena",
-			type = "backpacks",
-			description = "Mochila pequena para guardar seus itens/acessorios",
-			x = 2,
-			y = 2,
-			weight = 0.25
-		},
-		["medium_backpack"] = {
-			index = "backpackm",
-			name = "Mochila Media",
-			type = "backpacks",
-			description = "Mochila media para guardar seus itens/acessorios",
-			x = 3,
-			y = 3,
-			weight = 0.5
-		},
-		["large_backpack"] = {
-			index = "backpackg",
-			name = "Mochila Grande",
-			type = "backpacks",
-			description = "Mochila grande para guardar seus itens/acessorios",
-			x = 4,
-			y = 4,
-			weight = 1.0
 		},
 		["premium01"] = {
 			index = "premium01",
@@ -657,12 +621,6 @@ Reborn.itemList = function()
 			type = "use",
 			weight = 0.1
 		},
-		--[[ ["watch"] = {
-			index = "watch",
-			name = "Relógio",
-			type = "use",
-			weight = 0.3
-		}, ]]
 		["c4"] = {
 			index = "c4",
 			name = "C4",
@@ -699,38 +657,6 @@ Reborn.itemList = function()
 			type = "use",
 			weight = 0.8
 		},
-		["liquido1"] = {
-			index = "liquido1",
-			name = "Liquido 1",
-			type = "use",
-			weight = 0.8
-		},
-		["liquido2"] = {
-			index = "liquido2",
-			name = "Liquido 2",
-			type = "use",
-			weight = 0.8
-		},
-		["liquido3"] = {
-			index = "liquido3",
-			name = "Liquido 3",
-			type = "use",
-			weight = 0.8
-		},
-		["liquido4"] = {
-			index = "liquido4",
-			name = "Liquido 4",
-			type = "use",
-			weight = 0.8
-		},
-		["liquido5"] = {
-			index = "liquido5",
-			name = "Liquido 5",
-			type = "use",
-			weight = 0.8
-		},
-		
-
 		["dollars"] = {
 			index = "dollars",
 			name = "Dinheiro",
@@ -910,24 +836,6 @@ Reborn.itemList = function()
 			name = "Papel Moeda",
 			type = "use",
 			weight = 0.1
-		},
-		["seringaa"] = {
-			index = "seringaa",
-			name = "Seringa A",
-			type = "use",
-			weight = 1.5
-		},
-		["seringab"] = {
-			index = "seringab",
-			name = "Seringa B",
-			type = "use",
-			weight = 1.5
-		},
-		["seringac"] = {
-			index = "seringac",
-			name = "Seringa C",
-			type = "use",
-			weight = 1.5
 		},
 		["fichas"] = {
 			index = "fichas",
@@ -1407,7 +1315,6 @@ Reborn.itemList = function()
 			type = "ammo",
 			weight = 0.001
 		},
-		
 		["suppressor"] = {
 			index = "attachssilencer",
 			name = "Silenciador",
@@ -1449,7 +1356,6 @@ Reborn.itemList = function()
 			description = "Empunhadura para armas pequenas e grandes",
 			weight = 1.0
 		},
-	
 		["pager"] = {
 			index = "pager",
 			name = "Pager",

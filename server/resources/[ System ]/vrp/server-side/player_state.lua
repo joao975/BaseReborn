@@ -118,9 +118,6 @@ AddEventHandler("vRP:playerSpawn",function(user_id,source)
     local source = source
 	local data = vRP.getUserDataTable(user_id)
 	if data then
-		if data.skin then
-			vRPclient.applySkin(source,data.skin)
-		end
 		if data.hunger == nil then
 			data.hunger = 100
 			data.thirst = 100
@@ -150,11 +147,6 @@ RegisterServerEvent("vRP:BucketServer")
 AddEventHandler("vRP:BucketServer", function(source, value, bucket)
     if value == "Enter" then
         SetPlayerRoutingBucket(source, bucket)
-        --[[ if bucket > 0 then
-            SetRoutingBucketEntityLockdownMode(bucket, "inactive")
-            SetRoutingBucketEntityLockdownMode(bucket, "relaxed")
-            SetRoutingBucketPopulationEnabled(bucket, false)
-        end ]]
     else
         SetPlayerRoutingBucket(source, 0)
     end

@@ -270,6 +270,12 @@ function vRP.clearInventory(user_id)
 	vRP.upgradeHunger(user_id,100)
 	TriggerEvent("ld-inv:Server:ClearInventory", user_id)
 	TriggerEvent("ld-inv:Server:ClearWeapons", user_id)
+	if GetResourceState("ox_inventory") == "started" then
+		local nplayer = vRP.getUserSource(user_id)
+		if nplayer then
+			exports.ox_inventory:ClearInventory(nplayer)
+		end
+	end
 	return true
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -285,7 +291,8 @@ AddEventHandler("baseModule:idLoaded",function(source,user,model)
 		local resultData = json.decode(playerData) or {}
 		vRP.user_tables[user_id] = resultData
 		vRP.user_sources[user_id] = source
-
+		vRP.users[source] = user_id
+		
 		if model ~= nil then
 			local first_login = Reborn.first_login()
 			TriggerClientEvent("Notify",source,"importante",first_login['Mensagem'],20000)
@@ -311,7 +318,6 @@ AddEventHandler("baseModule:idLoaded",function(source,user,model)
 
 		local identity = vRP.getUserIdentity(user_id)
 		if identity then
-			vRP.users[source] = user_id
 			vRP.rusers[user_id] = identity.steam
 		end
 

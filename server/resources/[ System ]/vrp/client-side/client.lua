@@ -1,20 +1,12 @@
---####--####--####--####
---##  AUTENTICAÇÃO  --##
---####--####--####--####
-
-Citizen.CreateThread(function()
-    local direct = Reborn.images()
-    SendNUIMessage({ act = "setDirect", myDirect = direct })
-end)
+--####--####--####--#
+--##   CONVERSÃO   -#
+--####--####--####--#
 
 function exportHandler(resource, exportName, func)
     AddEventHandler(('__cfx_export_%s_%s'):format(resource,exportName), function(setCB)
         setCB(func)
     end)
 end
---####--####--####--#
---##   CONVERSÃO   -#
---####--####--####--#
 
 tvRP.getNearestPlayer = function(radius) 
     return vRP.nearestPlayer(radius)
@@ -42,4 +34,3 @@ end
 tvRP.nearVehicle = function(radius)
     return vRP.getNearVehicle(radius)
 end
-
