@@ -429,18 +429,7 @@ config.veiculos = {
         ['monsterr'] = { nome = 'monsterr', valor = 250000, peso = 40 },
         ['monsterr34'] = { nome = 'monsterr34', valor = 250000, peso = 40 },
         ['sr650fly'] = { nome = 'sr650fly', valor = 250000, peso = 40 },
-        ['yacht2'] = { nome = 'yacht2', valor = 250000, peso = 40 },
-        ['rmodsianr1'] = { nome = 'rmodsianr1', valor = 250000, peso = 40 },
-        ['f350offroadspec'] = { nome = 'f350offroadspec', valor = 250000, peso = 40 },
-        ['bbdawn'] = { nome = 'bbdawn', valor = 250000, peso = 40 },
-        ['gcmlamboultimae'] = { nome = 'gcmlamboultimae', valor = 250000, peso = 40 },
-        ['amggt63'] = { nome = 'amggt63', valor = 250000, peso = 40 },
-        ['fordmustang'] = { nome = 'fordmustang', valor = 100000, peso = 40 },
-        ['lancerevolution9'] = { nome = 'lancerevolution9', valor = 100000, peso = 40 },
-        ['bmwm4gts'] = { nome = 'bmwm4gts', valor = 150000, peso = 40 },
-        ['ferrariitalia'] = { nome = 'ferrariitalia', valor = 150000, peso = 40 },
-        ['lamborghinihuracan'] = { nome = 'lamborghinihuracan', valor = 150000, peso = 40 },
-        ['nissangtr'] = { nome = 'nissangtr', valor = 150000, peso = 40 },      
+        ['yacht2'] = { nome = 'yacht2', valor = 250000, peso = 40 },   
     },
     ['vans'] = {
         ['mule'] = { nome = 'mule', valor = 1000000, peso = 200 },
@@ -475,5 +464,17 @@ config.veiculos = {
         ['youga2'] = { nome = 'youga2', valor = 150000, peso = 180 },
         ['youga3'] = { nome = 'youga3', valor = 150000, peso = 180 },
     },
-    ['vips'] = {}
+    ['vips'] = {
+        ['rmodsianr1'] = { nome = 'rmodsianr1', valor = 250000, peso = 40 },
+        ['f350offroadspec'] = { nome = 'f350offroadspec', valor = 250000, peso = 40 },
+        ['bbdawn'] = { nome = 'bbdawn', valor = 250000, peso = 40 },
+        ['gcmlamboultimae'] = { nome = 'gcmlamboultimae', valor = 250000, peso = 40 },
+        ['amggt63'] = { nome = 'amggt63', valor = 250000, peso = 40 },
+        ['fordmustang'] = { nome = 'fordmustang', valor = 100000, peso = 40 },
+        ['lancerevolution9'] = { nome = 'lancerevolution9', valor = 100000, peso = 40 },
+        ['bmwm4gts'] = { nome = 'bmwm4gts', valor = 150000, peso = 40 },
+        ['ferrariitalia'] = { nome = 'ferrariitalia', valor = 150000, peso = 40 },
+        ['lamborghinihuracan'] = { nome = 'lamborghinihuracan', valor = 150000, peso = 40 },
+        ['nissangtr'] = { nome = 'nissangtr', valor = 150000, peso = 40 },   
+    }
 }
