@@ -52,7 +52,7 @@ function applyModifies(nveh,engine,fuel,tuning,vehDoors,vehWindows,vehTyres,vnam
 		end
 	end
 	if GetResourceState("will_tunners") == "started" then
-		exports['will_tunners']:SetVehicleProp(nveh, tuning)
+		exports['will_tunners']:SetVehicleProp(nveh,tuning)
 	else
 		vehicleMods(nveh,tuning)
 	end
@@ -136,6 +136,10 @@ function vehicleMods(veh,custom)
 			SetVehicleNeonLightEnabled(veh,1,false)
 			SetVehicleNeonLightEnabled(veh,2,false)
 			SetVehicleNeonLightEnabled(veh,3,false)
+		end
+		
+		if custom.livery and tonumber(custom.livery) then
+			SetVehicleLivery(veh, tonumber(custom.livery))
 		end
 
 		if custom.xenoncolor then
@@ -273,7 +277,6 @@ end)
 
 function will.getNearVehicles(radius,x,y,z)
 	local r = {}
-
 	local vehs = {}
 	local it,veh = FindFirstVehicle()
 	if veh then

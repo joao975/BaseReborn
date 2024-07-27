@@ -1,19 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Garage</title>
-    <link rel="stylesheet" href="style.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Garage_v2</title>
+    <link rel="stylesheet" href="style.css" />
     <script src="nui://game/ui/jquery.js" type="text/javascript"></script>
     <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
-</head>
-<body>
+  </head>
+  <body>
     <div class="joinMenu">
-      <h3 class="priceyesbutton" style="text-align:center">GARAGEM</h3>
-      <img id="garageimg" src="./images/luxe.png" alt="Garagem" srcset="">
+      <h3 class="priceyesbutton" style="text-align: center">GARAGEM</h3>
+      <img
+        id="garageimg"
+        src="http://212.18.114.101/garages_v2/luxe.png"
+        alt="Garagem"
+        srcset=""
+      />
       <div>
-        <input type="number" id="inputGarage" placeholder="Passaporte">
+        <input type="number" id="inputGarage" placeholder="Passaporte" />
         <button id="submitMenu">Entrar</button>
       </div>
     </div>
@@ -21,84 +26,170 @@
       <ul class="vehicleOptions">
         <li class="veh-option" data-veh="zentorno">
           <h3>Zentorno</h3>
-          <img src="./vehicleimage/Adder.png" alt="">
+          <img src="./vehicleimage/Adder.png" alt="" />
           <p>Selecionar</p>
         </li>
-        <li class="veh-option" data-veh="t20">          
+        <li class="veh-option" data-veh="t20">
           <h3>T20</h3>
-          <img src="./vehicleimage/T20.png" alt="">
+          <img src="./vehicleimage/T20.png" alt="" />
           <p>Selecionar</p>
         </li>
       </ul>
       <button id="veh-option-button">Confirmar</button>
     </div>
-    <div class="container" style="display:none">
+    <div class="container" style="display: none">
       <div class="backgorund-shadow"></div>
+      <div class="left-infos">
         <div class="cargaragetext">
-          <img src="./images/garagetext.png" alt="">
-        </div>
-        <div style="display:none" class="notify">TEST Notify!</div>
-        <div class="fuelbar">
-          <img src="./images/fueltank.png" alt="">
-          <h1>GASOLINA</h1>
-          <h2 class="fuellevel"></h2>
-        </div>
-        <div class="priceyes" style="display:none">
-          <h4>TEM CERTEZA?</h4>
-          <h2 class="pricebutton" >SIM</h2>
-          <h3 class="priceyesbutton">NÃO</h3>  
-          <img src="./images/yesno.png" alt="">
-        </div>
-        <div class="transferyes" style="display:none">
-          <h4>TEM CERTEZA?</h4>
-          <h2>SIM</h2>
-          <h3 class="transferyescar">NÃO</h3>  
-          <img src="./images/yesno.png" alt="">
+          <img src="http://212.18.114.101/garages_v2/garagetext.png" alt="" />
         </div>
         <div class="sellprice">
-          <h2>PREÇO</h2>
-          <h3 class="vehicleprice"></h3>
-          <h4 class="sellpricecar">VENDER</h4>
-          <img src="./images/sellprice.png" alt="">
-        </div> 
+          <h3 class="vehicleprice">R$100000</h3>
+          <h2 class="sellpricecar">VENDER</h2>
+        </div>
         <div class="transfer">
-          <h2>TRANSFERIR PARA</h2>
-          <input id="transfer" type="number" placeholder="ID">
-          <h3 class="transfertovehicle">TRANSFERIR</h3>
-          <img src="./images/transfer.png" alt="">
-        </div> 
-        <div class="platepng">
-          <h1>NÚMERO DA PLACA</h1>
-          <h2 class="platevehicle"></h2>
-          <img src="./images/plate.png" alt="">
+          <input id="transfer" type="number" placeholder="ID" />
+          <h2 class="transfertovehicle">TRANSFERIR</h2>
         </div>
-        <div class="enginepng">
-          <h1>MOTOR</h1>
-          <h2 class="damagevehicle"></h2>
-          <img src="./images/engine.png" alt="">
-        </div>
-        <div class="windowpng">
-          <h1>LATARIA</h1>
-          <h2 class="bodyhealth"></h2>
-          <img src="./images/window.png" alt="">
-        </div>
-        <div class="parkpng">
-          <h1>STATUS</h1>
-          <h2 class="stored"></h2>
-          <img class="vehiclestoredpng" src="./images/park.png" alt="">
+        <div class="veh-infos">
+          <div
+            class="platepng"
+            style="
+              background-image: url('http://212.18.114.101/garages_v2/plate.png');
+            "
+          >
+            <h1>PLACA</h1>
+            <h2 class="platevehicle">JF89-13F8</h2>
+          </div>
+          <div
+            class="enginepng"
+            style="
+              background-image: url('http://212.18.114.101/garages_v2/engine.png');
+            "
+          >
+            <h1>MOTOR</h1>
+            <h2 class="damagevehicle">90</h2>
+          </div>
+          <div
+            class="fuelbar"
+            style="
+              background-image: url('http://212.18.114.101/garages_v2/fueltank.png');
+            "
+          >
+            <h1>GASOLINA</h1>
+            <h2 class="fuellevel">100</h2>
+          </div>
+          <div
+            class="windowpng"
+            style="
+              background-image: url('http://212.18.114.101/garages_v2/window.png');
+            "
+          >
+            <h1>LATARIA</h1>
+            <h2 class="bodyhealth">100</h2>
+          </div>
         </div>
         <div class="delNearVeh">
           <h1>GUARDAR VEICULO PROXIMO</h1>
         </div>
-        <div class="searchbox">
-          <input id="searchvehicle" type="text" name="" id=""  placeholder="Procurar carro">
-        </div>
-        <div class="closebutton">
-          <h2>Sair</h2>
-          <img class="closeimg" src="./images/close.png" alt="">
-        </div>
-        <div class="selectedvehicle"></div>
+      </div>
+      <div class="priceyes" style="display: none">
+        <h4>TEM CERTEZA?</h4>
+        <h2 class="pricebutton">SIM</h2>
+        <h3 class="priceyesbutton">NÃO</h3>
+        <img src="http://212.18.114.101/garages_v2/yesno.png" alt="" />
+      </div>
+      <div class="transferyes" style="display: none">
+        <h4>TEM CERTEZA?</h4>
+        <h2>SIM</h2>
+        <h3 class="transferyescar">NÃO</h3>
+        <img src="http://212.18.114.101/garages_v2/yesno.png" alt="" />
+      </div>
+      <div class="searchbox">
+        <input
+          id="searchvehicle"
+          type="text"
+          name=""
+          id=""
+          placeholder="Procurar carro"
+        />
+      </div>
+      <div class="closebutton">
+        <h2>Sair</h2>
+        <img
+          class="closeimg"
+          src="http://212.18.114.101/garages_v2/close.png"
+          alt=""
+        />
+      </div>
+      <div class="selectedvehicle"></div>
     </div>
-  <script src="script.js"></script>
-</body>
+    <div class="adminMenu" style="display: none">
+      <div class="adminContainer">
+        <h1>Registro de Garagem</h1>
+        <form id="garageForm">
+          <div class="form-group">
+            <label for="garageName">Nome da Garagem:</label>
+            <input type="text" id="garageName" required />
+          </div>
+          <div class="form-group" style="display: flex; gap: 1vw">
+            <div>
+              <label for="garagePayment">Pagamento:</label>
+              <input
+                type="text"
+                id="garagePayment"
+                placeholder="Valor para retirar veiculo"
+              />
+            </div>
+            <div>
+              <label for="garagePerm">Permissão:</label>
+              <input type="text" id="garagePerm" placeholder="Permissão" />
+            </div>
+          </div>
+          <div class="form-group"></div>
+          <div class="form-group">
+            <label for="blipCoordinate">Coordenada do Blip:</label>
+            <span id="garageInitBlip">983.54, 531.23, 21.32</span>
+          </div>
+          <div class="form-group">
+            <label for="garagetype">Tipo:</label>
+            <select id="garagetype" required>
+              <option value="interior">Interior</option>
+              <option value="painel">Painel</option>
+            </select>
+          </div>
+          <div class="form-group" id="interiorSelection">
+            <label for="interior">Selecione o Interior:</label>
+            <select id="garageinterior" required>
+              <option value="Garagem_menor">Garagem_menor</option>
+              <option value="Garagem_media">Garagem_media</option>
+              <option value="Garagem_maior">Garagem_maior</option>
+              <option value="Garagem_luxo">Garagem_luxo</option>
+              <option value="Garagem_gigante">Garagem_gigante</option>
+            </select>
+            <img
+              src="http://212.18.114.101/garages_v2/small.png"
+              alt="garage-image"
+              id="adm-garage-img"
+            />
+          </div>
+          <div class="form-group" id="panelCoordinates" style="display: none">
+            <label for="panelCoordinates"
+              >Coordenadas para retirar veiculo:</label
+            >
+            <div style="display: flex; gap: 1vw">
+              <input type="text" id="panelCoordinatesInput" />
+              <button type="button" id="getCoordinates">
+                Pegar Coordenadas
+              </button>
+            </div>
+          </div>
+          <button type="button" onclick="registerGarage()">
+            Registrar Garagem
+          </button>
+        </form>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
 </html>

@@ -607,6 +607,7 @@ exports('addVehicle', function(user_id, vehicle)
         local plate = generatePlateNumber()
         local infos = { user_id = user_id, vehicle = vehicle, plate = plate, engine = 1000, body = 1000, fuel = 100, work = 'false' }
         execute("will/add_vehicle", infos)
+        execute("will/set_arrest",{ plate = plate, arrest = 0, time = os.time() + 7*24*60*60 })
     end
 end)
 
