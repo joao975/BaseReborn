@@ -149,6 +149,11 @@ if (IsDuplicityVersion()) then
                 -- p.Functions.ClearInventory()
                 TriggerEvent("ld-inv:Server:ClearInventory", p.PlayerData.citizenid)
 	            TriggerEvent("ld-inv:Server:ClearWeapons", p.PlayerData.citizenid)
+                if GetResourceState("ox_inventory") == "started" then
+                    if targetId then
+                        exports.ox_inventory:ClearInventory(targetId)
+                    end
+                end
             end
         end,
         GetVehiclesList = function() return QBCore.Shared.Vehicles end,
@@ -310,6 +315,11 @@ if (not IsDuplicityVersion()) then
     Compat = {
         OpenInventory = function(targetId) 
             TriggerServerEvent("ld-inventory:revistar", targetId, "otherplayer")
+            if GetResourceState("ox_inventory") == "started" then
+                if targetId then
+                    exports.ox_inventory:forceOpenInventory(source, 'player', tonumber(targetId))
+                end
+            end
         end,
         UncuffSelf = function()
             TriggerEvent('police:client:GetCuffed')

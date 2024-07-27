@@ -914,8 +914,7 @@ AdminPanel.Init = function () {
       }
     } else if (AdminPanel.ConfirmingAction.action == "setjob") {
       AdminPanel.ConfirmingAction.jobname = $("#jobname").val();
-      AdminPanel.ConfirmingAction.jobgrade = $("#jobgrade").val();
-      if ($("#jobname").val().length < 1 || $("#jobgrade").val().length < 1) {
+      if ($("#jobname").val().length < 1) {
         AdminPanel.ShowAlert(
           "danger",
           "<strong>ERROR:</strong>" +
@@ -1256,8 +1255,7 @@ AdminPanel.Init = function () {
                 <strong>` +
           AdminPanel.Language.setJobTranslation +
           `</strong> of ${AdminPanel.EditingPlayerInfo.name}?<br/>
-                <input type="text" class="form-control" id="jobname" placeholder="Job" style="margin-bottom:5px">
-                <input type="text" class="form-control" id="jobgrade" placeholder="Grade">
+                <input type="text" class="form-control" id="jobname" placeholder="Grupo" style="margin-bottom:5px">
             `
       );
       $("#confirm").modal("show");

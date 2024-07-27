@@ -619,8 +619,8 @@ RegisterServerEvent("mri_Qadmin:server:SetJob", function(targetId, job, grade)
     local src = source
     if AdminPanel.HasPermission(src, "setjob") then
         Compat.SetPlayerJob(targetId, job, grade)
-        TriggerEvent("qb-log:server:CreateLog", "adminactions", "Set Job", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** set the job of " .. GetPlayerName(targetId) .. " to " .. job .. " (" .. grade .. ")", false)
-        TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.jobSet", {value = job, value2 = grade}))
+        TriggerEvent("qb-log:server:CreateLog", "adminactions", "Set Job", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** set the job of " .. GetPlayerName(targetId) .. " to " .. job, false)
+        TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.jobSet", {value = job}))
     end
 end)
 
@@ -657,16 +657,18 @@ RegisterServerEvent("mri_Qadmin:server:GiveItem", function(targetId, item, amoun
                 oxGetItems = GlobalState["RebornConfig"].items
             end
             if oxGetItems[item] ~= nil then
+                local targetPlayer = nil
                 if targetId == "self" or targetId == nil or targetId == "" or targetId == " " then
                     targetId = source
+                    targetPlayer = QBCore.Functions.GetPlayer(src)
+                else
+                    targetPlayer = QBCore.Functions.GetPlayerByCitizenId(tonumber(targetId))
                 end
-                local targetPlayer = nil
-                targetPlayer = QBCore.Functions.GetPlayer(tonumber(targetId))
                 if targetPlayer then
                     targetPlayer.Functions.AddItem(item, amount)
-                    TriggerEvent("qb-log:server:CreateLog", "adminactions", "Set Gang", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** gave " .. item .. " (x" .. amount .. ") to " .. GetPlayerName(targetId), false)
+                    TriggerEvent("qb-log:server:CreateLog", "adminactions", "Set Gang", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** gave " .. item .. " (x" .. amount .. ") to " .. GetPlayerName(targetPlayer.PlayerData.source), false)
                     TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.gaveItem", {value = item}))
-                    TriggerClientEvent("QBCore:Notify", targetId, Lang:t("notify.givenItem", {value = item}), "success")
+                    TriggerClientEvent("QBCore:Notify", targetPlayer.PlayerData.source, Lang:t("notify.givenItem", {value = item}), "success")
                 end
             else
                 TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "danger", "<strong>"..Lang:t("alerts.error").."</strong> "..Lang:t("alerts.invalidItem"))
@@ -969,7 +971,7 @@ RegisterServerEvent("mri_Qadmin:server:OpenSkinMenu", function(targetId)
     local src = source
     if AdminPanel.HasPermission(src, "skinmenu") then
         TriggerClientEvent("mri_Qadmin:client:ShowPanelAlert", src, "success", "<strong>"..Lang:t("alerts.success").."</strong> "..Lang:t("alerts.skinMenuOpened", {value = GetPlayerName(targetId)}))
-        TriggerClientEvent("will_skinshop:openShop",src,"Creator")
+        TriggerClientEvent("will_skinshop:openShop",src, "Creator")
         TriggerEvent("qb-log:server:CreateLog", "adminactions", "Skin Menu", "red", "**STAFF MEMBER " .. GetPlayerName(src) .. "** opened skin menu for " .. GetPlayerName(targetId), false)
     end
 end)
