@@ -132,19 +132,33 @@ function vRP.hasAnyPermission(user_id, perms)
 	return false
 end
 
+local aliasPerm = {
+	['Police'] = "policia.permissao",
+	['Mechanic'] = "mecanico.permissao",
+	['Paramedic'] = "paramedico.permissao"
+}
+
 function vRP.numPermission(perm, offline)
 	local users = {}
-	local consult = vRP.query("vRP/get_specific_perm",{ permiss = tostring(perm) })
-	for k,v in pairs(consult) do
-		if offline then
-			table.insert(users,v.user_id)
-		else
-			local userSource = vRP.getUserSource(v.user_id)
-			if userSource then
+	if perm and aliasPerm[perm] then
+        for k,v in pairs(vRP.rusers) do
+            if vRP.hasPermission(tonumber(k), aliasPerm[perm]) then
+                table.insert(users,tonumber(k))
+            end
+        end
+	else
+		local consult = vRP.query("vRP/get_specific_perm",{ permiss = tostring(perm) })
+		for k,v in pairs(consult) do
+			if offline then
 				table.insert(users,v.user_id)
+			else
+				local userSource = vRP.getUserSource(v.user_id)
+				if userSource then
+					table.insert(users,v.user_id)
+				end
 			end
 		end
-	end
+    end
 	return users
 end
 -----------------------------------------------------------------------------------------------------------------------------------------

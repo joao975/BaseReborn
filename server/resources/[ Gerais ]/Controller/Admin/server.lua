@@ -612,13 +612,12 @@ end)
 RegisterCommand('pegarip',function(source,args,rawCommand)
     local user_id = vRP.getUserId(source)
     local tplayer = vRP.getUserSource(parseInt(args[1]))
-    if vRP.numPermission(user_id,"Owner") then
+    if vRP.hasPermission(user_id,"Owner") then
         if args[1] and tplayer then
-        TriggerClientEvent('chatMessage',source,"^1IP do Usuário: "..GetPlayerEndpoint(tplayer))
+        	TriggerClientEvent('chatMessage',source,"^1IP do Usuário: "..GetPlayerEndpoint(tplayer))
         end
     end
 end)
-
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- SPEC 
 ----------------------------------------------------------------------------------------------------------------------------------------

@@ -8,6 +8,7 @@ Reborn.groups = function()
 		["Owner"] = {
 			"owner.permissao",
 			"admin.permissao",
+			"administrator.permissao",
 			"cas.permissao",
 			"suporte.permissao",
 			"player.blips",
@@ -17,10 +18,12 @@ Reborn.groups = function()
 			"player.secret",
 			"player.wall",
 			"moderador.permissao",
-			"adm.permissao"
+			"adm.permissao",
+			"staff.permissao"
 		},
 		["Admin"] = {
 			"admin.permissao",
+			"administrator.permissao",
 			"suporte.permissao",
 			"player.blips",
 			"player.spec",
@@ -29,7 +32,8 @@ Reborn.groups = function()
 			"player.secret",
 			"player.wall",
 			"moderador.permissao",
-			"adm.permissao"
+			"adm.permissao",
+			"staff.permissao"
 		}, 
 		["Mod"] = {
 			"moderador.permissao",
@@ -39,12 +43,14 @@ Reborn.groups = function()
 			"mqcu.permissao",
 			"player.wall",
 			"suporte.permissao",
-			"mod.permissao"
+			"mod.permissao",
+			"staff.permissao"
 		},
 		["Sup"] = {
 			"suporte.permissao",
 			"mqcu.permissao",
-			"sup.permissao"
+			"sup.permissao",
+			"staff.permissao"
 		},
 		--[[ 
 			#############
@@ -205,13 +211,6 @@ Reborn.groups = function()
 			"garmas.permissao",
 			"policiatiros.permissao"
 		},
-		["PaisanaRecruta"] = {
-			_config = {
-				title = "Paisana - Recruta",
-				gtype = "job",
-			},
-			"sem.permissao",
-		},
 		["Recruta"] = {
 			_config = {
 				title = "Recruta",
@@ -231,7 +230,7 @@ Reborn.groups = function()
 			   HOSPITAL
 			#############
 		 ]]
-		["Paramedic"] = {
+		["Paramedico"] = {
 			_config = {
 				title = "Paramedico",
 				gtype = "job"
@@ -324,6 +323,7 @@ Reborn.groups = function()
 				gtype = "vip",
 				salary = 3000
 			},
+			"vip.permissao",
 			"prata.permissao"
 		},
 		["Ouro"] = {
@@ -332,6 +332,7 @@ Reborn.groups = function()
 				gtype = "vip",
 				salary = 4000
 			},
+			"vip.permissao",
 			"ouro.permissao",
 			"mochila.permissao"
 		},
@@ -341,6 +342,7 @@ Reborn.groups = function()
 				gtype = "vip",
 				salary = 5500
 			},
+			"vip.permissao",
 			"platina.permissao",
 			"pets.permissao",
 			"corarma.permissao",
@@ -356,6 +358,7 @@ Reborn.groups = function()
 				gtype = "vip",
 				salary = 7500
 			},
+			"vip.permissao",
 			"diamante.permissao",
 			"pets.permissao",
 			"corarma.permissao",
