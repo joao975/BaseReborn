@@ -1,6 +1,6 @@
 
 --#########################
----## FUNCTIONS
+---## FRAMEWORK FUNCTIONS
 --#########################
 
 function getUserId(source)
@@ -27,7 +27,10 @@ function getUserIdentity(user_id)
 		identity = vRP.Identity(user_id)
 	end
 	if not identity.name2 then
-        identity.name2 = identity.firstname
+        identity.name2 = identity.firstname or identity.Lastname or ""
+    end
+    if not identity.name then
+        identity.name = identity.Firstname or ""
     end
     return identity
 end
@@ -65,9 +68,13 @@ function checkUserWeight(user_id, item, amount)
 end
 
 function getItemName(item)
-    return vRP.itemNameList(item) or item
+    if itemName and type(itemName) == "function" then
+        return itemName(item)
+    elseif vRP.itemNameList then
+        return vRP.itemNameList(item) or item
+    end
+    return item
 end
-
 
 local itemsWeight = {
     ['fuel'] = 0.01,
@@ -89,10 +96,16 @@ local itemsWeight = {
 }
 
 function getItemWeight(item)
+    if type(itemWeight) == "function" then
+        return itemWeight(item)
+    end
     if itemsWeight[item] then
         return itemsWeight[item]
     end
-    return vRP.itemWeightList(item) or 0.5
+    if vRP.itemWeightList then
+        return vRP.itemWeightList(item) or 0.5
+    end
+    return 0.5
 end
 
 function tryPayment(user_id, price)
@@ -106,7 +119,7 @@ end
 
 function getUserMoney(user_id)
     if Config.base == "cn" then
-        return vRP.InventoryFull(user_id,"dollars")
+        return vRP.InventoryItemAmount(user_id,"dollars")[1]
     elseif Config.base == "summerz" then
         return vRP.itemAmount(user_id, "dollars")
     end
@@ -117,23 +130,29 @@ function giveUserMoney(user_id, money)
     if Config.base == "cn" then
         vRP.GiveBank(user_id, money)
     elseif Config.base == "vrpex" then
-        vRP.giveMoneyBank(user_id, money)
+        vRP.giveBankMoney(user_id, money)
     else
         vRP.addBank(user_id, money)
     end
 end
 
 function prepare(name, query)
+    if Config.base == "cn" then
+        return vRP.Prepare(name, query)
+    end
     vRP.prepare(name, query)
 end
 
 function query(name, data)
+    if Config.base == "cn" then
+        return vRP.Query(name, data)
+    end
     return vRP.query(name, data)
 end
 
 function execute(name, data)
     if Config.base == "cn" then
-        vRP.query(name, data)
+        vRP.Query(name, data)
     else
         vRP.execute(name, data)
     end
@@ -165,9 +184,8 @@ function deleteVehicle(vehNet)
 end
 
 function request(source,text)
+    if Config.base == "cn" then
+        return vRP.Request(source,text,30)
+    end
     return vRP.request(source,text,30)
 end
-
-AddEventHandler("vRP:playerSpawn",function(user_id,source)
-    playerSpawn(source, user_id)
-end)

@@ -3,6 +3,7 @@ lastFuel = 0
 vehFuels = {}
 isFuel = false
 showNui = false
+allShops = GlobalState['Will_Shops'] or {}
 local gameTimer = GetGameTimer()
 local vehClass = {
 	[13] = 0.0,
@@ -10,51 +11,55 @@ local vehClass = {
 	[15] = 2.5,
 	[21] = 0.0
 }
+
+AddStateBagChangeHandler("Will_Shops", nil,function(bagName,_,value)
+    allShops = value
+end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- MAIN THREADS
 -----------------------------------------------------------------------------------------------------------------------------------------
-function will.initThreads()
-    Citizen.CreateThread(function()
-        SetNuiFocus(false, false)
-        while true do
-            local timeDistance = 500
-            local ped = PlayerPedId()
-            local coords = GetEntityCoords(ped)
-            for k,v in pairs(GlobalState['Will_Shops']) do
-                local managmentDis = #(coords - v['managment_coords'])
-                local shopDis = #(coords - v['buy_products_coords'])
-                local jobDis = #(coords - v['job_coords'])
-                if managmentDis <= 2.0 then
-                    timeDistance = 4
-                    DrawText3D(v['managment_coords'].x,v['managment_coords'].y,v['managment_coords'].z,"~g~[E]~w~ Gerenciamento")
-                    if IsControlJustPressed(0,38) then
-                        openManagment(k)
-                    end
-                elseif shopDis <= 2.0 then
-                    timeDistance = 4
-                    DrawText3D(v['buy_products_coords'].x,v['buy_products_coords'].y,v['buy_products_coords'].z,"~g~[E]~w~ Abrir loja")
-                    if IsControlJustPressed(0,38) then
-                        openShop(k)
-                    end
-                elseif jobDis <= 2.0 then
-                    timeDistance = 4
-                    DrawText3D(v['job_coords'].x,v['job_coords'].y,v['job_coords'].z,"~g~[E]~w~ Emprego")
-                    if IsControlJustPressed(0,38) then
-                        checkShopJobs(k)
-                    end
-                end
-            end
-            Citizen.Wait(timeDistance)
-        end
-    end)
-end
+CreateThread(function()
+	SetNuiFocus(false, false)
+	while true do
+		local timeDistance = 500
+		local ped = PlayerPedId()
+		local coords = GetEntityCoords(ped)
+		for k,v in pairs(allShops) do
+			local managmentDis = #(coords - v['managment_coords'])
+			local shopDis = #(coords - v['buy_products_coords'])
+			local jobDis = #(coords - v['job_coords'])
+			if managmentDis <= 2.0 then
+				timeDistance = 4
+				DrawText3D(v['managment_coords'].x,v['managment_coords'].y,v['managment_coords'].z,"~g~[E]~w~ Gerenciamento")
+				if IsControlJustPressed(0,38) then
+					openManagment(k)
+				end
+			elseif shopDis <= 2.0 then
+				timeDistance = 4
+				DrawText3D(v['buy_products_coords'].x,v['buy_products_coords'].y,v['buy_products_coords'].z,"~g~[E]~w~ Abrir loja")
+				if IsControlJustPressed(0,38) then
+					openShop(k)
+				end
+			elseif jobDis <= 2.0 then
+				timeDistance = 4
+				DrawText3D(v['job_coords'].x,v['job_coords'].y,v['job_coords'].z,"~g~[E]~w~ Emprego")
+				if IsControlJustPressed(0,38) then
+					checkShopJobs(k)
+				end
+			end
+		end
+		Wait(timeDistance)
+	end
+end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- CREATE BOX
 -----------------------------------------------------------------------------------------------------------------------------------------
 function createBox()
-    if Config.base == "creative" or Config.base == "summerz" then		
+    if Config.base == "creative" or Config.base == "summerz" then
         vRP.createObjects("anim@heists@box_carry@","idle","hei_prop_heist_box",50,28422)
-    else
+	elseif Config.base == "cn" then
+        vRP.CreateObjects("anim@heists@box_carry@","idle","hei_prop_heist_box",50,28422)
+	else
         vRP._CarregarObjeto("anim@heists@box_carry@","idle","hei_prop_heist_box",50,28422)
     end
 end
@@ -62,6 +67,8 @@ end
 function removeObjects()
     if Config.base == "creative" or Config.base == "summerz" then	
 		vRP.removeObjects()
+	elseif Config.base == "cn" then
+		vRP.Destroy()
 	else
 		vRP._DeletarObjeto()
 	end
@@ -76,7 +83,7 @@ function startThreadInWork(destiny, id, quantity, shop)
     local newQuantity = parseInt(quantity / 5)
 	addBlipCoords("Mercadoria", destiny)
 
-    Citizen.CreateThread(function()
+    CreateThread(function()
         while inWork and quantity > 0 do
             local ped = PlayerPedId()
             local coords = GetEntityCoords(ped)
@@ -119,8 +126,9 @@ function startThreadInWork(destiny, id, quantity, shop)
                     end
                 end
             end
-            Citizen.Wait(timeDistance)
+            Wait(timeDistance)
         end
+		TriggerEvent(Config.Notify['NotifyEvent'], Config.Notify['NotifyTypes']['Warning'],"Volte a loja para entregar os produtos!",5000)
         if DoesBlipExist(workBlip) then
             RemoveBlip(workBlip)
         end
@@ -136,7 +144,7 @@ function startWorkFuel(destiny, id, shop, data)
 		loadModel(vHash)
 		local tanker = CreateVehicle(vHash, destiny.x, destiny.y, destiny.z, destiny.w, true, false)
 		local tankAttached = false
-		Citizen.CreateThread(function()
+		CreateThread(function()
 			while inWork and not tankAttached do
 				local ped = PlayerPedId()
 				local coords = GetEntityCoords(ped)
@@ -149,7 +157,7 @@ function startWorkFuel(destiny, id, shop, data)
 						tankAttached = true
 					end
 				end
-				Citizen.Wait(timeDistance)
+				Wait(timeDistance)
 			end
 			if DoesBlipExist(workBlip) then
 				RemoveBlip(workBlip)
@@ -158,7 +166,7 @@ function startWorkFuel(destiny, id, shop, data)
 		end)
 	else
         TriggerEvent(Config.Notify['NotifyEvent'], Config.Notify['NotifyTypes']['Denied'],"Já possui um veiculo na vaga!",5000)
-		Citizen.Wait(5000)
+		Wait(5000)
 		local deliveryCoords = Config.deliveryCoords["fuel"]
 		local rand = math.random(1, #deliveryCoords)
 		local destiny = deliveryCoords[rand]
@@ -187,7 +195,7 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- CONSUMEFUEL
 -----------------------------------------------------------------------------------------------------------------------------------------
-Citizen.CreateThread(function()
+CreateThread(function()
 	SetNuiFocus(false,false)
 	while true do
 		local timeDistance = 1999
@@ -212,13 +220,13 @@ Citizen.CreateThread(function()
 				timeDistance = 1
 			end
 		end
-		Citizen.Wait(timeDistance)
+		Wait(timeDistance)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- THRED FUEL
 -----------------------------------------------------------------------------------------------------------------------------------------
-Citizen.CreateThread(function()
+CreateThread(function()
 	while true do
 		local timeDistance = 999
 		local ped = PlayerPedId()
@@ -306,122 +314,149 @@ Citizen.CreateThread(function()
 			end
 		end
 
-		Citizen.Wait(timeDistance)
+		Wait(timeDistance)
 	end
 end)
 
-function fuelLocsThread(fuelLocs, shop)
-	Citizen.CreateThread(function()
-		local litros = 0
-		while true do
-			local timeDistance = 500
-			local ped = PlayerPedId()
-			local coords = GetEntityCoords(ped)
-			for k,v in pairs(fuelLocs) do
-				local distance = #(coords - vector3(v[1],v[2],v[3]))
-				if distance <= 8.0 then
-					timeDistance = 4
-					local vehicle = GetPlayersLastVehicle()
-					if DoesEntityExist(vehicle) and not IsPedInAnyVehicle(ped) and GetSelectedPedWeapon(ped) ~= 883325847 then
-						local coordsVeh = GetEntityCoords(vehicle)
-						local vehFuel = GetVehicleFuelLevel(vehicle)
-						local vehPlate = GetVehicleNumberPlateText(vehicle)
-						local distance = #(coords - vector3(coordsVeh["x"],coordsVeh["y"],coordsVeh["z"]))
-						if distance <= 3.5 then
-							if not isFuel then
-								if vehFuel < 100.0 then
-									DrawText3D(coordsVeh["x"],coordsVeh["y"],coordsVeh["z"] + 1,"~g~E~w~   ABASTECER")
-								end
-							else
-								if not showNui then
-									SendNUIMessage({ fuel = true })
-									showNui = true
-								end
-								local fuelPrice = GlobalState['Will_Shops'][shop]['products']['fuel']
-								isPrice = isPrice + fuelPrice
-								SetVehicleFuelLevel(vehicle,vehFuel + 0.025)
-								litros = litros + 0.02
-								SendNUIMessage({ tank = parseInt(floor(vehFuel)), price = parseInt(isPrice), lts = litros })
-								DrawText3D(coordsVeh["x"],coordsVeh["y"],coordsVeh["z"] + 1,"~g~E~w~   FINALIZAR")
+local fuelTypes = { "prop_gas_pump_1a", "prop_gas_pump_1b", "prop_gas_pump_1c", "prop_gas_pump_1d", "prop_gas_pump_old2", "prop_gas_pump_old3", "prop_vintage_pump" }
 
-								if not IsEntityPlayingAnim(ped,"timetable@gardener@filling_can","gar_ig_5_filling_can",3) then
-									TaskPlayAnim(ped,"timetable@gardener@filling_can","gar_ig_5_filling_can",3.0,3.0,-1,50,0,0,0,0)
-								end
+function getClosestShop(coords)
+	for shop,v in pairs(allShops) do
+		if v.shopDifference and type(v.shopDifference) == "string" and v.shopDifference == "fuelSystem" then
+			if #(v.buy_products_coords - coords) <= 20 then
+				return shop
+			end
+		end
+	end
+	return nil
+end
 
-								if vehFuel >= 100.0 or GetEntityHealth(ped) <= 101 then
-									if vSERVER.paymentFuel(isPrice,vehPlate,100.0,shop,litros) then
-										TriggerServerEvent("engine:tryFuel",vehPlate,100.0)
-										vehFuels[vehPlate] = 100.0
-									else
-										TriggerServerEvent("engine:tryFuel",vehPlate,lastFuel)
-										vehFuels[vehPlate] = lastFuel
-									end
-									SetVehicleFuelLevel(vehicle,vehFuels[vehPlate])
-									StopAnimTask(ped,"timetable@gardener@filling_can","gar_ig_5_filling_can",2.0)
-									RemoveAnimDict("timetable@gardener@filling_can")
-									SendNUIMessage({ fuel = false })
-									showNui = false
-									isFuel = false
-									isPrice = 0
-									litros = 0
-								end
+CreateThread(function()
+	local litros = 0
+	while true do
+		local timeDistance = 500
+		local ped = PlayerPedId()
+		local coords = GetEntityCoords(ped)
+		local objCds = nil
+		local shop = nil
+		for k,pump in ipairs(fuelTypes) do
+			local object = GetClosestObjectOfType(coords,6.0,GetHashKey(pump),0,0,0)
+			if object and DoesEntityExist(object) then
+				objCds = GetEntityCoords(object)
+				shop = getClosestShop(objCds)
+				break
+			end
+		end
+		if objCds then
+			local distance = #(coords - objCds)
+			if distance <= 6.0 then
+				timeDistance = 4
+				local vehicle = GetPlayersLastVehicle()
+				if DoesEntityExist(vehicle) and not IsPedInAnyVehicle(ped) and GetSelectedPedWeapon(ped) ~= 883325847 then
+					local coordsVeh = GetEntityCoords(vehicle)
+					local vehFuel = GetVehicleFuelLevel(vehicle)
+					local vehPlate = GetVehicleNumberPlateText(vehicle)
+					local distance = #(coords - vector3(coordsVeh["x"],coordsVeh["y"],coordsVeh["z"]))
+					if distance <= 3.5 then
+						if not isFuel then
+							if vehFuel < 100.0 then
+								DrawText3D(coordsVeh["x"],coordsVeh["y"],coordsVeh["z"] + 1,"~g~E~w~   ABASTECER")
+							end
+						else
+							if not showNui then
+								SendNUIMessage({ fuel = true })
+								showNui = true
+							end
+							local fuelPrice = 0.025
+							if shop then
+								fuelPrice = allShops[shop]['products']['fuel']
+							end
+							isPrice = isPrice + fuelPrice
+							SetVehicleFuelLevel(vehicle,vehFuel + 0.025)
+							litros = litros + 0.02
+							SendNUIMessage({ tank = parseInt(floor(vehFuel)), price = parseInt(isPrice), lts = litros })
+							DrawText3D(coordsVeh["x"],coordsVeh["y"],coordsVeh["z"] + 1,"~g~E~w~   FINALIZAR")
+
+							if not IsEntityPlayingAnim(ped,"timetable@gardener@filling_can","gar_ig_5_filling_can",3) then
+								TaskPlayAnim(ped,"timetable@gardener@filling_can","gar_ig_5_filling_can",3.0,3.0,-1,50,0,0,0,0)
 							end
 
-							if IsControlJustPressed(1,38) and GetGameTimer() >= gameTimer then
-								gameTimer = GetGameTimer() + 3000
-
-								if isFuel then
-									if vSERVER.paymentFuel(isPrice,vehPlate,vehFuel,shop,isPrice * 4) then
-										TriggerServerEvent("engine:tryFuel",vehPlate,vehFuel)
-										vehFuels[vehPlate] = vehFuel
-									else
-										TriggerServerEvent("engine:tryFuel",vehPlate,lastFuel)
-										vehFuels[vehPlate] = lastFuel
-									end
-									SetVehicleFuelLevel(vehicle,vehFuels[vehPlate])
-									StopAnimTask(ped,"timetable@gardener@filling_can","gar_ig_5_filling_can",2.0)
-									RemoveAnimDict("timetable@gardener@filling_can")
-									SendNUIMessage({ fuel = false })
-									showNui = false
-									isFuel = false
-									isPrice = 0
-									litros = 0
+							if vehFuel >= 100.0 or GetEntityHealth(ped) <= 101 then
+								if vSERVER.paymentFuel(isPrice,vehPlate,100.0,shop,litros) then
+									TriggerServerEvent("engine:tryFuel",vehPlate,100.0)
+									vehFuels[vehPlate] = 100.0
 								else
-									if vehFuel < 100.0 then
-										lastFuel = vehFuel
-										TaskTurnPedToFaceEntity(ped,vehicle,5000)
-										loadAnim("timetable@gardener@filling_can")
-										TaskPlayAnim(ped,"timetable@gardener@filling_can","gar_ig_5_filling_can",3.0,3.0,-1,50,0,0,0,0)
-										isFuel = true
-									end
+									TriggerServerEvent("engine:tryFuel",vehPlate,lastFuel)
+									vehFuels[vehPlate] = lastFuel
 								end
+								SetVehicleFuelLevel(vehicle,vehFuels[vehPlate])
+								StopAnimTask(ped,"timetable@gardener@filling_can","gar_ig_5_filling_can",2.0)
+								RemoveAnimDict("timetable@gardener@filling_can")
+								ClearPedTasks(ped)
+								SendNUIMessage({ fuel = false })
+								showNui = false
+								isFuel = false
+								isPrice = 0
+								litros = 0
 							end
 						end
 
-						if isFuel and distance > 3.5 then
-							if vSERVER.paymentFuel(isPrice,vehPlate,vehFuel,shop,isPrice * 4) then
-								TriggerServerEvent("engine:tryFuel",vehPlate,vehFuel)
-								vehFuels[vehPlate] = vehFuel
+						if IsControlJustPressed(1,38) and GetGameTimer() >= gameTimer then
+							gameTimer = GetGameTimer() + 1500
+							print(shop)
+							if isFuel then
+								if vSERVER.paymentFuel(isPrice,vehPlate,vehFuel,shop,isPrice * 4) then
+									TriggerServerEvent("engine:tryFuel",vehPlate,vehFuel)
+									vehFuels[vehPlate] = vehFuel
+								else
+									TriggerServerEvent("engine:tryFuel",vehPlate,lastFuel)
+									vehFuels[vehPlate] = lastFuel
+								end
+								SetVehicleFuelLevel(vehicle,vehFuels[vehPlate])
+								StopAnimTask(ped,"timetable@gardener@filling_can","gar_ig_5_filling_can",2.0)
+								RemoveAnimDict("timetable@gardener@filling_can")
+								SendNUIMessage({ fuel = false })
+								ClearPedTasks(ped)
+								showNui = false
+								isFuel = false
+								isPrice = 0
+								litros = 0
 							else
-								TriggerServerEvent("engine:tryFuel",vehPlate,lastFuel)
-								vehFuels[vehPlate] = lastFuel
+								if vehFuel < 100.0 then
+									lastFuel = vehFuel
+									TaskTurnPedToFaceEntity(ped,vehicle,5000)
+									loadAnim("timetable@gardener@filling_can")
+									TaskPlayAnim(ped,"timetable@gardener@filling_can","gar_ig_5_filling_can",3.0,3.0,-1,50,0,0,0,0)
+									isFuel = true
+								end
 							end
-							SetVehicleFuelLevel(vehicle,vehFuels[vehPlate])
-							StopAnimTask(ped,"timetable@gardener@filling_can","gar_ig_5_filling_can",2.0)
-							RemoveAnimDict("timetable@gardener@filling_can")
-							SendNUIMessage({ fuel = false })
-							showNui = false
-							isFuel = false
-							isPrice = 0
-							litros = 0
 						end
+					end
+
+					if isFuel and distance > 3.5 then
+						if vSERVER.paymentFuel(isPrice,vehPlate,vehFuel,shop,isPrice * 4) then
+							TriggerServerEvent("engine:tryFuel",vehPlate,vehFuel)
+							vehFuels[vehPlate] = vehFuel
+						else
+							TriggerServerEvent("engine:tryFuel",vehPlate,lastFuel)
+							vehFuels[vehPlate] = lastFuel
+						end
+						SetVehicleFuelLevel(vehicle,vehFuels[vehPlate])
+						StopAnimTask(ped,"timetable@gardener@filling_can","gar_ig_5_filling_can",2.0)
+						RemoveAnimDict("timetable@gardener@filling_can")
+						SendNUIMessage({ fuel = false })
+						ClearPedTasks(ped)
+						showNui = false
+						isFuel = false
+						isPrice = 0
+						litros = 0
 					end
 				end
 			end
-			Citizen.Wait(timeDistance)
 		end
-	end)
-end
+		Wait(timeDistance)
+	end
+end)
 
 RegisterNetEvent("engine:syncFuel")
 AddEventHandler("engine:syncFuel",function(vehPlate,vehResult)
@@ -453,6 +488,45 @@ function skinshopThread(locs,shop)
 	end)
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
+-- STOP WORK
+-----------------------------------------------------------------------------------------------------------------------------------------
+CreateThread(function()
+    while true do
+        local timeDistance = 500
+        if inWork then
+            timeDistance = 4
+            drawTxt()
+            if IsControlJustPressed(0,168) then
+                offWork()
+            end
+        end
+        Wait(timeDistance)
+    end
+end)
+
+function drawTxt()
+	SetTextFont(4)
+	SetTextScale(0.40,0.40)
+	SetTextColour(255,255,255,180)
+	SetTextOutline()
+	SetTextCentre(1)
+	SetTextEntry("STRING")
+	AddTextComponentString("~w~PRESSIONE~r~  F7  ~w~PARA FINALIZAR O TRABALHO")
+	DrawText(0.25,0.97)
+end
+
+function offWork()
+    if inWork then
+        if workBlip and DoesBlipExist(workBlip) then
+            RemoveBlip(workBlip)
+        end
+        if DoesEntityExist(workVeh) then
+            vSERVER.cancelJob(VehToNet(workVeh))
+        end
+        inWork = false
+    end
+end
+-----------------------------------------------------------------------------------------------------------------------------------------
 -- DRAWTEXT3D
 -----------------------------------------------------------------------------------------------------------------------------------------
 function DrawText3D2(x,y,z, text)
@@ -480,29 +554,18 @@ function DrawText3D(x,y,z,text)
 	DrawRect(_x,_y+0.0125,0.01+factor,0.03,0,0,0,100)
 end
 
-function drawTxt()
-	SetTextFont(4)
-	SetTextScale(0.40,0.40)
-	SetTextColour(255,255,255,180)
-	SetTextOutline()
-	SetTextCentre(1)
-	SetTextEntry("STRING")
-	AddTextComponentString("~w~PRESSIONE~r~  F7  ~w~PARA FINALIZAR O TRABALHO")
-	DrawText(0.25,0.97)
-end
-
 function loadAnim(dict)
 	RequestAnimDict(dict)
 	while not HasAnimDictLoaded(dict) do
 		RequestAnimDict(dict)
-		Citizen.Wait(10)
+		Wait(10)
 	end
 end
 
 function loadModel(model)
 	RequestModel(model)
 	while not HasModelLoaded(model) do
-		Citizen.Wait(10)
+		Wait(10)
 	end
 end
 
