@@ -7,11 +7,10 @@ vRPNames = {}
 Tunnel.bindInterface("Wall",vRPNames)
 Proxy.addInterface("Wall",vRPNames)
 KSRPserver = Tunnel.getInterface("Wall")
-
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- VARS
 -----------------------------------------------------------------------------------------------------------------------------------------
-local cDistance = 150
+local cDistance = 150.0
 local showIds = false
 local players = {}
 local admin = false
@@ -19,7 +18,7 @@ local admin = false
 -- CORE
 -----------------------------------------------------------------------------------------------------------------------------------------
 function startPlayersThread()
-	Citizen.CreateThread(function()
+	CreateThread(function()
 		while showIds do
 			for _, id in ipairs(GetActivePlayers()) do
 				if id == -1 or id == nil then return end
@@ -28,15 +27,15 @@ function startPlayersThread()
 					return
 				end
 				if players[id] ~= pid or not players[id] then
-					players[id] = pid
+					players[id] = { id = pid, name = userIdentity.name.." "..userIdentity.name2 }
 				end
 			end
-			Citizen.Wait(5000)
+			Wait(5000)
 		end
 	end)
 end
 
-RegisterCommand("ids",function()
+RegisterCommand("wall",function()
 	admin = KSRPserver.isAdmin()
 	if not admin then
 		return
@@ -47,64 +46,57 @@ RegisterCommand("ids",function()
 	end
 
 	if showIds then
-		
 		KSRPserver.reportLog("ON")
-		TriggerEvent('chatMessage',"PLAYERS IDS:",{0,213,189},"ON")
+		TriggerEvent('chatMessage',"WALL",{0,213,189},"ON")
 		startPlayersThread()
 	else
 		KSRPserver.reportLog("OFF")
-		TriggerEvent('chatMessage',"PLAYERS IDS:",{0,213,189},"OFF")
+		TriggerEvent('chatMessage',"WALL",{0,213,189},"OFF")
 	end
 end)
-
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- IDS AND INFOS
 -----------------------------------------------------------------------------------------------------------------------------------------
-Citizen.CreateThread(function()
+CreateThread(function()
     while true do
     	local kswait = 1000
-		  if showIds then
+		if showIds then
 			pedAdm = PlayerPedId()
 			kswait = 4
-			if not IsEntityVisible(pedAdm) then
-	        	for k, id in ipairs(GetActivePlayers()) do
-	        		if  ((NetworkIsPlayerActive( id )) and GetPlayerPed(id) ~= PlayerPedId()) then
-				        x1, y1, z1 = table.unpack( GetEntityCoords( PlayerPedId(), true ) )
-				        x2, y2, z2 = table.unpack( GetEntityCoords( GetPlayerPed( id ), true ) )
-				        distance = math.floor(GetDistanceBetweenCoords(x1,  y1,  z1,  x2,  y2,  z2,  true))
-						if admin then
-					    	if ((distance < cDistance)) then
-					    		if GetPlayerPed(id) ~= -1 and players[id] ~= nil then
-									local playerName = GetPlayerName(id)
-									if playerName == nil or playerName == "" or playerName == -1 then
-										playerName = "Sem STEAM"
-									end
-					    			local playerHealth = GetEntityHealth(GetPlayerPed(id))
-									if playerHealth == 1 then
-										playerHealth = 0
-									end
-
-									local playerArmour = GetPedArmour(GetPlayerPed(id))
-									if playerArmour == 1 then
-										playerArmour = 0
-									end
-
-					    			local playerHealthPercent = playerHealth / 2
-					    			local playerArmourPercent = playerArmour
-					    			playerHealthPercent = math.floor(playerHealthPercent)
-					    			playerArmourPercent = math.floor(playerArmourPercent)
-					    			DrawText3D(x2, y2, z2+1, "~p~ID: ~w~" .. players[id] .. "\n~g~VIDA:~w~ "..playerHealth.. " (" .. playerHealthPercent .. "%)\n~r~COLETE:~w~ "..playerArmour.. " (" .. playerArmourPercent .. "%)\n~b~STEAM:~w~ " .. playerName, 255, 255, 255)
-					    		end
-					    	end
-					    end
+			for k, id in ipairs(GetActivePlayers()) do
+				if (NetworkIsPlayerActive( id )) then
+					x1, y1, z1 = table.unpack( GetEntityCoords( PlayerPedId(), true ) )
+					x2, y2, z2 = table.unpack( GetEntityCoords( GetPlayerPed( id ), true ) )
+					local distance = math.floor(GetDistanceBetweenCoords(x1,  y1,  z1,  x2,  y2,  z2,  true))
+					if admin then
+						if distance < cDistance then
+							if GetPlayerPed(id) ~= -1 and players[id] then
+								local playerName = GetPlayerName(id)
+								if playerName == nil or playerName == "" or playerName == -1 then
+									playerName = "Sem STEAM"
+								end
+								local playerHealth = GetEntityHealth(GetPlayerPed(id))
+								if playerHealth <= 101 then
+									playerHealth = 0
+								end
+								local playerArmour = GetPedArmour(GetPlayerPed(id))
+								if playerArmour <= 1 then
+									playerArmour = 0
+								end
+								local playerHealthPercent = (playerHealth / GetPedMaxHealth(GetPlayerPed(id))) * 100
+								local playerArmourPercent = playerArmour
+								playerHealthPercent = math.floor(playerHealthPercent)
+								playerArmourPercent = math.floor(playerArmourPercent)
+								DrawText3D(x2, y2, z2+1, "~p~ID: ~w~" .. players[id].id .. "\n~o~NOME:~w~ "..(players[id].name).. "\n~g~VIDA:~w~ "..playerHealth.. " (" .. playerHealthPercent .. "%)\n~r~COLETE:~w~ "..playerArmour.. " (" .. playerArmourPercent .. "%)\n~b~STEAM:~w~ " .. playerName, 255, 255, 255)
+							end
+						end
 					end
 				end
 			end
 		end
-		Citizen.Wait(kswait)
+		Wait(kswait)
     end
 end)
-
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- 3D TEXT
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -112,7 +104,6 @@ function DrawText3D(x,y,z, text, r,g,b)
     local onScreen,_x,_y=World3dToScreen2d(x,y,z)
     local px,py,pz=table.unpack(GetGameplayCamCoords())
     local dist = GetDistanceBetweenCoords(px,py,pz, x,y,z, 1)
- 
     local scale = (1/dist)*2
     local fov = (1/GetGameplayCamFov())*100
     local scale = scale*fov
