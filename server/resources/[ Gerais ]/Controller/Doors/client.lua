@@ -14,6 +14,7 @@ vSERVERDoor = Tunnel.getInterface("doors")
 -- VARIABLES
 -----------------------------------------------------------------------------------------------------------------------------------------
 local doors = nil
+local tempData = {}
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- DOORSUPDATE
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -71,15 +72,70 @@ Citizen.CreateThread(function()
 end)
 
 function doorsVRP.getDoorInfos()
-	local object = TryGetDoor()
-	local x,y,z = table.unpack(GetEntityCoords(PlayerPedId()))
-	local infos = {
-		x = x,
-		y = y,
-		z = z,
-		hash = GetEntityModel(object)
-	}
-	return infos
+	local rayCastCam = function(flags, ignore, distance)
+        local coords, normal = GetWorldCoordFromScreenCoord(0.5, 0.5)
+        local destination = coords + normal * (distance or 10)
+        local handle = StartShapeTestLosProbe(coords.x, coords.y, coords.z, destination.x, destination.y, destination.z, flags or 511, PlayerPedId(), ignore or 4)
+    
+        while true do
+            Wait(0)
+    
+            local retval, hit, endCoords, surfaceNormal, materialHash, entityHit = GetShapeTestResultIncludingMaterial(handle)
+    
+            if retval ~= 1 then
+                return hit, entityHit, endCoords, surfaceNormal, materialHash
+            end
+        end
+    end
+    isAddingDoorlock = true
+    repeat
+        DisablePlayerFiring(PlayerId(), true)
+        DisableControlAction(0, 25, true)
+
+        local hit, entity, coords = rayCastCam(1|16)
+        local changedEntity = lastEntity ~= entity
+        local doorA = tempData[1] and tempData[1].entity
+
+        if changedEntity and lastEntity ~= doorA then
+            SetEntityDrawOutline(lastEntity, false)
+        end
+
+        lastEntity = entity
+
+        if hit then
+            DrawMarker(28, coords.x, coords.y, coords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.2, 0.2, 0.2, 255, 42, 24, 100, false, false, 0, true, false, false, false)
+        end
+
+        if hit and entity > 0 and GetEntityType(entity) == 3 and (doorA ~= entity) then
+            if changedEntity then
+                SetEntityDrawOutline(entity, true)
+            end
+
+            if IsDisabledControlJustPressed(0, 24) then
+                isAddingDoorlock = false
+                local data = {
+					x = coords.x,
+					y = coords.y,
+					z = coords.z,
+                    hash = GetEntityModel(entity)
+                }
+                SetEntityDrawOutline(entity, false)
+                return data
+            end
+        end
+
+        if IsDisabledControlJustPressed(0, 25) then
+            SetEntityDrawOutline(entity, false)
+
+            if not doorA then
+                isAddingDoorlock = false
+                return
+            end
+
+            SetEntityDrawOutline(doorA, false)
+            table.wipe(tempData)
+        end
+    until not isAddingDoorlock
 end
 
 function TryGetDoor()
