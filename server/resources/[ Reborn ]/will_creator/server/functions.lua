@@ -257,8 +257,8 @@ RegisterCommand('addcode', function(source, args)
     if vRP.hasPermission(user_id, "admin.permissao") or vRP.hasPermission(user_id, "Admin") then
         if args[1] then
             local keys = json.decode(LoadResourceFile(GetCurrentResourceName(), 'keys.json'))
-            if keys[code] == nil then
-                keys[code] = {
+            if keys[tostring(args[1])] == nil then
+                keys[tostring(args[1])] = {
                     used = false,
                     increase = tonumber(args[2]) or 1
                 }
