@@ -263,6 +263,7 @@ RegisterCommand('addcode', function(source, args)
                     increase = tonumber(args[2]) or 1
                 }
                 SaveResourceFile(GetCurrentResourceName(), 'keys.json', json.encode(keys), -1)
+                TriggerClientEvent("Notify",source,"sucesso","Codigo "..tostring(args[1]).." criado com sucesso!",5000)
                 return
             end
         end
