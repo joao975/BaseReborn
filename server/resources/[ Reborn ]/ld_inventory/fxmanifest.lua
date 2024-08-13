@@ -26,8 +26,6 @@ files {
 	'ui/recipes.js',
 	'ui/assets/js/*.js',
 	'ui/assets/images/playerbg.png',
-	'ui/assets/images/items/*.png',
-	'ui/assets/images/items/*.jpg',
 	'ui/assets/images/geral/*.png',
 	'ui/assets/images/geral/*.svg',
 	'ui/assets/font/*ttf'

@@ -15,8 +15,6 @@ files {
 	'html/*.css',
 	'html/*.js',
 	'html/*.html',
-	'html/images/*.png',
-	'html/images/*.svg',
 }
 
 shared_script{
