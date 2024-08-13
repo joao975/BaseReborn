@@ -606,5 +606,20 @@ Reborn.groups = function()
 			"advogado.permissao"
 		},
 	}
+	local paisanaGroups = {}
+	for k,v in pairs(groups) do
+		if v._config and v._config.gtype and v._config.gtype == "job" then
+			paisanaGroups["Paisana"..k] = {
+				_config = {
+					title = "Paisana - "..v._config.title,
+					gtype = "job"
+				},
+				"sem.permissao"
+			}
+		end
+	end
+	for k,v in pairs(paisanaGroups) do
+		groups[k] = v
+	end
 	return groups
 end
