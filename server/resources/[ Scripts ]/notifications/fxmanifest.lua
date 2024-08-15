@@ -1,21 +1,9 @@
-   
+fx_version 'bodacious'; game 'gta5'; lua54 'yes'
 
- fx_version "bodacious"
-game "gta5"
+author 'dillen'
 
-ui_page "web-side/index.html"
+client_scripts {"@vrp/lib/utils.lua",'src/*.lua'}
+shared_scripts {'configuration/*.lua'}
 
-client_scripts {
-	"@vrp/lib/utils.lua",
-	"client-side/*"
-}
-
-files {
-	"web-side/*"
-}
-
-
-
-
-
-              
+ui_page 'html/index.html'
+files {'html/index.html', 'html/app.js', 'html/style.css', 'html/sound.mp3'}
