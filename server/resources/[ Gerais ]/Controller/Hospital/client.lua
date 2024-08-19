@@ -10,7 +10,6 @@ vRP = Proxy.getInterface("vRP")
 hpSERVER = {}
 Tunnel.bindInterface("Hospital",hpSERVER)
 hpSERVER = Tunnel.getInterface("Hospital")
-
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- VARIABLES
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -19,17 +18,16 @@ local bleeding = 0
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- PRESSEDDIAGNOSTIC
 -----------------------------------------------------------------------------------------------------------------------------------------
-Citizen.CreateThread(function()
+CreateThread(function()
 	while true do
 		local ped = PlayerPedId()
-
 		if GetEntityHealth(ped) > 110 and not IsPedInAnyVehicle(ped) then
 			if not damaged.vehicle and HasEntityBeenDamagedByAnyVehicle(ped) then
 				ClearEntityLastDamageEntity(ped)
 				damaged.vehicle = true
 				bleeding = bleeding + 2
 			end
-
+			
 			if HasEntityBeenDamagedByWeapon(ped,0,2) then
 				ClearEntityLastDamageEntity(ped)
 				damaged.bullet = true
@@ -47,13 +45,13 @@ Citizen.CreateThread(function()
 			damaged[bone] = true
 		end
 
-		Citizen.Wait(1500)
+		Wait(1500)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- PRESSEDBLEEDING
 -----------------------------------------------------------------------------------------------------------------------------------------
-Citizen.CreateThread(function()
+CreateThread(function()
 	while true do
 		local ped = PlayerPedId()
 
@@ -73,7 +71,7 @@ Citizen.CreateThread(function()
 			end
 		end
 
-		Citizen.Wait(10000)
+		Wait(10000)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -97,28 +95,29 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- DRAWINJURIES
 -----------------------------------------------------------------------------------------------------------------------------------------
+local function draw3dtext(x,y,z,text)
+	local onScreen,_x,_y = World3dToScreen2d(x,y,z)
+	SetTextFont(4)
+	SetTextScale(0.35,0.35)
+	SetTextColour(255,255,255,100)
+	SetTextEntry("STRING")
+	SetTextCentre(1)
+	AddTextComponentString(text)
+	DrawText(_x,_y)
+	local factor = (string.len(text))/300
+	DrawRect(_x,_y+0.0125,0.01+factor,0.03,0,0,0,100)
+end
+
 local exit = true
+
 RegisterNetEvent("drawInjuries")
 AddEventHandler("drawInjuries",function(ped,injuries)
-	local function draw3dtext(x,y,z,text)
-		local onScreen,_x,_y = World3dToScreen2d(x,y,z)
-		SetTextFont(4)
-		SetTextScale(0.35,0.35)
-		SetTextColour(255,255,255,100)
-		SetTextEntry("STRING")
-		SetTextCentre(1)
-		AddTextComponentString(text)
-		DrawText(_x,_y)
-		local factor = (string.len(text))/300
-		DrawRect(_x,_y+0.0125,0.01+factor,0.03,0,0,0,100)
-	end
-
-	Citizen.CreateThread(function()
+	CreateThread(function()
 		local counter = 0
 		exit = not exit
 
 		while true do
-			if counter > 1000 or exit then
+			if counter > 4000 or exit then
 				exit = true
 				break
 			end
@@ -129,7 +128,7 @@ AddEventHandler("drawInjuries",function(ped,injuries)
 			end
 
 			counter = counter + 1
-			Citizen.Wait(0)
+			Wait(0)
 		end
 	end)
 end)
@@ -145,10 +144,6 @@ end
 function hpSERVER.getBleeding()
 	return bleeding
 end
-
-
-
-
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- CHECKIN
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -174,7 +169,7 @@ local bedsIn = {
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- THREADCHECKIN
 -----------------------------------------------------------------------------------------------------------------------------------------
-Citizen.CreateThread(function()
+CreateThread(function()
 	while true do
 		local timeDistance = 1000
 		local ped = PlayerPedId()
@@ -186,13 +181,11 @@ Citizen.CreateThread(function()
 					timeDistance = 4
 					DrawText3Ds(v[1],v[2],v[3],"~g~E~w~   ATENDIMENTO")
 					if distance <= 1.5 and IsControlJustPressed(1,38) and hpSERVER.checkServices() then
-						if  GetEntityHealth(ped) < 400 then
+						if GetEntityHealth(ped) < 400 then
 							local checkBusy = 0
 							local checkSelected = v[4]
-
 							for _,v in pairs(bedsIn[checkSelected]) do
 								checkBusy = checkBusy + 1
-
 								local checkPos = nearestPlayer(v[1],v[2],v[3])
 								if checkPos == nil then
 									if hpSERVER.paymentCheckin() then
@@ -203,17 +196,16 @@ Citizen.CreateThread(function()
 										end
 
 										DoScreenFadeOut(1000)
-										Citizen.Wait(1000)
+										Wait(1000)
 
 										SetEntityCoords(ped,v[1],v[2],v[3])
 
-										Citizen.Wait(500)
+										Wait(500)
 										TriggerEvent("emotes","checkin")
 
-										Citizen.Wait(5000)
+										Wait(5000)
 										DoScreenFadeIn(1000)
 									end
-
 									break
 								end
 							end
@@ -228,13 +220,11 @@ Citizen.CreateThread(function()
 				end
 			end
 		end
-
-		Citizen.Wait(timeDistance)
+		Wait(timeDistance)
 	end
 end)
-
 -----------------------------------------------------------------------------------------------------------------------------------------
---[ MACAS DO HOSPITAL ]------------------------------------------------------------------------------------------------------------------ 
+-- MACAS DO HOSPITAL
 -----------------------------------------------------------------------------------------------------------------------------------------
 local macas = {
 	{ ['x'] = 321.76, ['y'] = -586.79, ['z'] = 43.29, ['x2'] = 322.69, ['y2'] = -587.0, ['z2'] = 44.21, ['h'] = 160.8 },
@@ -247,7 +237,7 @@ local macas = {
 	{ ['x'] = 308.68, ['y'] = -582.1, ['z'] = 43.29, ['x2'] = 307.62, ['y2'] = -581.66, ['z2'] = 44.21, ['h'] = 160.8 },
 }
 
-Citizen.CreateThread(function()
+CreateThread(function()
 	for k,v in pairs(macas) do
 		local cod = macas[k]
 		exports["target"]:AddCircleZone("treatment:"..k,vector3(cod.x,cod.y,cod.z),1.0,{
@@ -266,11 +256,9 @@ Citizen.CreateThread(function()
 		})
 	end
 end)
------------------------------------------------------------------------------------------------------------------------------------------
---[ USO ]-------------------------------------------------------------------------------------------------------------------------------- 
------------------------------------------------------------------------------------------------------------------------------------------
+
 local emMaca = false
-Citizen.CreateThread(function()
+CreateThread(function()
 	while true do
 		local idle = 1000
 		for k,v in pairs(macas) do
@@ -302,7 +290,7 @@ Citizen.CreateThread(function()
 			end
 		end
 
-		Citizen.Wait(idle)
+		Wait(idle)
 	end
 end)
 
@@ -311,7 +299,7 @@ AddEventHandler('tratamento-macas',function()
 	TriggerEvent("cancelando",true)
 	repeat
 		SetEntityHealth(PlayerPedId(),GetEntityHealth(PlayerPedId())+3)
-		Citizen.Wait(1500)
+		Wait(1500)
 	until GetEntityHealth(PlayerPedId()) >= 399 or GetEntityHealth(PlayerPedId()) <= 101
 	TriggerEvent("Notify","importante","Tratamento concluido.")
 	TriggerEvent("cancelando",false)
@@ -327,7 +315,6 @@ AddEventHandler("tratamento",function()
     local health = GetEntityHealth(ped)
 
     SetEntityHealth(ped,health)
-	
 	if emMaca then
 		if tratamento then
 			return
@@ -335,11 +322,10 @@ AddEventHandler("tratamento",function()
 
 		tratamento = true
 		TriggerEvent("Notify","sucesso","Tratamento iniciado, aguarde a liberação do <b>profissional médico.</b>.",8000)
-		
 
 		if tratamento then
 			repeat
-				Citizen.Wait(600)
+				Wait(600)
 				if GetEntityHealth(ped) > 101 then
 					SetEntityHealth(ped,GetEntityHealth(ped)+3)
 				end
@@ -352,8 +338,6 @@ AddEventHandler("tratamento",function()
 		TriggerEvent("Notify","negado","Você precisa estar deitado em uma maca para ser tratado.",8000)
 	end
 end)
-
-
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- DRAWTEXT3D
 -----------------------------------------------------------------------------------------------------------------------------------------

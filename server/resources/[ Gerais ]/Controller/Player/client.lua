@@ -15,9 +15,9 @@ local gsrTime = 0
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- RECEIVESALARY
 -----------------------------------------------------------------------------------------------------------------------------------------
-Citizen.CreateThread(function()
+CreateThread(function()
 	while true do
-		Citizen.Wait(30*60000)
+		Wait(30*60000)
 		TriggerServerEvent("vrp_player:salary")
 	end
 end)
@@ -418,119 +418,6 @@ AddEventHandler("vrp_player:SeatPlayer",function(index)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
--- WCOMPONENTS
------------------------------------------------------------------------------------------------------------------------------------------
-local wComponents = {
-	["WEAPON_PISTOL"] = {
-		"COMPONENT_AT_PI_FLSH",
-		"COMPONENT_PISTOL_CLIP_02",
-		"COMPONENT_AT_PI_SUPP_02"
-	},
-	["WEAPON_HEAVYPISTOL"] = {
-		"COMPONENT_AT_PI_FLSH"
-	},
-	["WEAPON_PISTOL_MK2"] = {
-		"COMPONENT_AT_PI_RAIL",
-		"COMPONENT_AT_PI_FLSH_02",
-		"COMPONENT_AT_PI_COMP"
-	},
-	["WEAPON_COMBATPISTOL"] = {
-		"COMPONENT_AT_PI_FLSH"
-	},
-	["WEAPON_APPISTOL"] = {
-		"COMPONENT_AT_PI_FLSH"
-	},
-	["WEAPON_MICROSMG"] = {
-		"COMPONENT_AT_PI_FLSH",
-		"COMPONENT_AT_SCOPE_MACRO"
-	},
-	["WEAPON_SMG"] = {
-		"COMPONENT_AT_AR_FLSH",
-		"COMPONENT_AT_SCOPE_MACRO_02",
-		"COMPONENT_AT_PI_SUPP"
-	},
-	["WEAPON_ASSAULTSMG"] = {
-		"COMPONENT_AT_AR_FLSH",
-		"COMPONENT_AT_SCOPE_MACRO",
-		"COMPONENT_AT_AR_SUPP_02"
-	},
-	["WEAPON_COMBATPDW"] = {
-		"COMPONENT_AT_AR_FLSH",
-		"COMPONENT_AT_AR_AFGRIP",
-		"COMPONENT_AT_SCOPE_SMALL"
-	},
-	["WEAPON_PUMPSHOTGUN"] = {
-		"COMPONENT_AT_AR_FLSH"
-	},
-	["WEAPON_CARBINERIFLE"] = {
-		"COMPONENT_AT_AR_FLSH",
-		"COMPONENT_AT_SCOPE_MEDIUM",
-		"COMPONENT_AT_AR_AFGRIP"
-	},
-	["WEAPON_ASSAULTRIFLE"] = {
-		"COMPONENT_AT_AR_FLSH",
-		"COMPONENT_AT_SCOPE_MACRO",
-		"COMPONENT_AT_AR_AFGRIP"
-	},
-	["WEAPON_MACHINEPISTOL"] = {
-		"COMPONENT_AT_PI_SUPP"
-	},
-	["WEAPON_ASSAULTRIFLE_MK2"] = {
-		"COMPONENT_AT_AR_AFGRIP_02",
-		"COMPONENT_AT_AR_FLSH",
-		"COMPONENT_AT_SCOPE_MEDIUM_MK2",
-		"COMPONENT_AT_MUZZLE_01"
-	},
-	["WEAPON_PISTOL50"] = {
-		"COMPONENT_AT_PI_FLSH"
-	},
-	["WEAPON_SNSPISTOL_MK2"] = {
-		"COMPONENT_AT_PI_FLSH_03",
-		"COMPONENT_AT_PI_RAIL_02",
-		"COMPONENT_AT_PI_COMP_02"
-	},
-	["WEAPON_SMG_MK2"] = {
-		"COMPONENT_AT_AR_FLSH",
-		"COMPONENT_AT_SCOPE_MACRO_02_SMG_MK2",
-		"COMPONENT_AT_MUZZLE_01"
-	},
-	["WEAPON_BULLPUPRIFLE"] = {
-		"COMPONENT_AT_AR_FLSH",
-		"COMPONENT_AT_SCOPE_SMALL",
-		"COMPONENT_AT_AR_SUPP"
-	},
-	["WEAPON_BULLPUPRIFLE_MK2"] = {
-		"COMPONENT_AT_AR_FLSH",
-		"COMPONENT_AT_SCOPE_MACRO_02_MK2",
-		"COMPONENT_AT_MUZZLE_01"
-	},
-	["WEAPON_SPECIALCARBINE"] = {
-		"COMPONENT_AT_AR_FLSH",
-		"COMPONENT_AT_SCOPE_MEDIUM",
-		"COMPONENT_AT_AR_AFGRIP"
-	},
-	["WEAPON_SPECIALCARBINE_MK2"] = {
-		"COMPONENT_AT_AR_FLSH",
-		"COMPONENT_AT_SCOPE_MEDIUM_MK2",
-		"COMPONENT_AT_MUZZLE_01"
-	}
-}
------------------------------------------------------------------------------------------------------------------------------------------
--- ATTACHS
------------------------------------------------------------------------------------------------------------------------------------------
-RegisterCommand("attachs",function(source,args)
-	local ped = PlayerPedId()
-	if plSERVER.Attaches() then
-		for k,v in pairs(wComponents) do
-			if GetSelectedPedWeapon(ped) == GetHashKey(k) then
-				for k2,v2 in pairs(v) do
-					GiveWeaponComponentToPed(ped,GetHashKey(k),GetHashKey(v2))
-				end
-			end
-		end
-	end
-end)
------------------------------------------------------------------------------------------------------------------------------------------
 -- TOGGLEHANDCUFF
 -----------------------------------------------------------------------------------------------------------------------------------------
 local handcuff = false
@@ -770,6 +657,8 @@ local blackWeapons = {
 	"WEAPON_PROXMINE",
 	"WEAPON_PIPEBOMB",
 	"WEAPON_BALL",
+	"WEAPON_UNARMED",
+	"WEAPON_PETROLCAN"
 }
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- THREADSHOTSFIRED
@@ -784,20 +673,13 @@ Citizen.CreateThread(function()
 	while true do
 		local timeDistance = 500
 		local ped = PlayerPedId()
-		if GetSelectedPedWeapon(ped) ~= GetHashKey("WEAPON_UNARMED") and GetSelectedPedWeapon(ped) ~= GetHashKey("WEAPON_PETROLCAN") and not inGame then
+		if not LocalPlayer.state.inLateGame and not inGame then
 			timeDistance = 4
 			if IsPedShooting(ped) then
-				for k,v in ipairs(blackWeapons) do
-					if GetSelectedPedWeapon(ped) == GetHashKey(v) then
-						bWeapons = true
-					end
-				end
-
 				if not bWeapons then
 					plSERVER.shotsFired()
 					gsrTime = 60
 				end
-
 				bWeapons = false
 			end
 		end
@@ -1034,38 +916,40 @@ local weapons = {
 	"WEAPON_GUSENBERG"
 }
 
-local holster = false
 Citizen.CreateThread(function()
-	while true do
-		local timeDistance = 500
-		local ped = PlayerPedId()
-		if DoesEntityExist(ped) and GetEntityHealth(ped) > 101 and not IsPedInAnyVehicle(ped) then
-			if not holster and CheckWeapon(ped) then
-				timeDistance = 4
-				if not IsEntityPlayingAnim(ped,"amb@world_human_sunbathe@female@back@idle_a","idle_a",3) then
-					loadAnimDict("rcmjosh4")
-					TaskPlayAnim(ped,"rcmjosh4","josh_leadout_cop2",3.0,2.0,-1,48,10,0,0,0)
-					Citizen.Wait(450)
-					ClearPedTasks(ped)
+	if GlobalState['Inventory'] ~= "ox_inventory" then
+		local holster = false
+		while true do
+			local timeDistance = 500
+			local ped = PlayerPedId()
+			if DoesEntityExist(ped) and GetEntityHealth(ped) > 101 and not IsPedInAnyVehicle(ped) then
+				if not holster and CheckWeapon(ped) then
+					timeDistance = 4
+					if not IsEntityPlayingAnim(ped,"amb@world_human_sunbathe@female@back@idle_a","idle_a",3) then
+						loadAnimDict("rcmjosh4")
+						TaskPlayAnim(ped,"rcmjosh4","josh_leadout_cop2",3.0,2.0,-1,48,10,0,0,0)
+						Citizen.Wait(450)
+						ClearPedTasks(ped)
+					end
+					holster = true
+				elseif holster and not CheckWeapon(ped) then
+					timeDistance = 4
+					if not IsEntityPlayingAnim(ped,"amb@world_human_sunbathe@female@back@idle_a","idle_a",3) then
+						loadAnimDict("weapons@pistol@")
+						TaskPlayAnim(ped,"weapons@pistol@","aim_2_holster",3.0,2.0,-1,48,10,0,0,0)
+						Citizen.Wait(450)
+						ClearPedTasks(ped)
+					end
+					holster = false
 				end
-				holster = true
-			elseif holster and not CheckWeapon(ped) then
-				timeDistance = 4
-				if not IsEntityPlayingAnim(ped,"amb@world_human_sunbathe@female@back@idle_a","idle_a",3) then
-					loadAnimDict("weapons@pistol@")
-					TaskPlayAnim(ped,"weapons@pistol@","aim_2_holster",3.0,2.0,-1,48,10,0,0,0)
-					Citizen.Wait(450)
-					ClearPedTasks(ped)
-				end
-				holster = false
 			end
+	
+			if GetEntityHealth(ped) <= 101 and holster then
+				holster = false
+				SetCurrentPedWeapon(ped,GetHashKey("WEAPON_UNARMED"),true)
+			end
+			Citizen.Wait(timeDistance)
 		end
-
-		if GetEntityHealth(ped) <= 101 and holster then
-			holster = false
-			SetCurrentPedWeapon(ped,GetHashKey("WEAPON_UNARMED"),true)
-		end
-		Citizen.Wait(timeDistance)
 	end
 end)
 
@@ -1107,7 +991,6 @@ end
 local wLux = {
 	["WEAPON_PISTOL"] = {
 		"COMPONENT_PISTOL_VARMOD_LUXE",
-
 	},
 	["WEAPON_APPISTOL"] = {
 		"COMPONENT_APPISTOL_VARMOD_LUXE"
@@ -1219,7 +1102,6 @@ end)
 RegisterNetEvent("vrp_player:CheckTrunk")
 AddEventHandler("vrp_player:CheckTrunk",function()
 	local ped = PlayerPedId()
-
 	if inTrunk then
 		local vehicle = GetEntityAttachedTo(ped)
 		if DoesEntityExist(vehicle) then
@@ -1244,7 +1126,6 @@ Citizen.CreateThread(function()
 			local vehicle = GetEntityAttachedTo(ped)
 			if DoesEntityExist(vehicle) then
 				timeDistance = 4
-
 				DisableControlAction(1,73,true)
 				DisableControlAction(1,29,true)
 				DisableControlAction(1,47,true)

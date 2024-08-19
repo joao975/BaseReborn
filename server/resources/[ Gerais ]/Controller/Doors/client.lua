@@ -25,7 +25,7 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- THREADBUTTON
 -----------------------------------------------------------------------------------------------------------------------------------------
-Citizen.CreateThread(function()
+CreateThread(function()
 	while true do
 		local timeDistance = 500
 		local ped = PlayerPedId()
@@ -59,7 +59,7 @@ Citizen.CreateThread(function()
 								v.lock = not v.lock
 								vSERVERDoor.doorsStatistics(k,v.lock)
 								vRP._playAnim(true,{"anim@heists@keycard@","exit"},false)
-								Citizen.Wait(350)
+								Wait(350)
 								vRP.stopAnim()
 							end
 						end
@@ -67,7 +67,7 @@ Citizen.CreateThread(function()
 				end
 			end
 		end
-		Citizen.Wait(timeDistance)
+		Wait(timeDistance)
 	end
 end)
 
@@ -137,37 +137,11 @@ function doorsVRP.getDoorInfos()
         end
     until not isAddingDoorlock
 end
-
-function TryGetDoor()
-    local playerped = PlayerPedId()
-    local playerCoords = GetEntityCoords(playerped)
-    local handle, ped = FindFirstObject()
-    local success
-    local rped = nil
-    local distanceFrom
-    repeat
-        local pos = GetEntityCoords(ped)
-        local distance = GetDistanceBetweenCoords(playerCoords, pos, true)
-        if distance < 1.5 then
-            distanceFrom = distance
-            --FreezeEntityPosition(ped, true)
-			rped = ped
-	    	if IsEntityTouchingEntity(playerped, ped) then
-				rped = ped
-				break
-	    	end
-        end
-        success, ped = FindNextObject(handle)
-    until not success
-    EndFindObject(handle)
-    return rped
-end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- DRAWTEXT3D
 -----------------------------------------------------------------------------------------------------------------------------------------
 function DrawText3D(x,y,z,text)
 	local onScreen,_x,_y = GetScreenCoordFromWorldCoord(x,y,z)
-
 	if onScreen then
 		BeginTextCommandDisplayText("STRING")
 		AddTextComponentSubstringKeyboardDisplay(text)

@@ -11,15 +11,9 @@ admVRP = {}
 Tunnel.bindInterface("Admin",admVRP)
 admSERVER = Tunnel.getInterface("Admin")
 -----------------------------------------------------------------------------------------------------------------------------------------
--- TELEPORTWAY
------------------------------------------------------------------------------------------------------------------------------------------
-function admVRP.vehicleHash(vehicle)
-    return GetEntityModel(vehicle)
-end
------------------------------------------------------------------------------------------------------------------------------------------
 -- ILHA
 -----------------------------------------------------------------------------------------------------------------------------------------
-Citizen.CreateThread(function()
+CreateThread(function()
     while true do
         local timeDistance = 500
         if IsPauseMenuActive() then
@@ -27,7 +21,7 @@ Citizen.CreateThread(function()
             SetRadarAsExteriorThisFrame()
             SetRadarAsInteriorThisFrame("h4_fake_islandx",vec(4700.0,-5145.0),0,0)
         end
-        Citizen.Wait(timeDistance)
+        Wait(timeDistance)
     end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -73,7 +67,6 @@ function admVRP.teleportWay()
 	while not HasCollisionLoadedAroundEntity(ped) do
 		Citizen.Wait(10)
 	end
-
 	SetEntityCoordsNoOffset(ped,x,y,z,0,0,1)
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -84,30 +77,8 @@ function admVRP.teleportLimbo()
 	local x,y,z = table.unpack(GetEntityCoords(ped))
 	local _,vector = GetNthClosestVehicleNode(x,y,z,math.random(5,10),0,0,0)
 	local x2,y2,z2 = table.unpack(vector)
-
 	SetEntityCoordsNoOffset(ped,x2,y2,z2+5,0,0,1)
 end
------------------------------------------------------------------------------------------------------------------------------------------
--- VEHELETRIC
------------------------------------------------------------------------------------------------------------------------------------------
-local vehEletric = {
-	["teslaprior"] = true,
-	["voltic"] = true,
-	["raiden"] = true,
-	["neon"] = true,
-	["tezeract"] = true,
-	["cyclone"] = true,
-	["surge"] = true,
-	["dilettante"] = true,
-	["dilettante2"] = true,
-	["bmx"] = true,
-	["cruiser"] = true,
-	["fixter"] = true,
-	["scorcher"] = true,
-	["tribike"] = true,
-	["tribike2"] = true,
-	["tribike3"] = true
-}
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- SKIN
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -124,49 +95,17 @@ AddEventHandler("skinmenu",function(mhash)
     end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
--- ADMINVEHICLE
------------------------------------------------------------------------------------------------------------------------------------------
-RegisterNetEvent("adminVehicle")
-AddEventHandler("adminVehicle",function(name,plate)
-	local mHash = GetHashKey(name)
-
-	RequestModel(mHash)
-	while not HasModelLoaded(mHash) do
-		RequestModel(mHash)
-		Citizen.Wait(10)
-	end
-
-	if HasModelLoaded(mHash) then
-		local ped = PlayerPedId()
-		local nveh = CreateVehicle(mHash,GetEntityCoords(ped),GetEntityHeading(ped),true,false)
-
-		SetVehicleDirtLevel(nveh,0.0)
-		SetVehRadioStation(nveh,"OFF")
-		SetVehicleNumberPlateText(nveh,plate)
-		SetEntityAsMissionEntity(nveh,true,true)
-
-		SetPedIntoVehicle(ped,nveh,-1)
-
-		if vehEletric[vehname] then
-			SetVehicleFuelLevel(nveh,0.0)
-		else
-			SetVehicleFuelLevel(nveh,100.0)
-		end
-
-		SetModelAsNoLongerNeeded(mHash)
-	end
-end)
------------------------------------------------------------------------------------------------------------------------------------------
 -- DELETENPCS
 -----------------------------------------------------------------------------------------------------------------------------------------
-function admVRP.deleteNpcs()
+function admVRP.deleteNpcs(nDist)
 	local handle,ped = FindFirstPed()
 	local finished = false
 	repeat
 		local coords = GetEntityCoords(ped)
 		local coordsPed = GetEntityCoords(PlayerPedId())
 		local distance = #(coords - coordsPed)
-		if IsPedDeadOrDying(ped) and not IsPedAPlayer(ped) and distance < 3 then
+        local pDist = nDist or 10.0
+		if IsPedDeadOrDying(ped) and not IsPedAPlayer(ped) and distance < pDist then
 			TriggerServerEvent("tryDeleteEntity",PedToNet(ped))
 			finished = true
 		end
@@ -174,9 +113,8 @@ function admVRP.deleteNpcs()
 	until not finished
 	EndFindPed(handle)
 end
-
 -----------------------------------------------------------------------------------------------------------------------------------------
--- /SPEC Rusher#1337 CLIENT
+-- SPECMODE
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterNetEvent("SpecMode")
 AddEventHandler("SpecMode", function(nsource)
@@ -193,8 +131,6 @@ AddEventHandler("SpecMode", function(nsource)
         TriggerEvent("Notify", "negado", "Você saiu do modo espectador.",4000) 
     end
 end)
-
-
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- NOCLIP
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -247,29 +183,12 @@ AddEventHandler("vehtuning",function()
 		SetVehicleMod(vehicle,35,GetNumVehicleMods(vehicle,35)-1,false)
 		SetVehicleMod(vehicle,38,GetNumVehicleMods(vehicle,38)-1,true)
         SetVehicleWindowTint(vehicle,1)
-        --SetVehicleTyresCanBurst(vehicle,false)
-        --SetVehicleNumberPlateText(vehicle,"LAST")
-        --SetVehicleNumberPlateTextIndex(vehicle,5)
     end
 end)
-
-
-
---[ DEBUG ]-------------------------------------------------------------------------------------------------------------------
-
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- DEBUG
+-----------------------------------------------------------------------------------------------------------------------------------------
 local dickheaddebug = false
-
-local Keys = {
-	["ESC"] = 322, ["F1"] = 288, ["F2"] = 289, ["F3"] = 170, ["F5"] = 166, ["F6"] = 167, ["F7"] = 168, ["F8"] = 169, ["F9"] = 56, ["F10"] = 57,
-	["~"] = 243, ["1"] = 157, ["2"] = 158, ["3"] = 160, ["4"] = 164, ["5"] = 165, ["6"] = 159, ["7"] = 161, ["8"] = 162, ["9"] = 163, ["-"] = 84, ["="] = 83, ["BACKSPACE"] = 177,
-	["TAB"] = 37, ["Q"] = 44, ["W"] = 32, ["E"] = 38, ["R"] = 45, ["T"] = 245, ["Y"] = 246, ["U"] = 303, ["P"] = 199, ["["] = 39, ["]"] = 40, ["ENTER"] = 18,
-	["CAPS"] = 137, ["A"] = 34, ["S"] = 8, ["D"] = 9, ["F"] = 23, ["G"] = 47, ["H"] = 74, ["K"] = 311, ["L"] = 182,
-	["LEFTSHIFT"] = 21, ["Z"] = 20, ["X"] = 73, ["C"] = 26, ["V"] = 0, ["B"] = 29, ["N"] = 249, ["M"] = 244, [","] = 82, ["."] = 81,
-	["LEFTCTRL"] = 36, ["LEFTALT"] = 19, ["SPACE"] = 22, ["RIGHTCTRL"] = 70,
-	["HOME"] = 213, ["PAGEUP"] = 10, ["PAGEDOWN"] = 11, ["DELETE"] = 178,
-	["LEFT"] = 174, ["RIGHT"] = 175, ["TOP"] = 27, ["DOWN"] = 173,
-	["NENTER"] = 201, ["N4"] = 108, ["N5"] = 60, ["N6"] = 107, ["N+"] = 96, ["N-"] = 97, ["N7"] = 117, ["N8"] = 61, ["N9"] = 118
-}
 
 RegisterNetEvent("ToggleDebug")
 AddEventHandler("ToggleDebug",function()
@@ -281,8 +200,6 @@ AddEventHandler("ToggleDebug",function()
         TriggerEvent('chatMessage',"DEBUG",{255,70,50},"OFF")
     end
 end)
-
-local inFreeze = false
 
 function GetVehicle()
     local playerped = GetPlayerPed(-1)
@@ -322,7 +239,6 @@ function GetObject()
         if distance < 10.0 then
             distanceFrom = distance
             rped = ped
-            --FreezeEntityPosition(ped, inFreeze)
 	    	if IsEntityTouchingEntity(GetPlayerPed(-1), ped) then
 	    		DrawText3Ds(pos["x"],pos["y"],pos["z"]+1, "Obj: " .. ped .. " Model: " .. GetEntityModel(ped) .. " IN CONTACT" )
 	    	else
@@ -348,14 +264,11 @@ function getNPC()
         if canPedBeUsed(ped) and distance < 30.0 and (distanceFrom == nil or distance < distanceFrom) then
             distanceFrom = distance
             rped = ped
-
 	    	if IsEntityTouchingEntity(GetPlayerPed(-1), ped) then
 	    		DrawText3Ds(pos["x"],pos["y"],pos["z"], "Ped: " .. ped .. " Model: " .. GetEntityModel(ped) .. " Relationship HASH: " .. GetPedRelationshipGroupHash(ped) .. " IN CONTACT" )
 	    	else
 	    		DrawText3Ds(pos["x"],pos["y"],pos["z"], "Ped: " .. ped .. " Model: " .. GetEntityModel(ped) .. " Relationship HASH: " .. GetPedRelationshipGroupHash(ped) )
 	    	end
-
-            FreezeEntityPosition(ped, inFreeze)
         end
         success, ped = FindNextPed(handle)
     until not success
@@ -377,71 +290,53 @@ function canPedBeUsed(ped)
 end
 
 function debugon()
-Citizen.CreateThread( function()
+    CreateThread( function()
+        while true do
+            Wait(4)
+            if dickheaddebug then
+                local pos = GetEntityCoords(GetPlayerPed(-1))
+                local forPos = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0, 1.0, 0.0)
+                local backPos = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0, -1.0, 0.0)
+                local LPos = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 1.0, 0.0, 0.0)
+                local RPos = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), -1.0, 0.0, 0.0) 
+                local forPos2 = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0, 2.0, 0.0)
+                local backPos2 = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0, -2.0, 0.0)
+                local LPos2 = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 2.0, 0.0, 0.0)
+                local RPos2 = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), -2.0, 0.0, 0.0)    
+                local x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
+                local currentStreetHash, intersectStreetHash = GetStreetNameAtCoord(x, y, z, currentStreetHash, intersectStreetHash)
+                currentStreetName = GetStreetNameFromHashKey(currentStreetHash)
 
-    while true do
-        Citizen.Wait(4)
-        
-        if dickheaddebug then
-            local pos = GetEntityCoords(GetPlayerPed(-1))
+                drawTxtS(0.8, 0.50, 0.4,0.4,0.30, "Heading: " .. GetEntityHeading(GetPlayerPed(-1)), 55, 155, 55, 255)
+                drawTxtS(0.8, 0.52, 0.4,0.4,0.30, "Coords: " .. pos, 55, 155, 55, 255)
+                drawTxtS(0.8, 0.54, 0.4,0.4,0.30, "Attached Ent: " .. GetEntityAttachedTo(GetPlayerPed(-1)), 55, 155, 55, 255)
+                drawTxtS(0.8, 0.56, 0.4,0.4,0.30, "Health: " .. GetEntityHealth(GetPlayerPed(-1)), 55, 155, 55, 255)
+                drawTxtS(0.8, 0.58, 0.4,0.4,0.30, "H a G: " .. GetEntityHeightAboveGround(GetPlayerPed(-1)), 55, 155, 55, 255)
+                drawTxtS(0.8, 0.60, 0.4,0.4,0.30, "Model: " .. GetEntityModel(GetPlayerPed(-1)), 55, 155, 55, 255)
+                drawTxtS(0.8, 0.62, 0.4,0.4,0.30, "Speed: " .. GetEntitySpeed(GetPlayerPed(-1)), 55, 155, 55, 255)
+                drawTxtS(0.8, 0.64, 0.4,0.4,0.30, "Frame Time: " .. GetFrameTime(), 55, 155, 55, 255)
+                drawTxtS(0.8, 0.66, 0.4,0.4,0.30, "Street: " .. currentStreetName, 55, 155, 55, 255)
+                
+                DrawLine(pos,forPos, 255,0,0,115)
+                DrawLine(pos,backPos, 255,0,0,115)
 
-            local forPos = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0, 1.0, 0.0)
-            local backPos = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0, -1.0, 0.0)
-            local LPos = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 1.0, 0.0, 0.0)
-            local RPos = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), -1.0, 0.0, 0.0) 
+                DrawLine(pos,LPos, 255,255,0,115)
+                DrawLine(pos,RPos, 255,255,0,115)
 
-            local forPos2 = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0, 2.0, 0.0)
-            local backPos2 = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0, -2.0, 0.0)
-            local LPos2 = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 2.0, 0.0, 0.0)
-            local RPos2 = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), -2.0, 0.0, 0.0)    
+                DrawLine(forPos,forPos2, 255,0,255,115)
+                DrawLine(backPos,backPos2, 255,0,255,115)
 
-            local x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
-            local currentStreetHash, intersectStreetHash = GetStreetNameAtCoord(x, y, z, currentStreetHash, intersectStreetHash)
-            currentStreetName = GetStreetNameFromHashKey(currentStreetHash)
+                DrawLine(LPos,LPos2, 255,255,255,115)
+                DrawLine(RPos,RPos2, 255,255,255,115)
 
-            drawTxtS(0.8, 0.50, 0.4,0.4,0.30, "Heading: " .. GetEntityHeading(GetPlayerPed(-1)), 55, 155, 55, 255)
-            drawTxtS(0.8, 0.52, 0.4,0.4,0.30, "Coords: " .. pos, 55, 155, 55, 255)
-            drawTxtS(0.8, 0.54, 0.4,0.4,0.30, "Attached Ent: " .. GetEntityAttachedTo(GetPlayerPed(-1)), 55, 155, 55, 255)
-            drawTxtS(0.8, 0.56, 0.4,0.4,0.30, "Health: " .. GetEntityHealth(GetPlayerPed(-1)), 55, 155, 55, 255)
-            drawTxtS(0.8, 0.58, 0.4,0.4,0.30, "H a G: " .. GetEntityHeightAboveGround(GetPlayerPed(-1)), 55, 155, 55, 255)
-            drawTxtS(0.8, 0.60, 0.4,0.4,0.30, "Model: " .. GetEntityModel(GetPlayerPed(-1)), 55, 155, 55, 255)
-            drawTxtS(0.8, 0.62, 0.4,0.4,0.30, "Speed: " .. GetEntitySpeed(GetPlayerPed(-1)), 55, 155, 55, 255)
-            drawTxtS(0.8, 0.64, 0.4,0.4,0.30, "Frame Time: " .. GetFrameTime(), 55, 155, 55, 255)
-            drawTxtS(0.8, 0.66, 0.4,0.4,0.30, "Street: " .. currentStreetName, 55, 155, 55, 255)
-            
-            
-            DrawLine(pos,forPos, 255,0,0,115)
-            DrawLine(pos,backPos, 255,0,0,115)
-
-            DrawLine(pos,LPos, 255,255,0,115)
-            DrawLine(pos,RPos, 255,255,0,115)
-
-            DrawLine(forPos,forPos2, 255,0,255,115)
-            DrawLine(backPos,backPos2, 255,0,255,115)
-
-            DrawLine(LPos,LPos2, 255,255,255,115)
-            DrawLine(RPos,RPos2, 255,255,255,115)
-
-            local nearped = getNPC()
-
-            local veh = GetVehicle()
-
-            local nearobj = GetObject()
-
-            if IsControlJustReleased(0, 38) then
-                if inFreeze then
-                    inFreeze = false
-                    TriggerEvent("Notify","aviso","Freeze ON.",5000)
-                else
-                    inFreeze = true
-                    TriggerEvent("Notify","aviso","Freeze OFF.",5000)
-                end
+                getNPC()
+                GetVehicle()
+                GetObject()
+            else
+                break
             end
-        else
-            break
         end
-    end
-end)
+    end)
 end
 
 function drawTxtS(x,y ,width,height,scale, text, r,g,b,a)
@@ -473,7 +368,49 @@ function DrawText3Ds(x,y,z, text)
     local factor = (string.len(text)) / 370
     DrawRect(_x,_y+0.0125, 0.015+ factor, 0.03, 41, 11, 41, 68)
 end
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- DRIFT
+-----------------------------------------------------------------------------------------------------------------------------------------
+local blockedVehs = {
+    [`coach`] = true,
+    [`bus`] = true,
+    [`youga2`] = true,
+    [`ratloader`] = true,
+    [`taxi`] = true,
+    [`boxville4`] = true,
+    [`trash2`] = true,
+    [`tiptruck`] = true,
+    [`rebel`] = true,
+    [`speedo`] = true,
+    [`phantom`] = true,
+    [`packer`] = true,
+    [`paramedicoambu`] = true,
+}
 
+CreateThread(function()
+    while true do
+        local ped = PlayerPedId()
+        local vehicle = GetVehiclePedIsIn(PlayerPedId())
+        local timeDistance = 1000
+        if IsPedInAnyVehicle(ped) then
+            local speed = GetEntitySpeed(vehicle)*2.236936
+            if GetPedInVehicleSeat(vehicle,-1) == ped and not blockedVehs[GetEntityModel(vehicle)] then
+                if speed <= 100.0 then
+                    timeDistance = 50
+                    if IsControlPressed(1,21) then
+                        SetVehicleReduceGrip(vehicle,true)
+                    else
+                        SetVehicleReduceGrip(vehicle,false)
+                    end
+                end
+            end
+        end
+        Wait(timeDistance)
+    end
+end)
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- CONGELAR
+-----------------------------------------------------------------------------------------------------------------------------------------
 RegisterNetEvent('Congelar')
 AddEventHandler('Congelar',function(source)
     local ped = PlayerPedId(-1)
@@ -493,68 +430,11 @@ AddEventHandler('Congelar',function(source)
         SetPedComponentVariation(ped,1,0,0,2)
     end
 end)
-
-RegisterNetEvent("derrubar2")
-AddEventHandler("derrubar2",function()
-    SetPedToRagdoll(PlayerPedId(),60000,60000,0,0,0,0)
-    SetPedToRagdollWithFall(PlayerPedId(),3000,3000,0,ForwardVectorX,ForwardVectorY,ForwardVectorZ,10.0,0.0,0.0,0.0,0.0,0.0,0.0)
-end)
-
-RegisterNetEvent("derrubar")
-AddEventHandler("derrubar",function()
-    SetPedToRagdoll(PlayerPedId(),5000,5000,0,0,0,0)
-    SetPedToRagdollWithFall(PlayerPedId(),3000,3000,0,ForwardVectorX,ForwardVectorY,ForwardVectorZ,10.0,0.0,0.0,0.0,0.0,0.0,0.0)
-end)
-
--- -1919.02,-3037.17,23.59
-local object = nil
-RegisterNetEvent("createProp")
-AddEventHandler("createProp",function(prop)
-    local prop = prop
-    local x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
-    mHash = GetHashKey(prop)
-    object = CreateObject(mHash,x + 1.0,y + 1.0,z-1.0,true,true,true)
-    SetEntityHeading(object, 317.70)
-    FreezeEntityPosition(object,true)
-end)
-
-RegisterNetEvent("deleteProp")
-AddEventHandler("deleteProp",function()
-    TriggerServerEvent("tryDeleteEntity",ObjToNet(object))
-end)
-
-----------[ DRIFT ]------------------------------------------------------------------------------------------------------------------------------
-Citizen.CreateThread(function()
-    while true do
-        local ped = PlayerPedId()
-        local vehicle = GetVehiclePedIsIn(PlayerPedId())
-        local timeDistance = 1000
-        if IsPedInAnyVehicle(ped) then
-            local speed = GetEntitySpeed(vehicle)*2.236936
-            if GetPedInVehicleSeat(vehicle,-1) == ped 
-                and (GetEntityModel(vehicle) ~= GetHashKey("coach") 
-                    and GetEntityModel(vehicle) ~= GetHashKey("bus") 
-                    and GetEntityModel(vehicle) ~= GetHashKey("youga2") 
-                    and GetEntityModel(vehicle) ~= GetHashKey("ratloader") 
-                    and GetEntityModel(vehicle) ~= GetHashKey("taxi") 
-                    and GetEntityModel(vehicle) ~= GetHashKey("boxville4") 
-                    and GetEntityModel(vehicle) ~= GetHashKey("trash2") 
-                    and GetEntityModel(vehicle) ~= GetHashKey("tiptruck") 
-                    and GetEntityModel(vehicle) ~= GetHashKey("rebel") 
-                    and GetEntityModel(vehicle) ~= GetHashKey("speedo") 
-                    and GetEntityModel(vehicle) ~= GetHashKey("phantom") 
-                    and GetEntityModel(vehicle) ~= GetHashKey("packer") 
-                    and GetEntityModel(vehicle) ~= GetHashKey("paramedicoambu")) then
-                    if speed <= 100.0 then
-                        timeDistance = 50
-                    if IsControlPressed(1,21) then
-                        SetVehicleReduceGrip(vehicle,true)
-                    else
-                        SetVehicleReduceGrip(vehicle,false)
-                    end
-                end
-            end
-        end
-        Citizen.Wait(timeDistance)
-    end
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- SYNCAREA
+-----------------------------------------------------------------------------------------------------------------------------------------
+RegisterNetEvent("syncarea")
+AddEventHandler("syncarea",function(x,y,z,range)
+    ClearAreaOfVehicles(x,y,z,2000.0,false,false,false,false,false)
+    ClearAreaOfEverything(x,y,z,2000.0,false,false,false,false)
 end)

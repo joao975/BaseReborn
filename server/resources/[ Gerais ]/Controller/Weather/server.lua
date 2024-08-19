@@ -30,20 +30,21 @@ local weatherTypes = {
 -----------------------------------------------------------------------------------------------------------------------------------------
 Citizen.CreateThread(function()
 	while true do
-		if GetGameTimer() >= (timeDate + 4000) then
-			timeDate = GetGameTimer()
-			GlobalState.clockMinutes = GlobalState.clockMinutes + 1
-
-			if GlobalState.clockMinutes >= 60 then
-				GlobalState.clockHours = GlobalState.clockHours + 1
-				GlobalState.clockMinutes = 0
-
-				if GlobalState.clockHours >= 24 then
-					GlobalState.clockHours = 0
+		if not GlobalState.freezeTime then
+			if GetGameTimer() >= (timeDate + 4000) then
+				timeDate = GetGameTimer()
+				GlobalState.clockMinutes = GlobalState.clockMinutes + 1
+	
+				if GlobalState.clockMinutes >= 60 then
+					GlobalState.clockHours = GlobalState.clockHours + 1
+					GlobalState.clockMinutes = 0
+	
+					if GlobalState.clockHours >= 24 then
+						GlobalState.clockHours = 0
+					end
 				end
 			end
 		end
-
 		Citizen.Wait(4000)
 	end
 end)

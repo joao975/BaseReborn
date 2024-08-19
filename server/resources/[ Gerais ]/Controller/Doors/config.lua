@@ -95,4 +95,6 @@ doors = {
 	[94] = { ["x"] = -564.4, ["y"] = 276.3, ["z"] = 83.13, ["hash"] = 993120320, ["lock"] = true, ["text"] = true, ["distance"] = 15, ["press"] = 1.5, ["perm"] = "Tequilala",["sound"] = true },
 	[95] = { ["x"] = -569.87, ["y"] = 292.88, ["z"] = 79.18, ["hash"] = -6266844119, ["lock"] = true, ["text"] = true, ["distance"] = 15, ["press"] = 1.5, ["perm"] = "Tequilala",["sound"] = true },
 	[96] = { ['x'] = 434.74786376953, ['y'] = -980.61840820312, ['z'] = 30.839263916016, ['hash'] = -1215222675, ['lock'] = true, ['text'] = true, ['distance'] = 10, ['press'] = 1.5, ['perm'] = 'Police', ['sound'] = true },
+	[98] = { ['x'] = -1886.3123779297, ['y'] = 2063.5341796875, ['z'] = 145.59692382812, ['hash'] = 534758478, ['lock'] = true, ['text'] = true, ['distance'] = 10, ['press'] = 1.5, ['perm'] = "Mafia", ['sound'] = true },
+	[99] = { ['x'] = -1886.3723144531, ['y'] = 2063.4299316406, ['z'] = 145.50907897949, ['hash'] = 534758478, ['lock'] = true, ['text'] = true, ['distance'] = 10, ['press'] = 1.5, ['perm'] = "Mafia", ['sound'] = true },
 }

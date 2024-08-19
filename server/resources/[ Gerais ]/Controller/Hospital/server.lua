@@ -134,7 +134,7 @@ AddEventHandler("hospital:diagnostico",function(nplayer)
 end)
 
 function diagnostic(user_id,nplayer)
-	if vRP.hasPermission(user_id,"Paramedic") then
+	if vRP.hasPermission(user_id,"paramedico.permissao") then
 		if nplayer then
 			local hurt = false
 			local diagnostic,bleeding = hpCLIENT.getDiagnostic(nplayer)
@@ -150,7 +150,7 @@ function diagnostic(user_id,nplayer)
 					TriggerClientEvent("drawInjuries",source,nplayer,damaged)
 				end
 			end
-
+			
 			local text = ""
 			if bleeding > 4 then
 				text = "- <b>Bleeding</b><br>"
@@ -220,7 +220,7 @@ function hpVRP.paymentCheckin()
 	local source = source
 	local user_id = vRP.getUserId(source)
 	if user_id then
-		if vRP.hasPermission(user_id,"Police") then
+		if vRP.hasPermission(user_id,"policia.permissao") then
 			return true
 		end
 

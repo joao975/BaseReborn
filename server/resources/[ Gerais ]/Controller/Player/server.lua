@@ -14,18 +14,16 @@ Tunnel.bindInterface("Player",plVRP)
 plCLIENT = Tunnel.getInterface("Player")
 vTASKBAR = Tunnel.getInterface("taskbar")
 vSKINSHOP = Tunnel.getInterface("will_skinshop")
-
-local Time = {}
 ----------------------------------------------------------------------------------------------------------------------------------------
---[ WINS ]-------------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------------------------
+-- WINS 
+----------------------------------------------------------------------------------------------------------------------------------------
 RegisterServerEvent("trywins")
 AddEventHandler("trywins",function(nveh)
 	TriggerClientEvent("vrp_player:syncWins",-1,nveh)
 end)
------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------
 -- LOG - MORTE
--------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------
 RegisterServerEvent("logplayerDied")
 AddEventHandler("logplayerDied",function(killer, weapon)
 	local source = source
@@ -136,35 +134,6 @@ RegisterCommand("premium",function(source,args,rawCommand)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
--- HOOD
------------------------------------------------------------------------------------------------------------------------------------------
---[[ RegisterCommand("capo",function(source,args,rawCommand)
-	local user_id = vRP.getUserId(source)
-	if user_id then
-		if vRPclient.getHealth(source) > 101 then
-			local vehicle,vehNet = vRPclient.vehList(source,7)
-			if vehicle then
-				TriggerClientEvent("vrp_player:syncHood",-1,vehNet)
-			end
-		end
-	end
-end) ]]
------------------------------------------------------------------------------------------------------------------------------------------
--- DOORS
------------------------------------------------------------------------------------------------------------------------------------------
-RegisterCommand("portas",function(source,args,rawCommand)
-	local user_id = vRP.getUserId(source)
-	if user_id then
-		if vRPclient.getHealth(source) > 101 and not plCLIENT.getHandcuff(source) then
-			--local vehicle,vehNet = vRPclient.vehList(source,7)
-			local vehicle = vRPclient.getNearVehicle(source, 5)
-			if vehicle then
-				TriggerClientEvent("vrp_player:syncDoors",-1,vehicle,args[1])
-			end
-		end
-	end
-end)--
------------------------------------------------------------------------------------------------------------------------------------------
 -- WINS
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterCommand("vidros",function(source,args,rawCommand)
@@ -264,7 +233,7 @@ end)
 RegisterCommand("pd",function(source,args,rawCommand)
 	local user_id = vRP.getUserId(source)
 	if user_id and args[1] then
-		if vRP.hasPermission(user_id,"Police") then
+		if vRP.hasPermission(user_id,"policia.permissao") then
 			if vRPclient.getHealth(source) > 101 and not plCLIENT.getHandcuff(source) then
 				local identity = vRP.getUserIdentity(user_id)
 				local police = vRP.numPermission("Police")
@@ -284,7 +253,7 @@ end)
 RegisterCommand("mec",function(source,args,rawCommand)
 	local user_id = vRP.getUserId(source)
 	if user_id and args[1] then
-		if vRP.hasPermission(user_id,"Mechanic") then
+		if vRP.hasPermission(user_id,"mecanico.permissao") then
 			if vRPclient.getHealth(source) > 101 and not plCLIENT.getHandcuff(source) then
 				local identity = vRP.getUserIdentity(user_id)
 				local police = vRP.numPermission("Mechanic")
@@ -318,7 +287,7 @@ end)
 RegisterCommand("hp",function(source,args,rawCommand)
 	local user_id = vRP.getUserId(source)
 	if user_id and args[1] then
-		if vRP.hasPermission(user_id,"Paramedic") then
+		if vRP.hasPermission(user_id,"paramedico.permissao") then
 			if vRPclient.getHealth(source) > 101 and not plCLIENT.getHandcuff(source) then
 				local identity = vRP.getUserIdentity(user_id)
 				local police = vRP.numPermission("Paramedic")
@@ -336,7 +305,7 @@ end)
 RegisterCommand("911",function(source,args,rawCommand)
 	local user_id = vRP.getUserId(source)
 	if user_id and args[1] then
-		if vRP.hasPermission(user_id,"Police") then
+		if vRP.hasPermission(user_id,"policia.permissao") then
 			if vRPclient.getHealth(source) > 101 and not plCLIENT.getHandcuff(source) then
 				local identity = vRP.getUserIdentity(user_id)
 				TriggerClientEvent("chatMessage",-1,"[POLICE]:"..identity.name.." "..identity.name2,{0,0,255},rawCommand:sub(4))
@@ -348,7 +317,7 @@ end)
 RegisterCommand("112",function(source,args,rawCommand)
 	local user_id = vRP.getUserId(source)
 	if user_id and args[1] then
-		if vRP.hasPermission(user_id,"Paramedic") then
+		if vRP.hasPermission(user_id,"paramedico.permissao") then
 			if vRPclient.getHealth(source) > 101 and not plCLIENT.getHandcuff(source) then
 				local identity = vRP.getUserIdentity(user_id)
 				TriggerClientEvent("chatMessage",-1,"[SAMU]:"..identity.name.." "..identity.name2,{255,150,255},rawCommand:sub(4))
@@ -360,7 +329,7 @@ end)
 RegisterCommand("443",function(source,args,rawCommand)
 	local user_id = vRP.getUserId(source)
 	if user_id and args[1] then
-		if vRP.hasPermission(user_id,"Mechanic") then
+		if vRP.hasPermission(user_id,"mecanico.permissao") then
 			if vRPclient.getHealth(source) > 101 and not plCLIENT.getHandcuff(source) then
 				local identity = vRP.getUserIdentity(user_id)
 				TriggerClientEvent("chatMessage",-1,"[MECANICA]:"..identity.name.." "..identity.name2,{255, 115, 0},rawCommand:sub(4))
@@ -393,7 +362,7 @@ end)
 
 function getPlate(user_id,args)
 	local source = vRP.getUserSource(user_id)
-	if vRP.hasPermission(user_id,"Police") then
+	if vRP.hasPermission(user_id,"policia.permissao") then
 		if vRPclient.getHealth(source) > 101 then
 			if args and args[1] then
 				local plateUser = vRP.getVehiclePlate(tostring(args[1]))
@@ -435,32 +404,6 @@ function getPlate(user_id,args)
 	end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
--- DETIDO
------------------------------------------------------------------------------------------------------------------------------------------
---[[RegisterCommand("detido",function(source,args,rawCommand)
-	local user_id = vRP.getUserId(source)
-	if user_id then
-		if vRP.hasPermission(user_id,"Police") then
-			if vRPclient.getHealth(source) > 101 and not plCLIENT.getHandcuff(source) then
-				local vehicle,vehNet,vehPlate,vehName = vRPclient.vehList(source,7)
-				if vehicle then
-					local plateUser = vRP.getVehiclePlate(vehPlate)
-					local inVehicle = vRP.query("vRP/get_vehicles",{ user_id = parseInt(plateUser), vehicle = vehName })
-					if inVehicle[1] then
-						if inVehicle[1].arrest <= 0 then
-							vRP.execute("vRP/set_arrest",{ user_id = parseInt(plateUser), vehicle = vehName, arrest = 1, time = parseInt(os.time()) })
-							TriggerClientEvent("Notify",source,"aviso","Veículo <b>apreendido</b>.",3000)
-							TriggerClientEvent("Notify",plateUser,"aviso","Veículo <b>"..vRP.vehicleName(vehName).."</b> foi conduzido para o <b>DMV</b>.",7000)
-						else
-							TriggerClientEvent("Notify",source,"importante","O veículo está no galpão da polícia.",5000)
-						end
-					end
-				end
-			end
-		end
-	end
-end)]]
------------------------------------------------------------------------------------------------------------------------------------------
 -- SERVICE
 -----------------------------------------------------------------------------------------------------------------------------------------
 local admGroups = { "Owner", "Admin", "Mod", "Sup" }
@@ -494,7 +437,7 @@ function plVRP.cuffToggle()
 	local source = source
 	local user_id = vRP.getUserId(source)
 	if user_id then
-		if vRP.hasPermission(user_id,"Police") or vRP.hasPermission(user_id,"Admin") then
+		if vRP.hasPermission(user_id,"policia.permissao") or vRP.hasPermission(user_id,"Admin") then
 			if vRPclient.getHealth(source) > 101 and not plCLIENT.getHandcuff(source) and poCuff[user_id] == nil then
 				if not vRPclient.inVehicle(source) then
 					local nplayer = vRPclient.nearestPlayer(source,1.2)
@@ -568,10 +511,7 @@ function plVRP.shotsFired()
 	local user_id = vRP.getUserId(source)
 	if user_id then
 		if shotFired[user_id] == nil then
-			if not vRP.hasPermission(user_id,"Police") then
-				--local distance = plCLIENT.shotDistance(source)
-
-				--if distance then
+			if not vRP.hasPermission(user_id,"policia.permissao") then
 				shotFired[user_id] = 30
 				local x,y,z = vRPclient.getPositions(source)
 				local comAmount = vRP.numPermission("Police")
@@ -580,7 +520,6 @@ function plVRP.shotsFired()
 					async(function()
 						TriggerClientEvent("NotifyPush",player,{ time = os.date("%H:%M:%S - %d/%m/%Y"), text = "Ei esta tendo troca de tiro aqui perto de minha casa!", code = 10, title = "Confronto em andamento", x = x, y = y, z = z, criminal = "Disparos de arma de fogo", rgba = {105,52,136} })
 					end)
-					--end
 				end
 			end
 		end
@@ -593,7 +532,7 @@ function plVRP.carryToggle()
 	local source = source
 	local user_id = vRP.getUserId(source)
 	if user_id then
-		if vRP.hasPermission(user_id,"Police") or vRP.hasPermission(user_id,"Paramedic") or vRP.hasPermission(user_id,"Admin") then
+		if vRP.hasPermission(user_id,"policia.permissao") or vRP.hasPermission(user_id,"paramedico.permissao") or vRP.hasPermission(user_id,"admin.permissao") then
 			if vRPclient.getHealth(source) > 101 and not plCLIENT.getHandcuff(source) then
 				local nplayer = vRPclient.nearestPlayer(source,2)
 				if nplayer then
@@ -612,7 +551,7 @@ AddEventHandler("inventory:Carry", plVRP.carryToggle)
 RegisterCommand("carregar2",function(source,args,rawCommand)
 	local user_id = vRP.getUserId(source)
 	if user_id then
-		if vRP.hasPermission(user_id,"Police") or vRP.hasPermission(user_id,"Paramedic") then
+		if vRP.hasPermission(user_id,"policia.permissao") or vRP.hasPermission(user_id,"paramedico.permissao") then
 			if vRPclient.getHealth(source) > 101 and not plCLIENT.getHandcuff(source) then
 				local nplayer = vRPclient.nearestPlayer(source,2)
 				if nplayer then
@@ -628,7 +567,7 @@ end)
 function removeVehicle(source)
 	local user_id = vRP.getUserId(source)
 	if user_id then
-		if vRP.hasPermission(user_id,"Police") or vRP.hasPermission(user_id,"Paramedic") or vRP.hasPermission(user_id,"Admin") or vRP.getInventoryItemAmount(user_id,"rope") >= 1 then
+		if vRP.hasPermission(user_id,"policia.permissao") or vRP.hasPermission(user_id,"paramedico.permissao") or vRP.hasPermission(user_id,"Admin") or vRP.getInventoryItemAmount(user_id,"rope") >= 1 then
 			if vRPclient.getHealth(source) > 101 and not vRPclient.inVehicle(source) then
 				local vehicle,vehNet,vehPlate,vehName,vehLock = vRPclient.vehList(source,11)
 				if vehicle then
@@ -653,7 +592,7 @@ end)
 function putVehicle(source, seat)
 	local user_id = vRP.getUserId(source)
 	if user_id then
-		if vRP.hasPermission(user_id,"Police") or vRP.hasPermission(user_id,"Paramedic") or vRP.hasPermission(user_id,"Admin") or vRP.getInventoryItemAmount(user_id,"rope") >= 1 then
+		if vRP.hasPermission(user_id,"policia.permissao") or vRP.hasPermission(user_id,"paramedico.permissao") or vRP.hasPermission(user_id,"Admin") or vRP.getInventoryItemAmount(user_id,"rope") >= 1 then
 			if vRPclient.getHealth(source) > 101 and not plCLIENT.getHandcuff(source) and not vRPclient.inVehicle(source) then
 				local vehicle,vehNet,vehPlate,vehName,vehLock = vRPclient.vehList(source,11)
 				if vehicle then
@@ -917,13 +856,13 @@ RegisterCommand("preset",function(source,args,rawCommand)
 		if parseInt(args[1]) > 0 then
 			if vRPclient.getHealth(source) > 101 and not plCLIENT.getHandcuff(source) then
 				local model = vRPclient.getModelPlayer(source)
-				if vRP.hasPermission(user_id,"Paramedic") and preset["Paramedic"][tostring(args[1])] then
+				if vRP.hasPermission(user_id,"paramedico.permissao") and preset["Paramedic"][tostring(args[1])] then
 					if model == "mp_m_freemode_01" then
 						TriggerClientEvent("updateRoupas",source,preset["Paramedic"][tostring(args[1])]["homem"])
 					elseif model == "mp_f_freemode_01" then
 						TriggerClientEvent("updateRoupas",source,preset["Paramedic"][tostring(args[1])]["mulher"])
 					end
-				elseif vRP.hasPermission(user_id,"Police") and preset["Police"][tostring(args[1])] then
+				elseif vRP.hasPermission(user_id,"policia.permissao") and preset["Police"][tostring(args[1])] then
 					if model == "mp_m_freemode_01" then
 						TriggerClientEvent("updateRoupas",source,preset["Police"][tostring(args[1])]["homem"])
 					elseif model == "mp_f_freemode_01" then
@@ -1047,7 +986,7 @@ AddEventHandler("player:Outfit",function(Mode)
 	local Passport = vRP.getUserId(source)
 	if Mode == "aplicar" then
 		local consult = vRP.getSData("saveClothes:"..Passport)
-		local result = json.decode(consult)
+		local result = json.decode(consult) or {}
 		if result["pants"] ~= nil then
 			TriggerClientEvent("skinshop:Apply",source,result)
 			TriggerClientEvent("Notify",source,"verde","Roupas aplicadas.",3000)
@@ -1062,7 +1001,7 @@ AddEventHandler("player:Outfit",function(Mode)
 		end
 	elseif Mode == "aplicarpre" then
 		local consult = vRP.getSData("premClothes:"..Passport)
-		local result = json.decode(consult)
+		local result = json.decode(consult) or {}
 		if result["pants"] then
 			TriggerClientEvent("skinshop:Apply",source,result)
 			TriggerClientEvent("Notify",source,"verde","Roupas aplicadas.",5000)
@@ -1096,7 +1035,7 @@ AddEventHandler("skinshop:Remove",function(Mode)
 	if user_id then
 		local nplayer = vRPclient.nearestPlayer(source,2)
 		if nplayer then
-			if vRP.hasPermission(user_id,"Police") or vRP.hasPermission(user_id,"Paramedic") then
+			if vRP.hasPermission(user_id,"policia.permissao") or vRP.hasPermission(user_id,"paramedico.permissao") then
 				TriggerClientEvent("will_skinshop:set"..Mode,nplayer)
 			end
 		end
@@ -1107,7 +1046,7 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterCommand("setrepouso",function(source,args,rawCommand)
 	local user_id = vRP.getUserId(source)
-	if vRP.hasPermission(user_id,"Paramedic") then
+	if vRP.hasPermission(user_id,"paramedico.permissao") then
 		local nplayer = vRPclient.nearestPlayer(source,2)
 		if nplayer then
 			local nuser_id = vRP.getUserId(nplayer)
@@ -1196,40 +1135,6 @@ RegisterCommand("andar",function(source,args,rawCommand)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
--- FATURAS
------------------------------------------------------------------------------------------------------------------------------------------
-RegisterCommand("faturas",function(source,args,rawCommand)
-	local user_id = vRP.getUserId(source)
-	if user_id then
-		local nuser_id = vRP.prompt(source,"Passaporte:","")
-		if nuser_id == "" or parseInt(nuser_id) <= 0 then
-			return
-		end
-
-		local price = vRP.prompt(source,"Valor:","")
-		if price == "" or parseInt(price) <= 0 then
-			return
-		end
-
-		local reason = vRP.prompt(source,"Motivo:","")
-		if reason == "" then
-			return
-		end
-
-		local nplayer = vRP.getUserSource(parseInt(nuser_id))
-		if nplayer then
-			local identity = vRP.getUserIdentity(user_id)
-			local answered = vRP.request(nplayer,"Deseja aceitar a fatura no valor de <b>$"..vRP.format(parseInt(price)).." dólares</b>?",30)
-			if answered then
-				vRP.setInvoice(parseInt(nuser_id),parseInt(price),parseInt(user_id),tostring(reason))
-				TriggerClientEvent("Notify",source,"sucesso","Fatura aceita com sucesso.",5000)
-			else
-				TriggerClientEvent("Notify",source,"negado","Fatura rejeitada pelo cliente.",5000)
-			end
-		end
-	end
-end)
------------------------------------------------------------------------------------------------------------------------------------------
 -- LIVERY
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterCommand("extras2",function(source,args,rawCommand)
@@ -1240,20 +1145,6 @@ RegisterCommand("extras2",function(source,args,rawCommand)
 		end
 	end
 end)
------------------------------------------------------------------------------------------------------------------------------------------
--- TAXISTA
-------------------------------------------------------------------------------------------------------------------
-function plVRP.Taxista()
-	local source = source
-	local user_id = vRP.getUserId(source)
-	if not vRP.hasPermission(user_id,"Taxi") then
-		vRP.insertPermission(user_id,tostring("Taxi"))
-		TriggerClientEvent("Notify",source,"sucesso","Você iniciou o trabalho de taxista.",5000)
-	else
-		vRP.removePermission(user_id,tostring("Taxi"))
-		TriggerClientEvent("Notify",source,"sucesso","Você saiu de serviço.",5000)
-	end
-end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- TRUNKIN
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -1322,15 +1213,15 @@ RegisterCommand("onduty",function(source,args,rawCommand)
 	local user_id = vRP.getUserId(source)
 	if user_id then
 		if vRPclient.getHealth(source) > 101 and not plCLIENT.getHandcuff(source) then
-			if vRP.hasPermission(user_id,"Police") or vRP.hasPermission(user_id,"Paramedic") or vRP.hasPermission(user_id,"Mechanic") or vRP.hasPermission(user_id,"Taxi") then
+			if vRP.hasPermission(user_id,"policia.permissao") or vRP.hasPermission(user_id,"paramedico.permissao") or vRP.hasPermission(user_id,"mecanico.permissao") or vRP.hasPermission(user_id,"Taxi") then
 				local onDuty = ""
 				local service = {}
 
-				if vRP.hasPermission(user_id,"Police") then
+				if vRP.hasPermission(user_id,"policia.permissao") then
 					service = vRP.numPermission("Police")
-				elseif vRP.hasPermission(user_id,"Paramedic") then
+				elseif vRP.hasPermission(user_id,"paramedico.permissao") then
 					service = vRP.numPermission("Paramedic")
-				elseif vRP.hasPermission(user_id,"Mechanic") then
+				elseif vRP.hasPermission(user_id,"mecanico.permissao") then
 					service = vRP.numPermission("Mechanic")
 				elseif vRP.hasPermission(user_id,"Taxi") then
 					service = vRP.numPermission("Taxi")
@@ -1348,7 +1239,6 @@ RegisterCommand("onduty",function(source,args,rawCommand)
 		end
 	end
 end)
-
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- /SEQUESTRO
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -1374,7 +1264,6 @@ end)
 ------------------------------------------------------------------------------------------ 
 -- BEIJAR
 -----------------------------------------------------------------------------------------------
-
 RegisterCommand("beijar",function(source,args,rawCommand)
     local user_id = vRP.getUserId(source)
     local nplayer = vRPclient.nearestPlayer(source,2)
@@ -1388,7 +1277,6 @@ RegisterCommand("beijar",function(source,args,rawCommand)
 		end
 	end
 end)
-
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- PTR
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -1398,7 +1286,7 @@ RegisterCommand('ptr', function(source,args,rawCommand)
     local oficiais = vRP.numPermission("Police")
     local policia = 0
     local oficiais_nomes = ""
-    if vRP.hasPermission(user_id,"Police") or vRP.hasPermission(user_id,"Advogado") or vRP.hasPermission(user_id,"Paramedic") or vRP.hasPermission(user_id,"Mechanic") or vRP.hasPermission(user_id,"Owner") or vRP.hasPermission(user_id,"Admin") then
+    if vRP.hasPermission(user_id,"policia.permissao") or vRP.hasPermission(user_id,"paramedico.permissao") or vRP.hasPermission(user_id,"mecanico.permissao") or vRP.hasPermission(user_id,"Owner") or vRP.hasPermission(user_id,"Admin") then
         for k,v in ipairs(oficiais) do
             local identity = vRP.getUserIdentity(parseInt(v))
             oficiais_nomes = oficiais_nomes .. "<b>" .. v .. "</b>: " .. identity.name .. " " .. identity.name2 .. "<br>"
@@ -1419,7 +1307,7 @@ end)
 	local oficiais = vRP.numPermission("Paramedic")
 	local paramedicos = 0
 	local paramedicos_nomes = ""
-	if vRP.hasPermission(user_id,"Police") or vRP.hasPermission(user_id,"Advogado") or vRP.hasPermission(user_id,"Paramedic") or vRP.hasPermission(user_id,"Mechanic") or vRP.hasPermission(user_id,"Owner") or vRP.hasPermission(user_id,"Admin") then
+	if vRP.hasPermission(user_id,"policia.permissao") or vRP.hasPermission(user_id,"paramedico.permissao") or vRP.hasPermission(user_id,"mecanico.permissao") or vRP.hasPermission(user_id,"Owner") or vRP.hasPermission(user_id,"Admin") then
 		for k,v in ipairs(oficiais) do
 			local identity = vRP.getUserIdentity(parseInt(v))
 			paramedicos_nomes = paramedicos_nomes .. "<b>" .. v .. "</b>: " .. identity.name .. " " .. identity.name2 .. "<br>"
@@ -1440,34 +1328,13 @@ RegisterCommand('mecs', function(source,args,rawCommand)
 	local oficiais = vRP.numPermission("Mechanic")
 	local paramedicos = 0
 	local oficiais_nomes = ""
-	if vRP.hasPermission(user_id,"Police") or vRP.hasPermission(user_id,"Advogado") or vRP.hasPermission(user_id,"Paramedic") or vRP.hasPermission(user_id,"Mechanic") or vRP.hasPermission(user_id,"Owner") or vRP.hasPermission(user_id,"Admin") then
+	if vRP.hasPermission(user_id,"policia.permissao") or vRP.hasPermission(user_id,"paramedico.permissao") or vRP.hasPermission(user_id,"mecanico.permissao") or vRP.hasPermission(user_id,"Owner") or vRP.hasPermission(user_id,"Admin") then
 		for k,v in ipairs(oficiais) do
 			local identity = vRP.getUserIdentity(parseInt(v))
 			oficiais_nomes = oficiais_nomes .. "<b>" .. v .. "</b>: " .. identity.name .. " " .. identity.name2 .. "<br>"
 			paramedicos = paramedicos + 1
 		end
 		TriggerClientEvent("Notify",source,"importante", "Atualmente <b>"..paramedicos.." Mecânicos</b> em serviço.", 4000)
-		if parseInt(paramedicos) > 0 then
-			TriggerClientEvent("Notify",source,"importante", oficiais_nomes, 4000)
-		end
-	end
-end)
------------------------------------------------------------------------------------------------------------------------------------------
--- 
-----------------------------------------------------------------------------------------------------------------------------------------
-RegisterCommand('adv', function(source,args,rawCommand)
-	local user_id = vRP.getUserId(source)
-	local player = vRP.getUserSource(user_id)
-	local oficiais = vRP.numPermission("Advogado")
-	local paramedicos = 0
-	local oficiais_nomes = ""
-	if vRP.hasPermission(user_id,"Police") or vRP.hasPermission(user_id,"Advogado") or vRP.hasPermission(user_id,"Paramedic") or vRP.hasPermission(user_id,"Mechanic") or vRP.hasPermission(user_id,"Owner") or vRP.hasPermission(user_id,"Admin") then
-		for k,v in ipairs(oficiais) do
-			local identity = vRP.getUserIdentity(parseInt(v))
-			oficiais_nomes = oficiais_nomes .. "<b>" .. v .. "</b>: " .. identity.name .. " " .. identity.name2 .. "<br>"
-			paramedicos = paramedicos + 1
-		end
-		TriggerClientEvent("Notify",source,"importante", "Atualmente <b>"..paramedicos.." Advogados </b> em serviço.", 4000)
 		if parseInt(paramedicos) > 0 then
 			TriggerClientEvent("Notify",source,"importante", oficiais_nomes, 4000)
 		end
@@ -1482,8 +1349,7 @@ RegisterCommand("status", function(source,args,rawCommand)
 		local samuAmount = vRP.numPermission("Paramedic")
 		local copAmount = vRP.numPermission("Police")
 		local mecAmount = vRP.numPermission("Mechanic")
-		local taxiAmount = vRP.numPermission("Taxi")
-		TriggerClientEvent("Notify",source,"importante","<b>Policiais:</b> "..#copAmount.."<br><b>Paramedicos:</b> "..#samuAmount.."<br><b>Mecânico:</b> "..#mecAmount.."<br><b>Taxistas:</b> "..#taxiAmount.." ",15000)
+		TriggerClientEvent("Notify",source,"importante","<b>Policiais:</b> "..#copAmount.."<br><b>Paramedicos:</b> "..#samuAmount.."<br><b>Mecânico:</b> "..#mecAmount.." ",15000)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -1551,6 +1417,3 @@ AddEventHandler('heli:radius.down',function()
 	local source = source
 	TriggerClientEvent('heli:radius.down',-1,source)
 end)
-
-
-

@@ -26,7 +26,7 @@ AddEventHandler("will_pvp:inGame",function(status)
 	inGame = status
 end)
 
-Citizen.CreateThread(function()
+CreateThread(function()
 	SetPedMaxHealth(PlayerPedId(),400)
 	while true do
 		local timeDistance = 200
@@ -52,33 +52,29 @@ Citizen.CreateThread(function()
 			else
 				if deathtimer > 0 then
 					timeDistance = 4
-
 					SetEntityHealth(ped,101)
 					drawTxt("AGUARDE: ~r~"..deathtimer.."~w~ SEGUNDOS.",4,0.5,0.93,0.50,255,255,255,120)
-
 					if not IsEntityPlayingAnim(ped,"dead","dead_a",3) and not IsPedInAnyVehicle(ped) then
 						vRP.playAnim(false,{"dead","dead_a"},true)
 					end
 				else
 					timeDistance = 4
 					drawTxt("DIGITE ~r~/GG~w~.",4,0.5,0.93,0.50,255,255,255,120)
-					
 					if not IsEntityPlayingAnim(ped,"dead","dead_a",3) and not IsPedInAnyVehicle(ped) then
 						vRP.playAnim(false,{"dead","dead_a"},true)
 					end
-				
 				end
 			end
 		end
-		Citizen.Wait(timeDistance)
+		Wait(timeDistance)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- DEATHTIMER
 -----------------------------------------------------------------------------------------------------------------------------------------
-Citizen.CreateThread(function()
+CreateThread(function()
 	while true do
-		Citizen.Wait(1000)
+		Wait(1000)
 		if deadPlayer and deathtimer > 0 then
 			deathtimer = deathtimer - 1
 		end
@@ -94,19 +90,6 @@ RegisterCommand("gg",function(source,args,rawCommand)
 		TriggerEvent("Notify","aviso","AGUARDE: <b>"..deathtimer.."</b> OU CHAME OS <b>PARAMÉDICOS</b>.",5000)
 	end
 end)
------------------------------------------------------------------------------------------------------------------------------------------
--- DRAWTXT
------------------------------------------------------------------------------------------------------------------------------------------
-function drawTxt(text,font,x,y,scale,r,g,b,a)
-	SetTextFont(font)
-	SetTextScale(scale,scale)
-	SetTextColour(r,g,b,a)
-	SetTextOutline()
-	SetTextCentre(1)
-	SetTextEntry("STRING")
-	AddTextComponentString(text)
-	DrawText(x,y)
-end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- FINISHDEATH
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -150,7 +133,7 @@ AddEventHandler("vrp_survival:CheckIn",function()
 	SetEntityHealth(PlayerPedId(),102)
 	SetEntityInvincible(PlayerPedId(),false)
 
-	Citizen.Wait(500)
+	Wait(500)
 	TriggerServerEvent("pma-voice:toggleMute",false)
 	deadPlayer = false
 	blockControls = true
@@ -170,8 +153,7 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- BLOCKCONTROLS
 -----------------------------------------------------------------------------------------------------------------------------------------
-
-Citizen.CreateThread(function()
+CreateThread(function()
 	while true do
 		local timeDistance = 500
 		local ped = PlayerPedId()
@@ -194,7 +176,7 @@ Citizen.CreateThread(function()
 			DisableControlAction(1,288,true) -- F1
 			DisableControlAction(1,311,true) -- K
 		end
-		Citizen.Wait(timeDistance)
+		Wait(timeDistance)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -203,17 +185,14 @@ end)
 local cure = false
 function svVRP.startCure()
 	local ped = PlayerPedId()
-
 	if cure then
 		return
 	end
-
 	cure = true
 	TriggerEvent("Notify","sucesso","O tratamento começou, espere o paramédico libera-lo.",3000)
-
 	if cure then
 		repeat
-			Citizen.Wait(1000)
+			Wait(1000)
 			if GetEntityHealth(ped) > 101 then
 				SetEntityHealth(ped,GetEntityHealth(ped)+1)
 			end
@@ -263,7 +242,7 @@ end
 RegisterNetEvent("vrp_survival:FadeOutIn")
 AddEventHandler("vrp_survival:FadeOutIn",function()
 	DoScreenFadeOut(1000)
-	Citizen.Wait(5000)
+	Wait(5000)
 	DoScreenFadeIn(1000)
 end)
 
@@ -275,3 +254,16 @@ AddEventHandler("vrp_survival:desbugar",function()
 		StopScreenEffect("DeathFailOut")
 	end
 end)
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- DRAWTXT
+-----------------------------------------------------------------------------------------------------------------------------------------
+function drawTxt(text,font,x,y,scale,r,g,b,a)
+	SetTextFont(font)
+	SetTextScale(scale,scale)
+	SetTextColour(r,g,b,a)
+	SetTextOutline()
+	SetTextCentre(1)
+	SetTextEntry("STRING")
+	AddTextComponentString(text)
+	DrawText(x,y)
+end

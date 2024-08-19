@@ -99,7 +99,7 @@ end)
 
 function revive(user_id, nplayer)
 	local source = vRP.getUserSource(user_id)
-	if vRP.hasPermission(user_id,"Paramedic") or vRP.hasPermission(user_id,"Sup") or vRP.hasPermission(user_id,"Gote") then
+	if vRP.hasPermission(user_id,"paramedico.permissao") or vRP.hasPermission(user_id,"suporte.permissao") then
 		local nuser_id = vRP.getUserId(nplayer)
 		if nplayer then
 			if svCLIENT.deadPlayer(nplayer) then
@@ -132,7 +132,7 @@ function revive(user_id, nplayer)
 						if clear then
 							vRPclient._clearWeapons(nplayer)
 							Wait(2000)
-							vRPclient.teleport(nplayer,359.87,-585.34,43.29)
+							vRPclient.teleport(nplayer,resetCoords[1], resetCoords[2], resetCoords[3])
 							Wait(1000)
 							svCLIENT.SetPedInBed(nplayer)
 						end

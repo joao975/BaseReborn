@@ -33,9 +33,8 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- THREADRADAR
 -----------------------------------------------------------------------------------------------------------------------------------------
-Citizen.CreateThread(function()
+CreateThread(function()
 	SetNuiFocus(false,false)
-
 	while true do
 		local timeDistance = 999
 		local ped = PlayerPedId()
@@ -68,7 +67,6 @@ Citizen.CreateThread(function()
 						local vehName = vRP.vehicleModel(vehModel)
 						local vehPlate = GetVehicleNumberPlateText(vehBack)
 						local vehSpeed = GetEntitySpeed(vehBack) * 2.236936
-
 						SendNUIMessage({ radar = "bot", plate = vehPlate, model = vehName, speed = vehSpeed })
 					end
 				end
@@ -80,7 +78,7 @@ Citizen.CreateThread(function()
 			SendNUIMessage({ radar = false })
 		end
 
-		Citizen.Wait(timeDistance)
+		Wait(timeDistance)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
