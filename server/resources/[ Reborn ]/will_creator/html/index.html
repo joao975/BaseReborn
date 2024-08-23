@@ -327,7 +327,7 @@
           </div>
           <div class="h-full flex gap-[13px]" id="leftMenu">
             <div
-              class="relative w-[202px] h-[100vh] justify-start scrollbar-hide"
+              class="relative w-[200px] h-[100vh] justify-start scrollbar-hide"
             >
               <div
                 id="ustGradient"
@@ -354,10 +354,10 @@
               </div>
               <div
                 id="activeGradient"
-                class="transition-all z-10 my-4 absolute left-[-26px] w-[254px] top-[200px] h-[227px] active-menu-gradient"
+                class="transition-all z-10 my-4 absolute left-[-26px] top-[200px] active-menu-gradient"
               >
                 <div
-                  class="active-menu-gradient-outline rounded-[8px] absolute w-[266px] left-[-6px] top-[-6px] h-[239px] border-2"
+                  class="active-menu-gradient-outline rounded-[8px] absolute left-[-6px] top-[-6px] h-[20vh] border-2"
                 ></div>
                 <svg
                   class="w-full h-full"
@@ -501,7 +501,7 @@
               </div>
               <div
                 id="altGradient"
-                class="h-[617px] transition-all absolute mt-8 w-[200px] origin-bottom bottom-0 h-[492px] w-full menu-gradient"
+                class="h-full transition-all absolute mt-8 w-[200px] origin-bottom bottom-0 h-[492px] w-full menu-gradient"
               >
                 <div class="absolute left-[-13px] w-[2px] h-full py-5">
                   <div
@@ -523,11 +523,12 @@
                   </div>
                 </div>
               </div>
+
               <div
                 id="firstZa"
                 data-cam="body"
                 data-category="DNA"
-                class="transition-all category-btn cursor-pointer w-[200px] h-[200px] flex flex-col items-center justify-center opacity-50"
+                class="leftMenuIcon category-btn"
               >
                 <img
                   width="48"
@@ -545,7 +546,7 @@
                 id="eyeCategoryBtn"
                 data-category="EYES"
                 data-cam="eye"
-                class="transition-all category-btn cursor-pointer w-[200px] h-[200px] flex flex-col items-center justify-center opacity-50"
+                class="leftMenuIcon category-btn"
               >
                 <img
                   width="48"
@@ -563,7 +564,7 @@
                 id="noseCategoryBtn"
                 data-category="NOSE"
                 data-cam="nose"
-                class="category-barber-btn transition-all category-btn cursor-pointer w-[200px] h-[200px] flex flex-col items-center justify-center opacity-50"
+                class="category-barber-btn leftMenuIcon category-btn"
               >
                 <img
                   width="48"
@@ -581,7 +582,7 @@
                 id="beardCategoryBtn"
                 data-category="BEARD"
                 data-cam="mouth"
-                class="category-barber-btn transition-all category-btn cursor-pointer w-[200px] h-[200px] flex flex-col items-center justify-center opacity-50"
+                class="category-barber-btn leftMenuIcon category-btn"
               >
                 <img
                   width="48"
@@ -599,7 +600,7 @@
                 id="hairCategoryBtn"
                 data-category="HAIR"
                 data-cam="head"
-                class="category-barber-btn transition-all category-btn cursor-pointer w-[200px] h-[200px] flex flex-col items-center justify-center opacity-50"
+                class="category-barber-btn leftMenuIcon category-btn"
               >
                 <img
                   width="48"
@@ -662,7 +663,7 @@
                   </div>
                 </div>
               </div>
-              <div class="flex flex-col gap-1 items-end">
+              <div class="flex flex-col gap-1 items-end" id="name-selection">
                 <div class="flex flex-col gap-1 items-end">
                   <div
                     class="menu-header-gradient w-[350px] text-center text-[16px] uppercase font-medium py-[6px]"

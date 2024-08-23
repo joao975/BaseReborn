@@ -150,6 +150,6 @@ Config.Stores = {
     },
     {
         type = "surgery",
-        coords = vector4(298.78, -572.81, 43.26, 114.27),
+        coords = vector4(-1379.69,-470.58,72.05,10.79),
     }
 }

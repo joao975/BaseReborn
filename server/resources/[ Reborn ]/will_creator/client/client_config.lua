@@ -337,7 +337,7 @@ function GetMaxValues(isSingle, key, push)
     local ped = PlayerPedId()
     for k, v in pairs(pedCategories) do
         if v.type == "hair" then
-            maxModelValues[k].item = GetNumberOfPedDrawableVariations(ped, v.id)
+            maxModelValues[k].item = GetNumberOfPedDrawableVariations(ped, v.id) - 1
             maxModelValues[k].texture = 45
         end
 
@@ -362,7 +362,7 @@ function GetMaxValues(isSingle, key, push)
         end
 
         if v.type == "overlay" then
-            maxModelValues[k].item = GetNumHeadOverlayValues(v.id)
+            maxModelValues[k].item = GetNumHeadOverlayValues(v.id) - 1
             maxModelValues[k].texture = 45
         end
 

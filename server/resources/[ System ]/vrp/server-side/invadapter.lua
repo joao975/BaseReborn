@@ -484,9 +484,13 @@ CreateThread(function()
 			end
 	
 			if itemName == "cirurgia" then
-				if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
-					vRP.setUData(user_id,"vRP:spawnController",json.encode(0))
-					vRP.kick(user_id, "Você resetou sua aparência")  
+				if GetResourceState("will_creator") == "started" then
+					TriggerClientEvent("will_creator:resetChar",source)
+				else
+					if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
+						vRP.setUData(user_id,"vRP:spawnController",json.encode(0))
+						vRP.kick(user_id, "Você resetou sua aparência")  
+					end
 				end
 			end
 	
