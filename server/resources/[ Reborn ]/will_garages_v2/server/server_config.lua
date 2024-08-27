@@ -636,6 +636,7 @@ CreateThread(function()
 	prepare("will/get_stoled_vehs","SELECT * FROM "..Config.vehicleDB.." WHERE theft LIKE '%thief%'")
 	prepare("will/get_shared_vehs","SELECT * FROM "..Config.vehicleDB.." WHERE garage LIKE CONCAT('shared:', @garage)")
 	prepare("will/set_veh_stoled","UPDATE "..Config.vehicleDB.." SET theft = @theft WHERE plate = @plate")
+	prepare("will/set_vehicle_state","UPDATE "..Config.vehicleDB.." SET arrest = @arrest WHERE user_id = @user_id AND vehicle = @vehicle")
 
     AddEventHandler("vRP:playerSpawn",function(user_id,source)
         playerSpawn(user_id,source)
