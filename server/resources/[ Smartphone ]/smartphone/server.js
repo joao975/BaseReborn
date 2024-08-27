@@ -5521,7 +5521,7 @@ pF.ready(async (d) => {
   } else {
     for (let j of r8) {
       if (await pF.hasColumn(j, "paypal")) {
-        const m = await pF.firstColumn(j, "user_id", "id"),
+        const m = await pF.firstColumn(j, "id", "id"),
           n = {};
         (n.table = j), (n.key = m), Object.assign(r7, n);
         break;
@@ -6846,7 +6846,7 @@ pF.ready(async (c) => {
       .where("category", "LIKE", e)
       .orderBy("id", "DESC")
       .limit(50);
-    const g = await pF.getIdentitiesBy("user_id", f.pluck("user_id").unique());
+    const g = await pF.getIdentitiesBy("id", f.pluck("id").unique());
 
     for (let h of f) {
       (h.images = JSON.parse(h.images)),
