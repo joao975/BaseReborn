@@ -36,8 +36,7 @@ exports('getSharedObject', function()
 	return ESX
 end)
 
-CreateThread(function()
-    Wait(5000)
+RegisterNetEvent("esx:characterLoaded",function()
     TriggerServerEvent("esx:onPlayerJoined")
 end)
 
@@ -219,7 +218,6 @@ ESX.RegisterInput = function(command_name, label, input_group, key, on_press, on
 end
 
 function ESX.TriggerServerCallback(name, cb, ...)
-    print('ServerCallBack:', name, cb, json.encode(...))
     Core.ServerCallbacks[Core.CurrentRequestId] = cb
     TriggerServerEvent('esx:triggerServerCallback', name, Core.CurrentRequestId, ...)
     Core.CurrentRequestId = Core.CurrentRequestId < 65535 and Core.CurrentRequestId + 1 or 0
@@ -366,7 +364,6 @@ CreateThread(function()
             if OpenedMenus > 0 then
                 Sleep = 10
                 if IsControlPressed(0, 18) and IsUsingKeyboard(0) and (GetGameTimer() - GUI.Time) > 200 then
-                    print('enter')
                     SendNUIMessage({
                         action = 'controlPressed',
                         control = 'ENTER'
@@ -375,7 +372,6 @@ CreateThread(function()
                 end
 
                 if IsControlPressed(0, 177) and IsUsingKeyboard(0) and (GetGameTimer() - GUI.Time) > 200 then
-                    print('BACKSPACE')
                     SendNUIMessage({
                         action = 'controlPressed',
                         control = 'BACKSPACE'

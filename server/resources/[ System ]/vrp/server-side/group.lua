@@ -1,6 +1,5 @@
+local groups = module('vrp',"Reborn/Groups")
 local permissions = {}
-
-local groups = Reborn.groups()
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- GROUPS FUNCTIONS
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -131,7 +130,9 @@ function vRP.hasAnyPermission(user_id, perms)
 	end
 	return false
 end
-
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- USERS BY PERMISSION
+-----------------------------------------------------------------------------------------------------------------------------------------
 local aliasPerm = {
 	['Police'] = "policia.permissao",
 	['Mechanic'] = "mecanico.permissao",
@@ -167,14 +168,5 @@ end
 AddEventHandler("vRP:playerLeave",function(user_id,source)
 	if permissions[user_id] then
 		permissions[user_id] = nil
-	end
-end)
------------------------------------------------------------------------------------------------------------------------------------------
--- PLAYERSPAWN
------------------------------------------------------------------------------------------------------------------------------------------
-AddEventHandler("vRP:playerSpawn",function(user_id,source,first_spawn)
-	local consult = vRP.query("vRP/get_perm", { user_id = user_id })
-	for k,v in pairs(consult) do
-		vRP.insertPermission(user_id, v.permiss)
 	end
 end)

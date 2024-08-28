@@ -11,7 +11,7 @@ function table.maxn(t)
 end
 
 local modules = {}
-function module(rsc,path)
+function module(rsc,path,refresh)
 	if path == nil then
 		path = rsc
 		rsc = "vrp"
@@ -19,7 +19,7 @@ function module(rsc,path)
 
 	local key = rsc..path
 	local module = modules[key]
-	if module then
+	if module and not refresh then
 		return module
 	else
 		local code = LoadResourceFile(rsc,path..".lua")

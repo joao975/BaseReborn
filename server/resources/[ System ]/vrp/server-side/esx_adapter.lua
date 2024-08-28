@@ -10,7 +10,6 @@ Core.RegisteredCommands = {}
 Core.Pickups = {}
 Core.PickupId = 0
 Core.PlayerFunctionOverrides = {}
-allJobs = Reborn.groups()
 
 AddEventHandler('esx:getSharedObject', function(cb)
     cb(ESX)
@@ -48,7 +47,6 @@ end
 
 function ESX.SetTimeout(msec, cb)
     local id = Core.TimeoutCount + 1
-
     SetTimeout(msec, function()
         if Core.CancelledTimeouts[id] then
             Core.CancelledTimeouts[id] = nil
@@ -56,9 +54,7 @@ function ESX.SetTimeout(msec, cb)
             cb()
         end
     end)
-
     Core.TimeoutCount = id
-
     return id
 end
   
@@ -277,15 +273,6 @@ function ESX.GetIdentifier(playerId)
 end
 
 function ESX.RefreshJobs()
-  local items = Reborn.itemList()
-  for k, v in pairs(items) do
-      ESX.Items[k] = {label = v.name, weight = v.weight, rare = v.type, canRemove = true}
-  end
-
-  while not next(ESX.Items) do
-      Wait(0)
-  end
-
   local Jobs = {}
   local allJobs = Reborn.groups()
 
@@ -452,8 +439,9 @@ function loadESXPlayer(identifier, playerId, isNew)
   end
   local result = vRP.query("vRP/get_vrp_users", { id = user_id })
   local myJob = nil
+  local allJobs = Reborn.groups()
   local user_groups = vRP.getUserGroups(user_id)
-  
+
   for k,v in pairs(user_groups) do
     local kgroup = allJobs[k]
     if kgroup then
@@ -513,40 +501,28 @@ function loadESXPlayer(identifier, playerId, isNew)
   if gradeObject.skin_female then
     userData.job.skin_female = type(gradeObject.skin_female) == "string" and json.decode(gradeObject.skin_female) or gradeObject.skin_female
   end
+
   -- Inventory
   result.inventory = vRP.getInventory(user_id)
   if result.inventory then
     local inventory = type(result.inventory) == "string" and json.decode(result.inventory) or result.inventory
 
     for k, v in pairs(inventory) do
-      local item = ESX.Items[v.item] or ESX.Items[k] 
-
+      local item = ESX.Items[v.item] or ESX.Items[k]
       if item then
         foundItems[v.item] = v.amount or v.count
-        table.insert(userData.inventory,
-          {name = v.item, count = v.amount, label = item.label, weight = item.weight, usable = Core.UsableItemsCallbacks[v.item] ~= nil, rare = item.rare,
-            canRemove = item.canRemove})
-      else
-        -- print(('[^3WARNING^7] Ignoring invalid item "%s" for "%s"'):format(v.item, identifier))
+        table.insert(userData.inventory, {
+            name = v.item or v.name,
+            count = v.amount or v.count,
+            label = item.label,
+            weight = item.weight,
+            usable = Core.UsableItemsCallbacks[v.item] ~= nil,
+            rare = item.rare,
+            canRemove = item.canRemove
+          })
       end
-
     end
   end
-
-  --[[ for name, item in pairs(ESX.Items) do
-    local count = foundItems[name] or 0
-    if count > 0 then
-      userData.weight = userData.weight + (item.weight * count)
-    end
-
-    table.insert(userData.inventory,
-      {name = name, count = count, label = item.label, weight = item.weight, usable = Core.UsableItemsCallbacks[name] ~= nil, rare = item.rare,
-        canRemove = item.canRemove})
-  end ]]
-
-  --[[ table.sort(userData.inventory, function(a, b)
-    return a.label < b.label
-  end) ]]
 
   -- Group
   result.group = vRP.getUserGroupByType(user_id,"job")

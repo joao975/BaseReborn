@@ -458,7 +458,7 @@ function QBCore.Player.Login(source, citizenid, newData)
                 else
                     UserData.gang = {}
                 end
-                local Player = QBCore.Player.CheckPlayerData(source, UserData)
+                QBCore.Player.CheckPlayerData(source, UserData)
                 print(('[^2INFO QBCore^0] Player ^5"%s" ^0has connected to the server. Identifier: ^5%s^7'):format(UserData.charinfo.name.." "..UserData.charinfo.name2, citizenid))
             else
                 DropPlayer(source, Lang:t("info.exploit_dropped"))

@@ -4,7 +4,7 @@
 local Proxy = module("vrp","lib/Proxy")
 local Tunnel = module("vrp","lib/Tunnel")
 Reborn = Proxy.getInterface("Reborn")
-local items = Reborn.itemList()
+local items = module('vrp',"Reborn/Itemlist")
 local Webhooks = module("Reborn/webhooks")
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- ITEMDEFINITION
@@ -92,14 +92,15 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- GIVEINVENTORYITEM
 -----------------------------------------------------------------------------------------------------------------------------------------
-function vRP.giveInventoryItem(user_id,idname,amount,slot,notify)
+function vRP.giveInventoryItem(user_id,item,amount,slot,notify)
 	local nplayer = vRP.getUserSource(tonumber(user_id))
 	if nplayer then
-		Reborn.addItem(nplayer,idname,amount,nil,slot,notify)
+		local metadata = nil
+		Reborn.addItem(nplayer,item,amount,metadata,slot,notify)
 	end
 end
 
-function vRP.giveInventoryItemCustom(source,item,amount,metadata,slot)
+function vRP.giveInventoryItemCustom(source,idname,amount,slot,notify,metadata)
 	local user_id = vRP.getUserId(source)
 	local data = vRP.getInventory(user_id)
 	if data and parseInt(amount) > 0 then
@@ -206,14 +207,14 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- REMOVEINVENTORYITEM
 -----------------------------------------------------------------------------------------------------------------------------------------
-function vRP.removeInventoryItem(user_id,idname,amount,slot,notify)
+function vRP.removeInventoryItem(user_id,item,amount,slot,notify)
 	local nplayer = vRP.getUserSource(tonumber(user_id))
 	if nplayer then
-		Reborn.removeItem(nplayer,idname,amount,slot,notify)
+		Reborn.removeItem(nplayer,item,amount,slot,notify)
 	end
 end
 
-function vRP.removeItemCustom(source,item,amount,slot)
+function vRP.removeItemCustom(source,item,amount,slot,notify)
 	local user_id = vRP.getUserId(source)
 	local data = vRP.getInventory(user_id)
 	if data then

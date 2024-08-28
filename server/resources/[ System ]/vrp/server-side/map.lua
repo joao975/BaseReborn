@@ -220,6 +220,15 @@ end
 -------##########-------##########-------##########-------##########
 --						  WEBHOOK
 -------##########-------##########-------##########-------##########
+local Discords = {}
+
+AddEventHandler("Discord",function(Hook,Message,Color)
+	if not Discords[Hook] then return end
+	PerformHttpRequest(Discords[Hook],function(err,text,headers) end,"POST",json.encode({
+		username = ServerName,
+		embeds = { { color = Color, description = Message } }
+	}),{ ["Content-Type"] = "application/json" })
+end)
 
 function vRP.createWeebHook(webhook,message)
 	if webhook ~= "" then

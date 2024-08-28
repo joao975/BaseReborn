@@ -1,7 +1,6 @@
 local Proxy = module("lib/Proxy")
 local Tunnel = module("lib/Tunnel")
 Reborn = {}
-Reborn.debug = false -- Debug mode
 Proxy.addInterface("Reborn",Reborn)
 Tunnel.bindInterface("Reborn",Reborn)
 
@@ -23,12 +22,13 @@ end
 
 GlobalState['Basics'] = {
     ['ServerName'] = "Reborn Studios",
-    ['Discord'] = "https://discord.gg/F2K5CCqcaZ",
+    ['Discord'] = "https://discord.gg/8unYr9MUdx",
     ['ServerStore'] = "",
     ['Whitelist'] = true,
+    ['Debug'] = false
 }
 
-GlobalState['Inventory'] = "ld_inventory"       -- "ld_inventory" / "will_inventory" / "ox_inventory" / "custom"
+GlobalState['Inventory'] = "ox_inventory"       -- "ld_inventory" / "will_inventory" / "ox_inventory" / "custom"
 
 ----####----####----####----##
 ----##    IMG DIRETORIO    -##

@@ -107,9 +107,8 @@ CreateThread(function()
 			if vRPclient.getHealth(source) <= 101 then return end
 			Player(source)["state"]["Commands"] = true
 			if itemName == "analgesic" then
-				if vRPclient.getHealth(source) > 101 and vRPclient.getHealth(source) < 200 then
+				if vRPclient.getHealth(source) > 101 and vRPclient.getHealth(source) < 400 then
 					active[user_id] = 6
-					TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 					TriggerClientEvent("Progress",source,6000,"Utilizando...")
 					vRPclient._playAnim(source,true,{"mp_suicide","pill"},true)
 	
@@ -119,7 +118,6 @@ CreateThread(function()
 							vRPclient._stopAnim(source,false)
 	
 							if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
-								vRP.upgradeStress(user_id,5)
 								vRPclient.updateHealth(source,20)
 							end
 						end
@@ -157,7 +155,6 @@ CreateThread(function()
 				end
 				
 				active[user_id] = 1
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 				TriggerClientEvent("Progress",source,1000,"Fumando...")
 				vRPclient._createObjects(source,"amb@world_human_aa_smoke@male@idle_a","idle_c","prop_cs_ciggy_01",49,28422)
 	
@@ -181,7 +178,6 @@ CreateThread(function()
 	
 			if itemName == "lean" then
 				active[user_id] = 6
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 				TriggerClientEvent("Progress",source,6000,"Utilizando...")
 				vRPclient._playAnim(source,true,{"mp_suicide","pill"},true)
 	
@@ -194,7 +190,6 @@ CreateThread(function()
 							vRP.chemicalTimer(user_id,2)
 							vRP.downgradeStress(user_id,50)
 							TriggerClientEvent("cleanEffectDrugs",source)
-							--TriggerClientEvent("setMeth",source)
 						end
 					end
 					Citizen.Wait(0)
@@ -203,7 +198,6 @@ CreateThread(function()
 	
 			if itemName == "ecstasy" then
 				active[user_id] = 6
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 				TriggerClientEvent("Progress",source,6000,"Utilizando...")
 				vRPclient._playAnim(source,true,{"mp_suicide","pill"},true)
 	
@@ -214,7 +208,6 @@ CreateThread(function()
 	
 						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
 							vRP.chemicalTimer(user_id,2)
-							vRP.upgradeStress(user_id,3)
 							vRP.upgradeHunger(user_id,5)
 							vRP.downgradeThirst(user_id,10)
 							TriggerClientEvent("setEcstasy",source)
@@ -227,7 +220,6 @@ CreateThread(function()
 	
 			if itemName == "lsd" then
 				active[user_id] = 6
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 				TriggerClientEvent("Progress",source,6000,"Utilizando...")
 				vRPclient._playAnim(source,true,{"mp_suicide","pill"},true)
 	
@@ -251,7 +243,6 @@ CreateThread(function()
 	
 			if itemName == "meth" then
 				active[user_id] = 6
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 				TriggerClientEvent("Progress",source,6000,"Utilizando...")
 				vRPclient._playAnim(source,true,{"anim@amb@nightclub@peds@","missfbi3_party_snort_coke_b_male3"},true)
 	
@@ -262,7 +253,6 @@ CreateThread(function()
 	
 						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
 							vRP.chemicalTimer(user_id,2)
-							vRP.upgradeStress(user_id,5)
 							vRP.upgradeThirst(user_id,5)
 							TriggerClientEvent("setMeth",source)
 						end
@@ -273,7 +263,6 @@ CreateThread(function()
 	
 			if itemName == "cocaine" then
 				active[user_id] = 6
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 				TriggerClientEvent("Progress",source,6000,"Utilizando...")
 				vRPclient._playAnim(source,true,{"anim@amb@nightclub@peds@","missfbi3_party_snort_coke_b_male3"},true)
 	
@@ -284,8 +273,7 @@ CreateThread(function()
 	
 						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
 							vRP.chemicalTimer(user_id,2)
-							--vRPclient.setArmour(source,2)
-							vRP.upgradeStress(user_id,15)
+							vRPclient.setArmour(source,2)
 							TriggerClientEvent("setMeth",source)
 							TriggerClientEvent("setEnergetic",source,10,1.41)
 						end
@@ -299,8 +287,6 @@ CreateThread(function()
 				if nplayer then
 					if vRPclient.getHealth(nplayer) <= 101 then
 						active[user_id] = 10
-						TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-						TriggerClientEvent("royale:reanimado",nplayer)
 						TriggerClientEvent("Progress",source,10000,"Utilizando...")
 						TriggerClientEvent("Notify",nplayer,"aviso","Você está sendo reanimado.")
 						vRPclient._playAnim(source,false,{"mini@cpr@char_a@cpr_str","cpr_pumpchest"},true)
@@ -317,9 +303,8 @@ CreateThread(function()
 						until active[user_id] == nil
 					end			
 				else
-					if vRPclient.getHealth(source) > 101 and vRPclient.getHealth(source) < 200 then
+					if vRPclient.getHealth(source) > 101 and vRPclient.getHealth(source) < 400 then
 						active[user_id] = 30
-						TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 						TriggerClientEvent("Progress",source,30000,"Utilizando...")
 						vRPclient._createObjects(source,"amb@world_human_clipboard@male@idle_a","idle_c","v_ret_ta_firstaid",49,60309)
 	
@@ -342,9 +327,8 @@ CreateThread(function()
 			end
 	
 			if itemName == "gauze" then
-				if vRPclient.getHealth(source) > 101 and vRPclient.getHealth(source) < 200 then
+				if vRPclient.getHealth(source) > 101 and vRPclient.getHealth(source) < 400 then
 					active[user_id] = 3
-					TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 					TriggerClientEvent("Progress",source,3000,"Utilizando...")
 					vRPclient._playAnim(source,true,{"amb@world_human_clipboard@male@idle_a","idle_c"},true)
 	
@@ -373,7 +357,6 @@ CreateThread(function()
 	
 			if itemName == "binoculars" then
 				active[user_id] = 2
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 				TriggerClientEvent("Progress",source,2000,"Utilizando...")
 	
 				repeat
@@ -389,7 +372,6 @@ CreateThread(function()
 	
 			if itemName == "camera" then
 				active[user_id] = 2
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 				TriggerClientEvent("Progress",source,2000,"Utilizando...")
 	
 				repeat
@@ -437,7 +419,6 @@ CreateThread(function()
 						if vSURVIVAL.deadPlayer(nplayer) then
 							active[user_id] = 10
 							vRPclient.stopActived(source)
-							TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 							TriggerClientEvent("Progress",source,10000,"Utilizando...")
 							vRPclient._playAnim(source,false,{"mini@cpr@char_a@cpr_str","cpr_pumpchest"},true)
 	
@@ -447,8 +428,6 @@ CreateThread(function()
 									vSURVIVAL._reverseRevive(source)
 	
 									if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
-										vRP.upgradeStress(user_id,10)
-										vRP.upgradeStress(nuser_id,10)
 										vRP.upgradeThirst(nuser_id,10)
 										vRP.upgradeHunger(nuser_id,10)
 										vRP.chemicalTimer(nuser_id,1)
@@ -464,12 +443,10 @@ CreateThread(function()
 			end
 	
 			if itemName == "teddy" then
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 				vRPclient._createObjects(source,"impexp_int-0","mp_m_waremech_01_dual-0","v_ilev_mr_rasberryclean",49,24817,-0.20,0.46,-0.016,-180.0,-90.0,0.0)
 			end
 	
 			if itemName == "rose" then
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 				vRPclient._createObjects(source,"anim@heists@humane_labs@finale@keycards","ped_a_enter_loop","prop_single_rose",49,18905,0.13,0.15,0.0,-100.0,0.0,-20.0)
 			end
 	
@@ -518,34 +495,11 @@ CreateThread(function()
 				end
 			end
 	
-				--[[ 			if itemName == "firecracker" then
-				if firecracker[user_id] == nil then
-					active[user_id] = 3
-					firecracker[user_id] = 250
-					TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-					TriggerClientEvent("Progress",source,3000,"Utilizando...")
-					vRPclient._playAnim(source,false,{"anim@mp_fireworks","place_firework_3_box"},true)
-	
-					repeat
-						if active[user_id] == 0 then
-							active[user_id] = nil
-							vRPclient._stopAnim(source,false)
-	
-							if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
-								TriggerClientEvent("vrp_inventory:Firecracker",source)
-							end
-						end
-						Citizen.Wait(0)
-					until active[user_id] == nil
-				end
-			end ]]
-	
 			if itemName == "gsrkit" then
 				local nplayer = vRPclient.nearestPlayer(source,5)
 				if nplayer then
 					if vPLAYER.getHandcuff(nplayer) then
 						active[user_id] = 10
-						TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 						TriggerClientEvent("Progress",source,10000,"Utilizando...")
 	
 						repeat
@@ -566,14 +520,13 @@ CreateThread(function()
 					end
 				end
 			end
-	
+
 			if itemName == "gdtkit" then
 				local nplayer = vRPclient.nearestPlayer(source,5)
 				if nplayer then
 					local nuser_id = vRP.getUserId(nplayer)
 					if nuser_id then
 						active[user_id] = 10
-						TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 						TriggerClientEvent("Progress",source,10000,"Utilizando...")
 	
 						repeat
@@ -617,7 +570,6 @@ CreateThread(function()
 									elseif weed >= 3 then
 										weedStr = "Alto"
 									end
-	
 									TriggerClientEvent("Notify",source,"importante","<b>Químicos:</b> "..chemStr.."<br><b>Álcool:</b> "..alcoholStr.."<br><b>Drogas:</b> "..weedStr,8000)
 								end
 							end
@@ -629,7 +581,6 @@ CreateThread(function()
 	
 			if itemName == "vest" then
 				active[user_id] = 10
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._playAnim(source,true,{"clothingtie","try_tie_negative_a"},true)
 	
@@ -654,7 +605,6 @@ CreateThread(function()
 	
 			if itemName == "GADGET_PARACHUTE" or item == "parachute" then
 				active[user_id] = 10
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 	
 				repeat	
@@ -671,7 +621,6 @@ CreateThread(function()
 	
 			if itemName == "skate" then
 				active[user_id] = 3
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 				TriggerClientEvent("Progress",source,3000,"Utilizando...")
 	
 				repeat	
@@ -690,12 +639,10 @@ CreateThread(function()
 					if vehicle then
 						active[user_id] = 30
 						vRPclient.stopActived(source)
-						TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 						vRPclient._playAnim(source,false,{"mini@repair","fixing_a_player"},true)
 						local taskResult = vTASKBAR.taskLockpick(source)
 						if taskResult then
 							if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
-								vRP.upgradeStress(user_id,2)
 								TriggerClientEvent("vrp_inventory:repairTires",-1,vehNet)
 								TriggerClientEvent("will_garages_v2:repairVehicle",-1,vehNet,true)
 								TriggerClientEvent("Notify",source,"aviso","Carro arrumado com sucesso.",7000)
@@ -725,12 +672,9 @@ CreateThread(function()
 					if vRPclient.inVehicle(source) then
 						active[user_id] = 100
 						vRPclient.stopActived(source)
-						TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 						vGARAGE.startAnimHotwired(source)
-	
 						local taskResult = vTASKBAR.taskLockpick(source)
 						if taskResult then
-							--vRP.upgradeStress(user_id,4)
 							local iddoroubado = vRP.getVehiclePlate(vehPlate)
 							--SendWebhookMessage(webhookrobberycar,"```prolog\n[ID]: "..user_id.."\n[ROUBOU CARRO]: "..vRP.vehicleName(vehName).." "..os.date("\n[Data]: %d/%m/%Y [Hora]: %H:%M:%S").." \r```")
 							if iddoroubado and math.random(100) >= 50 then
@@ -761,7 +705,6 @@ CreateThread(function()
 					else
 						active[user_id] = 100
 						vRPclient.stopActived(source)
-						TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 						vRPclient._playAnim(source,false,{"missfbi_s4mop","clean_mop_back_player"},true)
 	
 						local taskResult = vTASKBAR.taskLockpick(source)
@@ -804,7 +747,6 @@ CreateThread(function()
 			end
 	
 			if itemName == "barrier" then
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 				local application,coords,heading = vRPclient.objectCoords(source,"prop_mp_barrier_02b")
 				if application then
 					if vRP.tryGetInventoryItem(user_id,itemName,1,true) then
@@ -823,7 +765,6 @@ CreateThread(function()
 			if itemName == "energetic" then
 				active[user_id] = 10
 				vRPclient.stopActived(source)
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"mp_player_intdrink","loop_bottle","prop_energy_drink",49,60309,0.0,0.0,0.0,0.0,0.0,130.0)
 	
@@ -844,7 +785,6 @@ CreateThread(function()
 			if itemName == "absolut" then
 				active[user_id] = 10
 				vRPclient.stopActived(source)
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"amb@world_human_drinking@beer@male@idle_a","idle_a","p_whiskey_notop",49,28422,0.0,0.0,0.05,0.0,0.0,0.0)
 	
@@ -862,12 +802,10 @@ CreateThread(function()
 					Citizen.Wait(0)
 				until active[user_id] == nil
 			end
-	
-	
+
 			if itemName == "hennessy" then
 				active[user_id] = 10
 				vRPclient.stopActived(source)
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"amb@world_human_drinking@beer@male@idle_a","idle_a","p_whiskey_notop",49,28422,0.0,0.0,0.05,0.0,0.0,0.0)
 	
@@ -889,7 +827,6 @@ CreateThread(function()
 			if itemName == "chandon" then
 				active[user_id] = 10
 				vRPclient.stopActived(source)
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"amb@world_human_drinking@beer@male@idle_a","idle_a","prop_beer_blr",49,28422,0.0,0.0,-0.10,0.0,0.0,0.0)
 	
@@ -911,7 +848,6 @@ CreateThread(function()
 			if itemName == "dewars" then
 				active[user_id] = 10
 				vRPclient.stopActived(source)
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"amb@world_human_drinking@beer@male@idle_a","idle_a","prop_beer_blr",49,28422,0.0,0.0,-0.10,0.0,0.0,0.0)
 	
@@ -933,7 +869,6 @@ CreateThread(function()
 			if itemName == "saque" then
 				active[user_id] = 10
 				vRPclient.stopActived(source)
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"amb@world_human_drinking@beer@male@idle_a","idle_a","prop_tequila",49,28422,0.0,0.0,-0.10,0.0,0.0,0.0)
 	
@@ -941,7 +876,6 @@ CreateThread(function()
 					if active[user_id] == 0 then
 						active[user_id] = nil
 						vRPclient._removeObjects(source)
-	
 						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
 							vRP.alcoholTimer(user_id,1)
 							vRP.upgradeThirst(user_id,20)
@@ -955,7 +889,6 @@ CreateThread(function()
 			if itemName == "water" then
 				active[user_id] = 10
 				vRPclient.stopActived(source)
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"mp_player_intdrink","loop_bottle","prop_ld_flow_bottle",49,60309,0.0,0.0,0.02,0.0,0.0,130.0)
 	
@@ -976,7 +909,6 @@ CreateThread(function()
 			if itemName == "sinkalmy" then
 				active[user_id] = 10
 				vRPclient.stopActived(source)
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"amb@world_human_drinking@beer@male@idle_a","idle_a","prop_ld_flow_bottle",49,28422)
 	
@@ -998,7 +930,6 @@ CreateThread(function()
 			if itemName == "ritmoneury" then
 				active[user_id] = 10
 				vRPclient.stopActived(source)
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"amb@world_human_drinking@beer@male@idle_a","idle_a","prop_ld_flow_bottle",49,28422)
 	
@@ -1020,7 +951,6 @@ CreateThread(function()
 			if itemName == "dirtywater" then
 				active[user_id] = 10
 				vRPclient.stopActived(source)
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"mp_player_intdrink","loop_bottle","prop_ld_flow_bottle",49,60309)
 	
@@ -1043,7 +973,6 @@ CreateThread(function()
 			if itemName == "cola" then
 				active[user_id] = 10
 				vRPclient.stopActived(source)
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"mp_player_intdrink","loop_bottle","prop_ecola_can",49,60309,0.0,0.0,0.04,0.0,0.0,130.0)
 	
@@ -1063,7 +992,6 @@ CreateThread(function()
 			if itemName == "soda" then
 				active[user_id] = 10
 				vRPclient.stopActived(source)
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"mp_player_intdrink","loop_bottle","ng_proc_sodacan_01b",49,60309,0.0,0.0,-0.04,0.0,0.0,130.0)
 	
@@ -1079,49 +1007,7 @@ CreateThread(function()
 					Citizen.Wait(0)
 				until active[user_id] == nil
 			end
-	
-			if itemName == "sucocereja" then
-				active[user_id] = 10
-				vRPclient.stopActived(source)
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				TriggerClientEvent("Progress",source,10000,"Utilizando...")
-				vRPclient._createObjects(source,"amb@world_human_drinking@coffee@male@idle_a","idle_c","prop_plastic_cup_02",49,28422,0.0,-0.01,0.0,0.0,0.0,0.0)
-	
-				repeat
-					if active[user_id] == 0 then
-						active[user_id] = nil
-						vRPclient._removeObjects(source)
-	
-						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
-							vRP.upgradeThirst(user_id,50)
-							vRP.downgradeStress(user_id,10)
-						end
-					end
-					Citizen.Wait(0)
-				until active[user_id] == nil
-			end
-	
-			if itemName == "sucolaranja" then
-				active[user_id] = 10
-				vRPclient.stopActived(source)
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				TriggerClientEvent("Progress",source,10000,"Utilizando...")
-				vRPclient._createObjects(source,"amb@world_human_drinking@coffee@male@idle_a","idle_c","prop_plastic_cup_02",49,28422,0.0,-0.01,0.0,0.0,0.0,0.0)
-	
-				repeat
-					if active[user_id] == 0 then
-						active[user_id] = nil
-						vRPclient._removeObjects(source)
-	
-						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
-							vRP.upgradeThirst(user_id,50)
-							vRP.downgradeStress(user_id,10)
-						end
-					end
-					Citizen.Wait(0)
-				until active[user_id] == nil
-			end
-	
+
 			if itemName == "fishingrod" then
 				local fishingStatus = false
 				local fishingCoords = vector3(-1202.71,2714.76,4.11)
@@ -1132,7 +1018,6 @@ CreateThread(function()
 				end
 				if fishingStatus then
 					active[user_id] = 30
-					TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 					vRPclient.stopActived(source)
 					vRPclient._createObjects(source,"amb@world_human_stand_fishing@idle_a","idle_c","prop_fishing_rod_01",49,60309)
 					if vTASKBAR.taskFishing(source) then
@@ -1149,7 +1034,6 @@ CreateThread(function()
 							TriggerClientEvent("Notify",source,"negado","Mochila cheia.",5000)
 						end
 					end
-	
 					active[user_id] = nil
 				else
 					TriggerClientEvent("Notify",source,"negado","Muito longe do local de pesca.",5000)
@@ -1159,7 +1043,6 @@ CreateThread(function()
 			if itemName == "coffee" then
 				active[user_id] = 10
 				vRPclient.stopActived(source)
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"amb@world_human_aa_coffee@idle_a", "idle_a","p_amb_coffeecup_01",49,28422)
 	
@@ -1181,7 +1064,6 @@ CreateThread(function()
 			if itemName == "hamburger" then
 				active[user_id] = 10
 				vRPclient.stopActived(source)
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"mp_player_inteat@burger","mp_player_int_eat_burger","prop_cs_burger_01",49,60309)
 	
@@ -1201,14 +1083,11 @@ CreateThread(function()
 			if itemName == "delivery" then
 				active[user_id] = 5
 				vRPclient.stopActived(source)
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 				TriggerClientEvent("Progress",source,5000,"Utilizando...")
 				vRPclient._createObjects(source,"amb@code_human_wander_drinking@beer@male@base","","prop_paper_bag_01",49,28422,0.0,-0.02,-0.05,0.0,0.0,0.0)
 				vRPclient._playAnim(source,false,{"mini@cpr@char_a@cpr_str","cpr_kol_idle"},false)
-				local itemList = {
-					[1] = { "tacos","hamburger","hotdog","soda","cola","chocolate","sandwich","fries","absolut","chandon","dewars","donut","hennessy" }
-				}
-				local food = itemList[1][math.random(#itemList[1])]
+				local itemList = { "tacos","hamburger","hotdog","soda","cola","chocolate","sandwich","fries","absolut","chandon","dewars","donut","hennessy" }
+				local food = itemList[math.random(#itemList)]
 				
 				repeat
 					if active[user_id] == 0 then
@@ -1224,98 +1103,9 @@ CreateThread(function()
 				until active[user_id] == nil
 			end
 	
-			if itemName == "yakisoba" then
-				active[user_id] = 10
-				vRPclient.stopActived(source)
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				TriggerClientEvent("Progress",source,10000,"Utilizando...")
-				vRPclient._createObjects(source,"amb@code_human_wander_drinking@beer@male@base","static","v_ret_fh_noodle",49,28422,0.0,-0.02,-0.05,0.0,0.0,0.0)
-				repeat
-					if active[user_id] == 0 then
-						active[user_id] = nil
-						vRPclient._removeObjects(source)
-	
-						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
-							vRP.upgradeHunger(user_id,50)
-							vRP.updateHealth(user_id,5)
-							vRP.downgradeStress(user_id,10)
-						end
-					end
-					Citizen.Wait(0)
-				until active[user_id] == nil
-			end
-	
-			if itemName == "lamen" then
-				active[user_id] = 10
-				vRPclient.stopActived(source)
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				TriggerClientEvent("Progress",source,10000,"Utilizando...")
-				vRPclient._createObjects(source,"amb@code_human_wander_drinking@beer@male@base","static","prop_bar_nuts",49,28422,0.0,-0.02,-0.05,0.0,0.0,0.0)
-	
-				repeat
-					if active[user_id] == 0 then
-						active[user_id] = nil
-						vRPclient._removeObjects(source)
-	
-						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
-							vRP.upgradeHunger(user_id,50)
-							vRP.updateHealth(user_id,5)
-							vRP.downgradeStress(user_id,10)
-						end
-					end
-					Citizen.Wait(0)
-				until active[user_id] == nil
-			end
-	
-			if itemName == "temaki" then
-				active[user_id] = 10
-				vRPclient.stopActived(source)
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				TriggerClientEvent("Progress",source,10000,"Utilizando...")
-				vRPclient._createObjects(source,"amb@code_human_wander_drinking@beer@male@base","static","v_ret_fh_noodle",49,28422,0.0,-0.02,-0.05,0.0,0.0,0.0)
-	
-				repeat
-					if active[user_id] == 0 then
-						active[user_id] = nil
-						vRPclient._removeObjects(source)
-	
-						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
-							vRP.upgradeHunger(user_id,50)
-							vRP.updateHealth(user_id,5)
-							vRP.downgradeStress(user_id,10)
-						end
-					end
-					Citizen.Wait(0)
-				until active[user_id] == nil
-			end
-	
-			if itemName == "sushi" then
-				--active[user_id] = 10
-				--vRPclient.stopActived(source)
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-				TriggerClientEvent("will_spray:removeClosestSpray",source)
-				TriggerClientEvent("Progress",source,10000,"Utilizando...")
-				vRPclient._createObjects(source,"amb@code_human_wander_drinking@beer@male@base","static","prop_bar_limes",49,28422,0.0,-0.02,-0.038,0.0,0.0,0.0)
-	
-				repeat
-					if active[user_id] == 0 then
-						active[user_id] = nil
-						vRPclient._removeObjects(source)
-	
-						if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
-							vRP.upgradeHunger(user_id,50)
-							vRP.updateHealth(user_id,5)
-							vRP.downgradeStress(user_id,10)
-						end
-					end
-					Citizen.Wait(0)
-				until active[user_id] == nil
-			end
-	
 			if itemName == "hotdog" then
 				active[user_id] = 10
 				vRPclient.stopActived(source)
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"amb@code_human_wander_eating_donut@male@idle_a","idle_c","prop_cs_hotdog_01",49,28422)
 	
@@ -1335,7 +1125,6 @@ CreateThread(function()
 			if itemName == "sandwich" then
 				active[user_id] = 10
 				vRPclient.stopActived(source)
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"mp_player_inteat@burger","mp_player_int_eat_burger","prop_sandwich_01",49,18905,0.13,0.05,0.02,-50.0,16.0,60.0)
 	
@@ -1355,7 +1144,6 @@ CreateThread(function()
 			if itemName == "tacos" then
 				active[user_id] = 10
 				vRPclient.stopActived(source)
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"mp_player_inteat@burger","mp_player_int_eat_burger","prop_taco_01",49,18905,0.16,0.06,0.02,-50.0,220.0,60.0)
 	
@@ -1375,7 +1163,6 @@ CreateThread(function()
 			if itemName == "fries" then
 				active[user_id] = 10
 				vRPclient.stopActived(source)
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"mp_player_inteat@burger","mp_player_int_eat_burger","prop_food_bs_chips",49,18905,0.10,0.0,0.08,150.0,320.0,160.0)
 	
@@ -1395,7 +1182,6 @@ CreateThread(function()
 			if itemName == "chocolate" then
 				active[user_id] = 10
 				vRPclient.stopActived(source)
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"mp_player_inteat@burger","mp_player_int_eat_burger","prop_choc_ego",49,60309)
 	
@@ -1416,7 +1202,6 @@ CreateThread(function()
 			if itemName == "donut" then
 				active[user_id] = 10
 				vRPclient.stopActived(source)
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 				TriggerClientEvent("Progress",source,10000,"Utilizando...")
 				vRPclient._createObjects(source,"amb@code_human_wander_eating_donut@male@idle_a","idle_c","prop_amb_donut",49,28422)
 	
@@ -1432,13 +1217,6 @@ CreateThread(function()
 					end
 					Citizen.Wait(0)
 				until active[user_id] == nil
-			end
-	
-			if itemName == "postit" then
-				if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
-					TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-					TriggerClientEvent("vrp_notepad:createNotepad",source)
-				end
 			end
 	
 			if itemName == "backpackp" then
@@ -1514,13 +1292,11 @@ CreateThread(function()
 			end
 	
 			if itemName == "tires" then
-				--TriggerClientEvent("vrp_inventory:createprop",source,"prop_rub_tyre_01")
 				if not vRPclient.inVehicle(source) then
 					local vehicle,vehNet = vRPclient.vehList(source,3)
 					if vehicle then
 						active[user_id] = 30
 						vRPclient.stopActived(source)
-						TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 						vRPclient._playAnim(source,false,{"anim@amb@clubhouse@tutorial@bkr_tut_ig3@","machinic_loop_mechandplayer"},true)
 	
 						local taskResult = vTASKBAR.taskTwo(source)
@@ -1537,13 +1313,10 @@ CreateThread(function()
 			end
 	
 			if itemName == "premiumplate" then
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
-	
 				local vehModel = vRP.prompt(source,"Nome de spawn do veiculo:","")
 				if vehModel == "" then
 					return
 				end
-	
 				local vehicle = vRP.query("vRP/get_vehicles",{ user_id = parseInt(user_id), vehicle = tostring(vehModel) })
 				if vehicle[1] then
 					local vehPlate = vRP.prompt(source,"NOVA PLACA:","")
@@ -1570,24 +1343,20 @@ CreateThread(function()
 					TriggerClientEvent("Notify",source,"negado","Modelo de veículo não encontrado em sua garagem.",5000)
 				end
 			end
-	
-	
+
 			if itemName == "premiumname" then
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 				if vRP.tryGetInventoryItem(user_id,itemName,1,true,slot) then
-	
-				local newName = vRP.prompt(source,"Primeiro Nome (NOVO):","")
-				if newName == "" then
-					return
+					local newName = vRP.prompt(source,"Primeiro Nome (NOVO):","")
+					if newName == "" then
+						return
+					end
+		
+					local newLastName = vRP.prompt(source,"Sobre Nome (NOVO):","")
+					if newLastName == "" then
+						return
+					end
+					vRP.upgradeNames(user_id,newName,newLastName)
 				end
-	
-				local newLastName = vRP.prompt(source,"Sobre Nome (NOVO):","")
-				if newLastName == "" then
-					return
-				end
-				
-				vRP.execute("vRP/rename_characters",{ id = user_id, name = newName, name2 = newLastName })
-			end
 			end
 	
 			if itemName == "aio_box" then
@@ -1640,7 +1409,6 @@ CreateThread(function()
 						local plateUsers = vRP.getVehiclePlate(vehPlate)
 						if not plateUsers then
 							active[user_id] = 30
-							TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 							TriggerClientEvent("Progress",source,30000,"Utilizando...")
 							vRPclient._playAnim(source,true,{"anim@amb@clubhouse@tutorial@bkr_tut_ig3@","machinic_loop_mechandplayer"},true)
 	
@@ -1662,7 +1430,6 @@ CreateThread(function()
 	
 			if itemName == "radio" then
 				vRPclient.stopActived(source)
-				TriggerClientEvent('ld-inv:Client:CloseInventory',source)
 				TriggerClientEvent("radio:openSystem",source)
 			end
 	
@@ -1692,7 +1459,6 @@ CreateThread(function()
 								TriggerClientEvent("vrp_sound:source",nplayer,"cuff",0.5)
 								vRPclient._playAnim(source,false,{"mp_arrest_paired","cop_p2_back_left"},false)
 								vRPclient._playAnim(nplayer,false,{"mp_arrest_paired","crook_p2_back_left"},false)
-								--vRPclient._playAnim(nplayer,true,{"mp_arresting","idle"},true)
 								SetTimeout(3500,function()
 									vPLAYER.toggleHandcuff(nplayer)
 									vRPclient._stopAnim(source,false)
@@ -1783,24 +1549,48 @@ CreateThread(function()
 			end
 	
 			if itemName == "pager" then
-				local nplayer = vRPclient.nearestPlayer(source,2)
+				local nplayer = vRPclient.nearestPlayer(source,2.5)
 				if nplayer then
 					local nuser_id = vRP.getUserId(nplayer)
 					if nuser_id then
-						if vRP.hasPermission(nuser_id,"Police") then
+						if vRP.hasPermission(nuser_id,"policia.permissao") then
 							TriggerClientEvent("radio:outServers",nplayer)
 							TriggerEvent("vrp_blipsystem:serviceExit",nplayer)
-							vRP.removePermission(vRP.getUserSource(nuser_id),"Police")
-							vRP.execute("vRP/upd_group",{ user_id = nuser_id, permiss = "Police", newpermiss = "waitPolice" })
-							TriggerClientEvent("Notify",source,"importante","Todas as comunicações da polícia foram retiradas.",5000)
+							TriggerClientEvent("tencode:StatusService",nplayer,false)
+							TriggerClientEvent("vrp_tencode:StatusService",nplayer,false)
+							local polGroup = vRP.getUserGroupByType(nuser_id,"job")
+							vRP.removeUserGroup(user_id,polGroup)
+        					vRP.addUserGroup(user_id, "Paisana"..polGroup)
+							TriggerClientEvent("Notify",source,"importante","Todas as comunicações do policial foram retiradas.",5000)
 						end
 					end
 				end
 			end
+			
 			Player(source)["state"]["Commands"] = false
-			TriggerClientEvent('ld-inv:Client:RefreshInventory',source)
 		end)
-	
+
+		RegisterNetEvent("inventory:makeWater")
+		AddEventHandler("inventory:makeWater",function()
+			local source = source
+			local user_id = vRP.getUserId(source)
+			local itemName = "emptybottle"
+			if vRP.computeInvWeight(user_id)+vRP.itemWeightList(itemName) <= vRP.getBackpack(user_id) then
+				TriggerClientEvent("Progress",source,3000)
+				TriggerClientEvent('cancelando',source,true)
+				vRPclient._playAnim(source,false,{"amb@prop_human_parking_meter@female@idle_a","idle_a_female"},true)
+				SetTimeout(3000,function()
+					vRPclient._DeletarObjeto(source)
+					TriggerClientEvent('cancelando',source,false)
+					if vRP.tryGetInventoryItem(user_id,itemName,1,true) then
+						vRP.giveInventoryItem(user_id,"water",1)
+					end
+				end)
+			else
+				TriggerClientEvent("Notify",source,"negado","Mochila cheia.",5000)
+			end
+		end)
+		
 		CreateThread(function()
 			while true do
 				for k,v in pairs(active) do
@@ -1811,6 +1601,5 @@ CreateThread(function()
 				Wait(1000)
 			end
 		end)
-	
 	end
 end)

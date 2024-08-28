@@ -105,7 +105,8 @@ RegisterNUICallback('getNotifyConfig', function(_, cb)
 end)
 
 function QBCore.Functions.Notify(text, texttype, length)
-    if type(text) == "table" then
+    TriggerEvent("Notify", texttype, text, length or 5000)
+    --[[ if type(text) == "table" then
         local ttext = text.text or 'Placeholder'
         local caption = text.caption or 'Placeholder'
         texttype = texttype or 'primary'
@@ -126,7 +127,7 @@ function QBCore.Functions.Notify(text, texttype, length)
             length = length,
             text = text
         })
-    end
+    end ]]
 end
 
 function QBCore.Debug(resource, obj, depth)

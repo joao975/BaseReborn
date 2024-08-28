@@ -1,17 +1,27 @@
 fx_version "bodacious"
 game "gta5"
-
+lua54 'yes'
 ui_page "web-side/index.html"
+
+dependencies {
+    '/server:6116',
+    '/onesync',
+    'oxmysql',
+}
+
+shared_scripts {
+	"lib/utils.lua",
+    'Reborn/locale.lua',
+	"Base_Config.lua",
+	"Esx-Qbcore.lua",
+	"lib/adaptive.lua"
+}
 
 server_scripts {
 	'@oxmysql/lib/MySQL.lua',
-	"lib/utils.lua",
-	"Base_Config.lua",
-	"Esx-Qbcore.lua",
 	"base.lua",
 	"lib/server.lua",
 	"queue.lua",
-	"Reborn/*",
 	"server-side/*",
 }
 
@@ -19,11 +29,11 @@ client_scripts {
 	"lib/utils.lua",
 	"Base_Config.lua",
 	"Esx-Qbcore.lua",
-	"Reborn/*",
 	"client-side/*",
 }
 
 files {
+	"Reborn/*",
 	"web-side/*",
 	"web-side/**/*",
 	"lib/Tunnel.lua",

@@ -14,7 +14,7 @@ function vRP.vehicleName(vname)
 	end
 	local vehList = Reborn.vehList()
 	for k,v in pairs(vehList) do
-		if v.hash == GetEntityModel(vname) then
+		if v.hash == GetHashKey(vname) then
 			return v.name
 		end
 	end
@@ -26,7 +26,7 @@ function vRP.vehicleChest(vname)
 	end
 	local vehList = Reborn.vehList()
 	for k,v in pairs(vehList) do
-		if v.hash == GetEntityModel(vname) then
+		if v.hash == GetHashKey(vname) then
 			return v.capacidade
 		end
 	end
@@ -38,7 +38,7 @@ function vRP.vehiclePrice(vname)
 	end
 	local vehList = Reborn.vehList()
 	for k,v in pairs(vehList) do
-		if v.hash == GetEntityModel(vname) then
+		if v.hash == GetHashKey(vname) then
 			return v.price
 		end
 	end
@@ -50,7 +50,7 @@ function vRP.vehicleType(vname)
 	end
 	local vehList = Reborn.vehList()
 	for k,v in pairs(vehList) do
-		if v.hash == GetEntityModel(vname) then
+		if v.hash == GetHashKey(vname) then
 			return v.tipo
 		end
 	end

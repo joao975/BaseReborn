@@ -77,6 +77,7 @@ Config.Accounts = {
 
 Config.EnableHud            	= false -- enable the default hud? Display current job and accounts (black, bank & cash)
 Config.EnableDefaultInventory   = false -- Display the default Inventory ( F2 )
+Config.OxInventory              = GlobalState['Inventory'] == "ox_inventory"
 
 Config.DistanceGive 			= 4.0 -- Max distance when giving items, weapons etc.
 

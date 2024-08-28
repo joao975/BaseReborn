@@ -311,9 +311,11 @@ AddEventHandler("baseModule:idLoaded",function(source,user,model)
 			end
 			vRP.user_tables[user_id].backpack = 5
 			TriggerEvent("Reborn:newPlayer",user_id)
-			for k,v in pairs(first_login['Itens']) do
-				vRP.giveInventoryItem(user_id,k,v)
-            end
+			SetTimeout(5000,function()
+				for k,v in pairs(first_login['Itens']) do
+					vRP.giveInventoryItem(user_id,k,v)
+				end
+			end)
 		end
 
 		local identity = vRP.getUserIdentity(user_id)

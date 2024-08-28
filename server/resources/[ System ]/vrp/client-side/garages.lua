@@ -1,4 +1,4 @@
-local vehList = Reborn.vehList()
+local vehList = module('vrp',"Reborn/Vehicles")
 local pedInSameVehicleLast = false
 local vehicle = nil
 local lastVehicle = nil
