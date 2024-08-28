@@ -22250,8 +22250,9 @@ var init_execute = __esm({
 const checkQuery = (query) => {
   let newQuery = query;
   const DbSimilarTables = GlobalState["DbSimilarTables"];
-  DbSimilarTables.map((item) => {
-    if (query.includes(item.Old)) {
+  DbSimilarTables.forEach((item) => {
+    let tableRegex = new RegExp("\\b" + item.Old + "\\b", "g");
+    if (tableRegex.test(query)) {
       if (item.Old !== item.New) {
         newQuery = query.replaceAll(item.Old, item.New);
       }
@@ -22303,9 +22304,11 @@ var init_query = __esm({
           }] ${invokingResource} took ${executionTime}ms to execute a query!
       ${query} ${JSON.stringify(parameters)}^0`);
       } catch (err) {
-        throw new Error(`${invokingResource} was unable to execute a query!
-    ${err.message}
-    ${err.sql || `${query} ${JSON.stringify(parameters)}`}`);
+        throw new Error(
+          `${invokingResource} was unable to execute a query! ${err.message} ${
+            err.sql || `${query} ${JSON.stringify(parameters)}`
+          }`
+        );
       }
       if (cb) cb(response(type, result));
       else return response(type, result);
