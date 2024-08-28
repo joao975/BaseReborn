@@ -1,7 +1,7 @@
 Tunnel = module("vrp","lib/Tunnel")
 Proxy = module("vrp","lib/Proxy")
 vRP = Proxy.getInterface("vRP")
-
+Reborn = Proxy.getInterface("Reborn")
 -----##########################################################-----
 --###          CONFIGS
 -----##########################################################-----
@@ -9,7 +9,7 @@ vRP = Proxy.getInterface("vRP")
 Config = {}
 
 -- Diretório das imagens
-Config.imageDirect = "http://212.18.114.101/clothes/"
+Config.imageDirect = Reborn.images()
 
 -- Definição de preços  
 Config.clothPrices = {

@@ -16,7 +16,7 @@ Config.base = "creative"                        -- vrpex / creative (v1 a v3) / 
 Config.Mysql = "oxmysql"                        -- mysql-async // oxmysql // ghmattimysql
 Config.vehicleDB = "vrp_vehicles"               -- Tabela dos veiculos
 
-Config.imgDiret = "http://212.18.114.101/imagens/"               -- Diretorio de imagens para os carros
+Config.imgDiret = Reborn.images()               -- Diretorio de imagens para os carros
 
 Config.deleteNearVeh = true                     -- Botão para deletar veiculo proximo
 Config.pick_cars = true                         -- Abrir opçoes de veiculos ao entrar em garagem sem vaga
