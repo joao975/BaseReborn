@@ -97,80 +97,82 @@ local bones = {
 -- BLEEDING
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterCommand("sangramento",function(source,args,rawCommand)
-    local user_id = vRP.getUserId(source)
 	local nplayer = vRPclient.nearestPlayer(source,3)
-    bleeding(user_id,nplayer)
+    bleeding(source,nplayer)
 end)
 
 RegisterNetEvent("hospital:sangramento")
 AddEventHandler("hospital:sangramento",function(nplayer)
 	local source = source
-	local user_id = vRP.getUserId(source)
-	bleeding(user_id,nplayer)
+	if type(nplayer) == "table" or not nplayer then
+		nplayer = vRPclient.nearestPlayer(source,2)
+	end
+	if not nplayer then return end
+	bleeding(source,nplayer)
 end)
 
-function bleeding(user_id,nplayer)
-	if vRP.hasPermission(user_id,"Paramedic") then
-        if nplayer then
-            TriggerClientEvent("resetBleeding",nplayer)
-            TriggerClientEvent("Notify",source,"sucesso","O sangramento parou.",5000)
-        end
+function bleeding(source,nplayer)
+	local user_id = vRP.getUserId(source)
+	if nplayer and vRP.hasPermission(user_id,"paramedico.permissao") then
+        TriggerClientEvent("resetBleeding",nplayer)
+        TriggerClientEvent("Notify",source,"sucesso","O sangramento parou.",5000)
     end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- DIAGNOSTIC
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterCommand("diagnostico",function(source,args,rawCommand)
-	local user_id = vRP.getUserId(source)
 	local nplayer = vRPclient.nearestPlayer(source,3)
-	diagnostic(user_id,nplayer)
+	diagnostic(source,nplayer)
 end)
 
 RegisterNetEvent("hospital:diagnostico")
 AddEventHandler("hospital:diagnostico",function(nplayer)
 	local source = source
-	local user_id = vRP.getUserId(source)
-	diagnostic(user_id,nplayer)
+	if type(nplayer) == "table" or not nplayer then
+		nplayer = vRPclient.nearestPlayer(source,2)
+	end
+	diagnostic(source,nplayer)
 end)
 
-function diagnostic(user_id,nplayer)
-	if vRP.hasPermission(user_id,"paramedico.permissao") then
-		if nplayer then
-			local hurt = false
-			local diagnostic,bleeding = hpCLIENT.getDiagnostic(nplayer)
-			if diagnostic then
-				
-				local damaged = {}
-				for k,v in pairs(diagnostic) do
-					damaged[k] = bones[k]
-				end
-
-				if next(damaged) then
-					hurt = true
-					TriggerClientEvent("drawInjuries",source,nplayer,damaged)
-				end
-			end
+function diagnostic(source,nplayer)
+	local user_id = vRP.getUserId(source)
+	if nplayer and vRP.hasPermission(user_id,"paramedico.permissao") then
+		local hurt = false
+		local diagnostic,bleeding = hpCLIENT.getDiagnostic(nplayer)
+		print(diagnostic,bleeding)
+		if diagnostic then
 			
-			local text = ""
-			if bleeding > 4 then
-				text = "- <b>Bleeding</b><br>"
+			local damaged = {}
+			for k,v in pairs(diagnostic) do
+				damaged[k] = bones[k]
 			end
 
-			if diagnostic.taser then
-				text = text .. "- <b>Taser prongs</b><br>"
+			if next(damaged) then
+				hurt = true
+				TriggerClientEvent("drawInjuries",source,nplayer,damaged)
 			end
-
-			if diagnostic.vehicle then
-				text = text .. "- <b>Vehicle accident bruises</b><br>"
-			end
-
-			if text ~= "" then
-				TriggerClientEvent("Notify",source,"aviso","Status do paciente:<br>" .. text,5000)
-			elseif not hurt then
-				TriggerClientEvent("Notify",source,"sucesso","Status do paciente:<br>- <b>Nada encontrado</b>",5000)
-			end
-			vRP.createWeebHook(Webhooks.webhookdiagnostico,"```prolog\n[ID]: "..user_id.."\n[DIAGNOSTICOU]: "..nplayer.."\n[RESULTADO]: "..text.. " "..os.date("\n[Data]: %d/%m/%Y [Hora]: %H:%M:%S").." \r```")
 		end
+		
+		local text = ""
+		if bleeding > 4 then
+			text = "- <b>Bleeding</b><br>"
+		end
+
+		if diagnostic.taser then
+			text = text .. "- <b>Taser prongs</b><br>"
+		end
+
+		if diagnostic.vehicle then
+			text = text .. "- <b>Vehicle accident bruises</b><br>"
+		end
+
+		if text ~= "" then
+			TriggerClientEvent("Notify",source,"aviso","Status do paciente:<br>" .. text,5000)
+		elseif not hurt then
+			TriggerClientEvent("Notify",source,"sucesso","Status do paciente:<br>- <b>Nada encontrado</b>",5000)
+		end
+		vRP.createWeebHook(Webhooks.webhookdiagnostico,"```prolog\n[ID]: "..user_id.."\n[DIAGNOSTICOU]: "..nplayer.."\n[RESULTADO]: "..text.. " "..os.date("\n[Data]: %d/%m/%Y [Hora]: %H:%M:%S").." \r```")
 	end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -186,11 +188,15 @@ RegisterNetEvent("hospital:tratamento")
 AddEventHandler("hospital:tratamento",function(nplayer)
 	local source = source
 	local user_id = vRP.getUserId(source)
+	if type(nplayer) == "table" or not nplayer then
+		nplayer = vRPclient.nearestPlayer(source,2)
+	end
+	if not nplayer then return end
 	treatment(user_id,nplayer)
 end)
 
 function treatment(user_id,nplayer)
-	if vRP.hasPermission(user_id,"Paramedic") then
+	if vRP.hasPermission(user_id,"paramedico.permissao") then
 		if nplayer then
 			if not vSURVIVAL.deadPlayer(nplayer) then
 				vSURVIVAL._startCure(nplayer)

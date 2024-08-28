@@ -94,6 +94,10 @@ RegisterNetEvent("paramedic:Revive")
 AddEventHandler("paramedic:Revive",function(nplayer)
 	local source = source
 	local user_id = vRP.getUserId(source)
+	if type(nplayer) == "table" or not nplayer then
+		nplayer = vRPclient.nearestPlayer(source,2)
+	end
+	if not nplayer then return end
 	revive(user_id,nplayer)
 end)
 
@@ -103,7 +107,7 @@ function revive(user_id, nplayer)
 		local nuser_id = vRP.getUserId(nplayer)
 		if nplayer then
 			if svCLIENT.deadPlayer(nplayer) then
-				TriggerClientEvent("Progress",source,10000,"Retirando...")
+				TriggerClientEvent("Progress",source,10000,"Reanimando...")
 				TriggerClientEvent("cancelando",source,true)
 				vRPclient._playAnim(source,false,{"mini@cpr@char_a@cpr_str","cpr_pumpchest"},true)
 				local chance = math.random(0,100)
@@ -122,6 +126,7 @@ function revive(user_id, nplayer)
 						TriggerClientEvent("Notify",source,"negado","Cidadão está sem pulso.",5000)
 						TriggerClientEvent("Notify",nplayer,"negado","Você está sem pulso.",5000)
 						Wait(120000)
+						if vRPclient.getHealth(nplayer) >= 101 then return end
 						svCLIENT.finishDeath(nplayer)
 						TriggerClientEvent("resetHandcuff",nplayer)
 						TriggerClientEvent("resetBleeding",nplayer)
