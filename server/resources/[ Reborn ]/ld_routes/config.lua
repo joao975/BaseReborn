@@ -19,8 +19,8 @@ config.main = {
 			vec3(1405.88,1137.7,109.75), --coordenadas do blip
 		},
 		["craft"] = { --configuração do craft
-			["pistolammo"] = {
-				["image"] = "pistolammo",
+			["ammo-9"] = {
+				["image"] = "ammo-9",
 				["amount"] = 1,
 				["destroy"] = true, --se os itens necessários pra fazer devem ser gastos ou não
 				["webhook"] = 'https://discord.com/api/webhooks/SEUWEBHOOK',
@@ -30,8 +30,8 @@ config.main = {
 					["gunpowder"] = 3,
 				}
 			},
-			["smgammo"] = {
-				["image"] = "smgammo",
+			["ammo-45"] = {
+				["image"] = "ammo-45",
 				["amount"] = 1,
 				["destroy"] = true,
 				["webhook"] = 'https://discord.com/api/webhooks/SEUWEBHOOK',
@@ -41,8 +41,8 @@ config.main = {
 					["gunpowder"] = 5,
 				}
 			},			
-			["rifleammo"] = {
-				["image"] = "rifleammo",
+			["ammo-rifle2"] = {
+				["image"] = "ammo-rifle2",
 				["amount"] = 1,
 				["destroy"] = true,
 				["webhook"] = 'https://discord.com/api/webhooks/SEUWEBHOOK',
@@ -52,8 +52,19 @@ config.main = {
 					["gunpowder"] = 7,
 				}
 			},
-			["shotgunammo"] = {
-				["image"] = "shotgunammo",
+			["ammo-rifle"] = {
+				["image"] = "ammo-rifle",
+				["amount"] = 1,
+				["destroy"] = true,
+				["webhook"] = 'https://discord.com/api/webhooks/SEUWEBHOOK',
+				["police_chance"] = 0,
+				["require"] = {
+					["capsule"] = 7,
+					["gunpowder"] = 7,
+				}
+			},
+			["ammo-shotgun"] = {
+				["image"] = "ammo-shotgun",
 				["amount"] = 1,
 				["destroy"] = true,
 				["webhook"] = 'https://discord.com/api/webhooks/SEUWEBHOOK',
@@ -258,8 +269,8 @@ config.main = {
 			vec3(591.47,-3273.54,6.07), --coordenadas do blip
 		},
 		["craft"] = { --configuração do craft
-			["m1911"] = {
-				["image"] = "m1911",
+			["WEAPON_PISTOL"] = {
+				["image"] = "WEAPON_PISTOL",
 				["amount"] = 1,
 				["destroy"] = true, --se os itens necessários pra fazer devem ser gastos ou não
 				["webhook"] = 'https://discord.com/api/webhooks/SEUWEBHOOK',
@@ -269,8 +280,8 @@ config.main = {
 					["copper"] = 15,
 				}
 			},
-			["fiveseven"] = {
-				["image"] = "fiveseven",
+			["WEAPON_PISTOL_MK2"] = {
+				["image"] = "WEAPON_PISTOL_MK2",
 				["amount"] = 1,
 				["destroy"] = true,
 				["webhook"] = 'https://discord.com/api/webhooks/SEUWEBHOOK',
@@ -280,8 +291,8 @@ config.main = {
 					["copper"] = 15,
 				}
 			},			
-			["akcompact"] = {
-				["image"] = "akcompact",
+			["WEAPON_SMG_MK2"] = {
+				["image"] = "WEAPON_SMG_MK2",
 				["amount"] = 1,
 				["destroy"] = true,
 				["webhook"] = 'https://discord.com/api/webhooks/SEUWEBHOOK',
@@ -291,8 +302,8 @@ config.main = {
 					["copper"] = 20,
 				}
 			},
-			["uzi"] = {
-				["image"] = "uzi",
+			["WEAPON_MICROSMG"] = {
+				["image"] = "WEAPON_MICROSMG",
 				["amount"] = 1,
 				["destroy"] = true,
 				["webhook"] = 'https://discord.com/api/webhooks/SEUWEBHOOK',
@@ -302,8 +313,19 @@ config.main = {
 					["copper"] = 20,
 				}
 			},
-			["ak103"] = {
-				["image"] = "ak103",
+			["WEAPON_MINISMG"] = {
+				["image"] = "WEAPON_MINISMG",
+				["amount"] = 1,
+				["destroy"] = true,
+				["webhook"] = 'https://discord.com/api/webhooks/SEUWEBHOOK',
+				["police_chance"] = 0,
+				["require"] = {
+					["aluminum"] = 20,
+					["copper"] = 20,
+				}
+			},
+			["WEAPON_ASSAULTRIFLE"] = {
+				["image"] = "WEAPON_ASSAULTRIFLE",
 				["amount"] = 1,
 				["destroy"] = true,
 				["webhook"] = 'https://discord.com/api/webhooks/SEUWEBHOOK',
@@ -313,8 +335,30 @@ config.main = {
 					["copper"] = 25,
 				}
 			},
-			["ak74"] = {
-				["image"] = "ak74",
+			["WEAPON_ASSAULTRIFLE_MK2"] = {
+				["image"] = "WEAPON_ASSAULTRIFLE_MK2",
+				["amount"] = 1,
+				["destroy"] = true,
+				["webhook"] = 'https://discord.com/api/webhooks/SEUWEBHOOK',
+				["police_chance"] = 0,
+				["require"] = {
+					["aluminum"] = 25,
+					["copper"] = 25,
+				}
+			},
+			["WEAPON_CARBINERIFLE"] = {
+				["image"] = "WEAPON_CARBINERIFLE",
+				["amount"] = 1,
+				["destroy"] = true,
+				["webhook"] = 'https://discord.com/api/webhooks/SEUWEBHOOK',
+				["police_chance"] = 0,
+				["require"] = {
+					["aluminum"] = 25,
+					["copper"] = 25,
+				}
+			},
+			["WEAPON_CARBINERIFLE_MK2"] = {
+				["image"] = "WEAPON_CARBINERIFLE_MK2",
 				["amount"] = 1,
 				["destroy"] = true,
 				["webhook"] = 'https://discord.com/api/webhooks/SEUWEBHOOK',
