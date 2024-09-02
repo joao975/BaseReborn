@@ -614,12 +614,20 @@ function getModelName(vehicle)
     end
 	if not hasFound then
 		local vehName = nil
-		local manufacturer = GetMakeNameFromVehicleModel(vehicleHash)
-		if manufacturer == "CARNOTFOUND" then
-			manufacturer = GetDisplayNameFromVehicleModel(vehicleHash)
-		end
+		local manufacturer = GetDisplayNameFromVehicleModel(vehicleHash)
 		if manufacturer ~= "CARNOTFOUND" then
-			vehName = manufacturer
+			if GetHashKey(manufacturer) == vehicleHash then
+				vehName = manufacturer
+			else
+				print('Veiculo não registrado')
+				print('Nome diferente no vehicles.meta:',manufacturer)
+				local makeName = GetMakeNameFromVehicleModel(vehicleHash)
+				if makeName ~= "CARNOTFOUND" and GetHashKey(makeName) == vehicleHash then
+					vehName = makeName
+				else
+					print('Make name:',makeName)
+				end
+			end
 		end
 		if vehName then
 			TriggerServerEvent("will_garages_v2:registerVehicle", vehName, GetVehicleType(vehicle))
