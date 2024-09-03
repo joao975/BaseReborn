@@ -36,7 +36,7 @@ Config.robberyVehs = {
     ['Vehs_limit'] = 5                          -- Limite de carros que pode guardar na garagem (Funciona apenas se usar a opção Config.guardar_outro_veh)
 }
 
-Config.disable_veh_peds = false                 -- Desativar veiculos de npc
+Config.disable_veh_peds = true                 -- Desativar veiculos de npc
 
 Config.car_by_garage = false                    -- Spawnar carro em apenas garagem que foi guardado
 

@@ -543,9 +543,9 @@ RegisterServerEvent("setPlateEveryone")
 AddEventHandler("setPlateEveryone",function(plate)
     local source = source
     if source then
-        registerPlate(vehPlate, getUserId(source))
+        registerPlate(plate, getUserId(source))
     else
-        registerPlate(vehPlate, nil)
+        registerPlate(plate, nil)
     end
 end)
 
