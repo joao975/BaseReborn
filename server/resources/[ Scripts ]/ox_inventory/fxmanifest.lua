@@ -4,7 +4,7 @@ lua54 'yes'
 game 'gta5'
 name 'ox_inventory'
 author 'Overextended'
-version '2.40.1'
+version '2.42.1'
 repository 'https://github.com/overextended/ox_inventory'
 description 'Slot-based inventory with item metadata support'
 
@@ -25,6 +25,10 @@ ox_libs {
 
 server_scripts {
     '@oxmysql/lib/MySQL.lua',
+    '@vrp/lib/utils.lua',
+    '@vrp/config/Item.lua',
+    '@vrp/config/Usables.lua',
+    '@vrp/config/Vehicle.lua',
     'init.lua'
 }
 

@@ -92,11 +92,20 @@ end
 
 local GetVehicleNumberPlateText = GetVehicleNumberPlateText
 
+function getVehicleChest(vehicleHash)
+	local vehicleGlobal = VehicleGlobal()
+	for k,v in pairs(vehicleGlobal) do
+		if GetHashKey(k) == vehicleHash then
+			return v.Weight
+		end
+	end
+end
+
 ---Atempts to lazily load inventory data from the database or create a new player-owned instance for "personal" stashes
 ---@param data table
 ---@param player table
 ---@return OxInventory | false | nil
-local function loadInventoryData(data, player)
+local function loadInventoryData(data, player, ignoreSecurityChecks)
 	local source = source
 	local inventory
 
@@ -160,7 +169,8 @@ local function loadInventoryData(data, player)
 			end
 
 			local model, class = lib.callback.await('ox_inventory:getVehicleData', source, data.netid)
-			local storage = Vehicles[data.type].models[model] or Vehicles[data.type][class]
+			local VehicleStorage = getVehicleChest(model)
+			local storage = VehicleStorage and { 21, VehicleStorage * 1000 } or Vehicles[data.type].models[model] or Vehicles[data.type][class]
             local dbId
 
             if server.getOwnedVehicleId then
@@ -178,7 +188,7 @@ local function loadInventoryData(data, player)
 
 		if stash then
 			if stash.jobs then stash.groups = stash.jobs end
-			if player and stash.groups and not server.hasGroup(player, stash.groups) then return end
+			if not ignoreSecurityChecks and player and stash.groups and not server.hasGroup(player, stash.groups) then return end
 
 			local owner
 
@@ -194,6 +204,9 @@ local function loadInventoryData(data, player)
 
 			if not inventory then
 				inventory = Inventory.Create(stash.name, stash.label or stash.name, 'stash', stash.slots, 0, stash.maxWeight, owner, nil, stash.groups)
+				if stash.coords then
+					inventory.coords = stash.coords
+				end
 			end
 		end
 	end
@@ -207,20 +220,20 @@ local function loadInventoryData(data, player)
 end
 
 setmetatable(Inventory, {
-	__call = function(self, inv, player)
+	__call = function(self, inv, player, ignoreSecurityChecks)
 		if not inv then
 			return self
 		elseif type(inv) == 'table' then
 			if inv.__index then return inv end
 
-			return not inv.owner and Inventories[inv.id] or loadInventoryData(inv, player)
+			return not inv.owner and Inventories[inv.id] or loadInventoryData(inv, player, ignoreSecurityChecks)
 		end
 
-		return Inventories[inv] or loadInventoryData({ id = inv }, player)
+		return Inventories[inv] or loadInventoryData({ id = inv }, player, ignoreSecurityChecks)
 	end
 })
 
----@cast Inventory +fun(inv: inventory, player?: inventory): OxInventory|false|nil
+---@cast Inventory +fun(inv: inventory, player?: inventory, ignoreSecurityChecks?: boolean): OxInventory|false|nil
 
 ---@param inv inventory
 ---@param owner? string | number
@@ -2707,5 +2720,12 @@ function Inventory.InspectInventory(playerId, invId)
 end
 
 exports('InspectInventory', Inventory.InspectInventory)
+
+lib.callback.register("ox_inventory:openHouseVault",function(source, houseName, vault)
+	if not RegisteredStashes[houseName] then
+		exports.ox_inventory:RegisterStash(houseName, houseName, 42, vault * 1000, source)
+	end
+	exports.ox_inventory:forceOpenInventory(source, 'stash', houseName)
+end)
 
 return Inventory

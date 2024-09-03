@@ -409,4 +409,12 @@ RegisterNetEvent('ox_inventory:refreshSlotCount', function(data)
 	})
 end)
 
+RegisterNetEvent("homes:openVault",function(houseName, vault)
+	lib.callback('ox_inventory:openHouseVault', 1000, function(success, message)
+		if success then
+			exports.ox_inventory:openInventory('stash', houseName)
+		end
+	end, houseName, vault)
+end)
+
 return Inventory
