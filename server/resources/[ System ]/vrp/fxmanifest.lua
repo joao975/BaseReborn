@@ -26,9 +26,6 @@ server_scripts {
 }
 
 client_scripts {
-	"lib/utils.lua",
-	"Base_Config.lua",
-	"Esx-Qbcore.lua",
 	"client-side/*",
 }
 

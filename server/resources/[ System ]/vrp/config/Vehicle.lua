@@ -14,11 +14,11 @@ function convertVehs()
             }
         end
     else
-        local vehs = Reborn.vehList()
+        local vehs = module('vrp',"Reborn/Vehicles")
         for _,v in pairs(vehs) do
             List[v.name] = {
                 Name = v.modelo,
-                Weight = v.capacidade,
+                Weight = tonumber(v.capacidade),
                 Price = v.price,
                 Mode = v.tipo,
                 Gemstone = v.Gemstone or 0,
@@ -27,6 +27,10 @@ function convertVehs()
         end
     end
 end
+
+CreateThread(function()
+    convertVehs()
+end)
 
 RegisterNetEvent("Reborn:reloadInfos",function()
 	convertVehs()

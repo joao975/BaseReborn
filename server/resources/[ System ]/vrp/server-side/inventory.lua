@@ -412,3 +412,97 @@ function vRP.updateHomePosition(user_id,x,y,z)
 		end
 	end
 end
+
+CreateThread(function()
+	if GlobalState['Inventory'] == "will_inventory" then
+        assert(GetResourceState("will_inventory") ~= "missing","will_inventory não encontrado, confira o resource ou altere GlobalState['Inventory']")
+		vRP.getInventory = function(inventory)
+			if tonumber(inventory) > 0 then
+				inventory = 'content-'..inventory
+			end
+			return exports['will_inventory']:getInventory(inventory)
+		end
+		
+		vRP.getInventoryMaxWeight = function(user_id)
+			return exports['will_inventory']:getInvWeight(user_id) or 0
+		end
+	
+		vRP.getInventoryWeight = function(inventory)
+			if parseInt(inventory) > 0 then
+				inventory = 'content-'..inventory
+			end
+			return exports['will_inventory']:computeInvWeight(inventory)
+		end
+	
+		vRP.computeItemsWeight = function(itemslist)
+			local weight = 0
+			for k,v in pairs(itemslist) do
+				local name = v.name and v.name:lower() or ''
+				local item = items[v.item] or items[name]
+				if item then
+					weight = weight + (item.weight or 0) * parseInt(v.amount)
+				end
+			end
+			return weight
+		end
+	
+		vRP.getBackpack = function(user_id)
+			return exports['will_inventory']:getInvWeight(user_id) or 0
+		end
+	end
+	
+	if GlobalState['Inventory'] == "ox_inventory" then
+        assert(GetResourceState("ox_inventory") ~= "missing","ox_inventario não encontrado, confira o resource ou altere GlobalState['Inventory']")
+		vRP.getInventory = function(user_id)
+			local nplayer = vRP.getUserSource(user_id)
+			if nplayer then
+				local userInv = exports.ox_inventory:GetInventory(nplayer)
+				if userInv then
+					local playerItems = userInv.items or {}
+					for k,v in pairs(playerItems) do
+						playerItems[k].item = v.name
+						playerItems[k].amount = v.count
+					end
+					return playerItems
+				end
+			end
+			return {}
+		end
+
+		vRP.getInventoryMaxWeight = function(user_id)
+			local nplayer = vRP.getUserSource(user_id)
+			if nplayer then
+				local inventory = exports.ox_inventory:GetInventory(nplayer)
+				return inventory and inventory.maxWeight or 30000
+			end
+		end
+	
+		vRP.getInventoryWeight = function(inventory)
+			local nplayer = vRP.getUserSource(user_id)
+			if nplayer then
+				local inventory = exports.ox_inventory:GetInventory(nplayer)
+				return inventory and inventory.weight or 0
+			end
+		end
+	
+		vRP.computeItemsWeight = function(itemslist)
+			local weight = 0
+			for k,v in pairs(itemslist) do
+				local name = v.name and v.name:lower() or ''
+				local item = items[v.item] or items[name]
+				if item then
+					weight = weight + (item.weight or 0) * parseInt(v.amount)
+				end
+			end
+			return weight
+		end
+	
+		vRP.getBackpack = function(user_id)
+			local nplayer = vRP.getUserSource(user_id)
+			if nplayer then
+				local inventory = exports.ox_inventory:GetInventory(nplayer)
+				return inventory and inventory.maxWeight or 30000
+			end
+		end
+	end
+end)
