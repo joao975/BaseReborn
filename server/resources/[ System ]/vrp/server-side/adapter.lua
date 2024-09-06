@@ -225,6 +225,9 @@ vRP.removeUserGroup = function(user,group)
     local source = vRP.getUserSource(parseInt(user))
     Reborn.remGroup(source,group)
 end
+-------##########-------##########-------##########-------##########
+--			CREATIVE NETWORK -> VRP
+-------##########-------##########-------##########-------##########
 
 vRP.Source = vRP.getUserSource
 vRP.Passport = vRP.getUserId
@@ -234,3 +237,46 @@ vRP.Prepare = vRP.prepare
 vRP.Datatable = vRP.getUserDataTable
 vRP.HasPermission = vRP.hasPermission
 vRP.PaymentFull = vRP.tryFullPayment
+
+function vRP.Identities(source)
+    local Result = false
+    local Identifiers = GetPlayerIdentifiers(source)
+    for _, v in pairs(Identifiers) do
+        if string.find(v,BaseMode) then
+            local SplitName = splitString(v, ":")
+            Result = SplitName[2]
+            break
+        end
+    end
+    return Result
+end
+
+function vRP.Inventory(Passport)
+    return vRP.getInventory(Passport)
+end
+
+vRP.CharacterChosen = function(source,Passport,Model)
+    TriggerEvent("baseModule:idLoaded",source,Passport,Model)
+end
+
+function vRP.Identity(Passport)
+    return vRP.getUserIdentity(Passport)
+end
+
+function vRP.InitPrison(Passport,Amount)
+    vRP.initPrison(Passport,Amount)
+end
+
+function vRP.UpdatePrison(Passport,Amount)
+    vRP.updatePrison(Passport,Amount)
+end
+
+vRP.GiveBank = vRP.giveBankMoney
+vRP.RemoveBank = vRP.paymentBank
+vRP.GetBank = vRP.getBank
+vRP.GetFine = vRP.getFines
+vRP.GiveFine = vRP.setFines
+vRP.PaymentBank = vRP.paymentBank
+vRP.PaymentMoney = vRP.tryFullPayment
+vRP.PaymentFull = vRP.tryFullPayment
+vRP.WithdrawCash = vRP.withdrawCash
