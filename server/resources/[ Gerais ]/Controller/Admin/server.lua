@@ -236,9 +236,9 @@ RegisterCommand("unban",function(source,args,rawCommand)
 	local perms = {	"Owner", "Admin" }
 	if user_id then
 		if vRP.hasAnyPermission(user_id,perms) and parseInt(args[1]) > 0 then
-			local identity = vRP.getUserIdentity(parseInt(args[1]))
-			if identity then
-				vRP.execute("vRP/set_banned",{ steam = tostring(identity.steam), banned = 0 })
+			local identity = vRP.getInformation(parseInt(args[1]))
+			if identity and identity[1] then
+				vRP.execute("vRP/set_banned",{ steam = tostring(identity[1].steam), banned = 0 })
 				TriggerClientEvent("Notify",source,"importante","Você desbaniu "..args[1]..".",5000)
 				vRP.createWeebHook(Webhooks.webhookunban,"```prolog\n[ID]: "..user_id.." \n[DESBANIU]: "..args[1].." "..os.date("\n[Data]: %d/%m/%Y [Hora]: %H:%M:%S").." \r```")
 			end
