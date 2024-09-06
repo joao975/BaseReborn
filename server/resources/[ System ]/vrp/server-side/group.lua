@@ -1,5 +1,6 @@
 local groups = module('vrp',"Reborn/Groups")
 local permissions = {}
+RegisterServerEvent("Reborn:reloadInfos",function() groups = module('vrp',"Reborn/Groups") end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- GROUPS FUNCTIONS
 -----------------------------------------------------------------------------------------------------------------------------------------

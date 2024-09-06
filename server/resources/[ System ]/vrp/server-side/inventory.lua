@@ -6,6 +6,8 @@ local Tunnel = module("vrp","lib/Tunnel")
 Reborn = Proxy.getInterface("Reborn")
 local items = module('vrp',"Reborn/Itemlist")
 local Webhooks = module("Reborn/webhooks")
+
+RegisterServerEvent("Reborn:reloadInfos",function() items = module('vrp',"Reborn/Itemlist") end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- ITEMDEFINITION
 -----------------------------------------------------------------------------------------------------------------------------------------
