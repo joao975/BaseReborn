@@ -238,9 +238,13 @@ RegisterNetEvent("will_jobs:initDriver",function()
     local jobConfigs = Config.jobs[actualJob]
     local passengers = {}
 
-    function spawnRandPeds(index)
+    function spawnRandPeds()
         local rand = math.random(1,3)
-        local pedCoords = getLocs(jobConfigs, "collets")[index]
+        local pedCoords = nil
+        while not pedCoords do
+            pedCoords = locs[1]
+            Wait(500)
+        end
         repeat
             rand = rand - 1
             local pedRand = pedHashs[math.random(#pedHashs)]
@@ -284,7 +288,7 @@ RegisterNetEvent("will_jobs:initDriver",function()
             actualSelected = actualSelected + 1
             FreezeEntityPosition(vehicle, false)
             SetTimeout(2000, function()
-                spawnRandPeds(jobIndex)
+                spawnRandPeds()
             end)
         end
     end
@@ -307,7 +311,7 @@ RegisterNetEvent("will_jobs:initDriver",function()
             end
         end
     end
-    spawnRandPeds(1)
+    spawnRandPeds()
 end)
 
 RegisterNetEvent("will_jobs:initTransporter",function()
