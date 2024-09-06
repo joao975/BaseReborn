@@ -318,11 +318,13 @@ CreateThread(function()
         name = "jewelry01",
         heading = 3374176
     },{
-        shop = "1",
         distance = 1.0,
         options = {
             {
-                event = "robberys:jewelry",
+                icon = "fa-solid fa-ring",
+                action = function()
+                    TriggerServerEvent("robberys:jewelry", "1")
+                end,
                 label = "Roubar",
                 tunnel = "server"
             }
@@ -333,11 +335,13 @@ CreateThread(function()
         name = "jewelry02",
         heading = 3374176
     },{
-        shop = "2",
         distance = 1.0,
         options = {
             {
-                event = "robberys:jewelry",
+                icon = "fa-solid fa-ring",
+                action = function()
+                    TriggerServerEvent("robberys:jewelry", "2")
+                end,
                 label = "Roubar",
                 tunnel = "server"
             }
@@ -348,11 +352,13 @@ CreateThread(function()
         name = "jewelry03",
         heading = 3374176
     },{
-        shop = "3",
         distance = 1.0,
         options = {
             {
-                event = "robberys:jewelry",
+                icon = "fa-solid fa-ring",
+                action = function()
+                    TriggerServerEvent("robberys:jewelry", "3")
+                end,
                 label = "Roubar",
                 tunnel = "server"
             }
@@ -363,11 +369,13 @@ CreateThread(function()
         name = "jewelry04",
         heading = 3374176
     },{
-        shop = "4",
         distance = 1.0,
         options = {
             {
-                event = "robberys:jewelry",
+                icon = "fa-solid fa-ring",
+                action = function()
+                    TriggerServerEvent("robberys:jewelry", "4")
+                end,
                 label = "Roubar",
                 tunnel = "server"
             }
@@ -378,11 +386,13 @@ CreateThread(function()
         name = "jewelry05",
         heading = 3374176
     },{
-        shop = "5",
         distance = 1.0,
         options = {
             {
-                event = "robberys:jewelry",
+                icon = "fa-solid fa-ring",
+                action = function()
+                    TriggerServerEvent("robberys:jewelry", "5")
+                end,
                 label = "Roubar",
                 tunnel = "server"
             }
@@ -393,11 +403,13 @@ CreateThread(function()
         name = "jewelry06",
         heading = 3374176
     },{
-        shop = "6",
         distance = 1.0,
         options = {
             {
-                event = "robberys:jewelry",
+                icon = "fa-solid fa-ring",
+                action = function()
+                    TriggerServerEvent("robberys:jewelry", "6")
+                end,
                 label = "Roubar",
                 tunnel = "server"
             }
@@ -408,11 +420,13 @@ CreateThread(function()
         name = "jewelry07",
         heading = 3374176
     },{
-        shop = "7",
         distance = 1.0,
         options = {
             {
-                event = "robberys:jewelry",
+                icon = "fa-solid fa-ring",
+                action = function()
+                    TriggerServerEvent("robberys:jewelry", "7")
+                end,
                 label = "Roubar",
                 tunnel = "server"
             }
@@ -423,11 +437,13 @@ CreateThread(function()
         name = "jewelry08",
         heading = 3374176
     },{
-        shop = "8",
         distance = 1.0,
         options = {
             {
-                event = "robberys:jewelry",
+                icon = "fa-solid fa-ring",
+                action = function()
+                    TriggerServerEvent("robberys:jewelry", "8")
+                end,
                 label = "Roubar",
                 tunnel = "server"
             }
@@ -438,11 +454,13 @@ CreateThread(function()
         name = "jewelry09",
         heading = 3374176
     },{
-        shop = "9",
         distance = 1.0,
         options = {
             {
-                event = "robberys:jewelry",
+                icon = "fa-solid fa-ring",
+                action = function()
+                    TriggerServerEvent("robberys:jewelry", "9")
+                end,
                 label = "Roubar",
                 tunnel = "server"
             }
@@ -453,11 +471,13 @@ CreateThread(function()
         name = "jewelry10",
         heading = 3374176
     },{
-        shop = "10",
         distance = 1.0,
         options = {
             {
-                event = "robberys:jewelry",
+                icon = "fa-solid fa-ring",
+                action = function()
+                    TriggerServerEvent("robberys:jewelry", "10")
+                end,
                 label = "Roubar",
                 tunnel = "server"
             }
@@ -468,11 +488,13 @@ CreateThread(function()
         name = "jewelry11",
         heading = 3374176
     },{
-        shop = "11",
         distance = 1.0,
         options = {
             {
-                event = "robberys:jewelry",
+                icon = "fa-solid fa-ring",
+                action = function()
+                    TriggerServerEvent("robberys:jewelry", "11")
+                end,
                 label = "Roubar",
                 tunnel = "server"
             }
@@ -483,11 +505,13 @@ CreateThread(function()
         name = "jewelry12",
         heading = 3374176
     },{
-        shop = "12",
         distance = 1.0,
         options = {
             {
-                event = "robberys:jewelry",
+                icon = "fa-solid fa-ring",
+                action = function()
+                    TriggerServerEvent("robberys:jewelry", "12")
+                end,
                 label = "Roubar",
                 tunnel = "server"
             }
@@ -498,11 +522,13 @@ CreateThread(function()
         name = "jewelry13",
         heading = 3374176
     },{
-        shop = "13",
         distance = 1.0,
         options = {
             {
-                event = "robberys:jewelry",
+                icon = "fa-solid fa-ring",
+                action = function()
+                    TriggerServerEvent("robberys:jewelry", "13")
+                end,
                 label = "Roubar",
                 tunnel = "server"
             }
@@ -513,11 +539,13 @@ CreateThread(function()
         name = "jewelry14",
         heading = 3374176
     },{
-        shop = "14",
         distance = 1.0,
         options = {
             {
-                event = "robberys:jewelry",
+                icon = "fa-solid fa-ring",
+                action = function()
+                    TriggerServerEvent("robberys:jewelry", "14")
+                end,
                 label = "Roubar",
                 tunnel = "server"
             }
@@ -528,11 +556,13 @@ CreateThread(function()
         name = "jewelry15",
         heading = 3374176
     },{
-        shop = "15",
         distance = 1.0,
         options = {
             {
-                event = "robberys:jewelry",
+                icon = "fa-solid fa-ring",
+                action = function()
+                    TriggerServerEvent("robberys:jewelry", "15")
+                end,
                 label = "Roubar",
                 tunnel = "server"
             }
@@ -543,11 +573,13 @@ CreateThread(function()
         name = "jewelry16",
         heading = 3374176
     },{
-        shop = "16",
         distance = 1.0,
         options = {
             {
-                event = "robberys:jewelry",
+                icon = "fa-solid fa-ring",
+                action = function()
+                    TriggerServerEvent("robberys:jewelry", "16")
+                end,
                 label = "Roubar",
                 tunnel = "server"
             }
@@ -558,11 +590,13 @@ CreateThread(function()
         name = "jewelry17",
         heading = 3374176
     },{
-        shop = "17",
         distance = 1.0,
         options = {
             {
-                event = "robberys:jewelry",
+                icon = "fa-solid fa-ring",
+                action = function()
+                    TriggerServerEvent("robberys:jewelry", "17")
+                end,
                 label = "Roubar",
                 tunnel = "server"
             }
@@ -573,11 +607,13 @@ CreateThread(function()
         name = "jewelry18",
         heading = 3374176
     },{
-        shop = "18",
         distance = 1.0,
         options = {
             {
-                event = "robberys:jewelry",
+                icon = "fa-solid fa-ring",
+                action = function()
+                    TriggerServerEvent("robberys:jewelry", "18")
+                end,
                 label = "Roubar",
                 tunnel = "server"
             }
@@ -588,11 +624,13 @@ CreateThread(function()
         name = "jewelry19",
         heading = 3374176
     },{
-        shop = "19",
         distance = 1.0,
         options = {
             {
-                event = "robberys:jewelry",
+                icon = "fa-solid fa-ring",
+                action = function()
+                    TriggerServerEvent("robberys:jewelry", "19")
+                end,
                 label = "Roubar",
                 tunnel = "server"
             }
@@ -603,11 +641,13 @@ CreateThread(function()
         name = "jewelry20",
         heading = 3374176
     },{
-        shop = "20",
         distance = 1.0,
         options = {
             {
-                event = "robberys:jewelry",
+                icon = "fa-solid fa-ring",
+                action = function()
+                    TriggerServerEvent("robberys:jewelry", "20")
+                end,
                 label = "Roubar",
                 tunnel = "server"
             }

@@ -91,7 +91,7 @@ end
 RegisterNetEvent("robberys:jewelry")
 AddEventHandler("robberys:jewelry",function(data)
 	local source = source
-	jewelryPayment(source, data[1])
+	jewelryPayment(source, data)
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- JEWELRYTIMERS
