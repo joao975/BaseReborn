@@ -300,6 +300,11 @@ end)
 --########## Pegar tunagem ##########
 
 function getTunning(user_id,veiculo,vehPlate)
+    if GetResourceState("will_tunners") == "started" then
+        return getSData("custom:"..vehPlate)
+    elseif GetResourceState("ld_tunners") == "started" then
+        return getSData("mods:"..vehPlate)
+    end
 	local tunagem = ''
 	if Config.base == "creative" then
     	tunagem = getSData("custom:"..user_id..":"..veiculo)
@@ -316,9 +321,6 @@ function getTunning(user_id,veiculo,vehPlate)
             tunagem = Datatable[1]["dvalue"]
         end
 	end
-    if GetResourceState("will_tunners") == "started" then
-        tunagem = getSData("custom:"..vehPlate)
-    end
     if type(tunagem) == 'string' then tunagem = json.decode(tunagem) end
 	return (tunagem or {})
 end
