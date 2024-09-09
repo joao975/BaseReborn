@@ -198,7 +198,7 @@ end
 
 function applyCustomization(ped, data)
     if data and data["face"] then
-        SetPedHeadBlendData(ped, data["face"].item, data["face2"].item, 0, data["face"].texture, data["face2"].texture, 0, data["facemix"].shapeMix, data["facemix"].skinMix, 0, true)
+        SetPedHeadBlendData(ped, data["face"].item, data["face2"].item, 0, 21, 15, 0, data["facemix"].shapeMix, data["facemix"].skinMix, 0, true)
         
         SetPedComponentVariation(ped, 2, data["hair"].item, 0, 0)
         SetPedHairColor(ped, data["hair"].texture, data["hair2"] and data["hair2"].texture or data["hair"].texture)
@@ -337,7 +337,11 @@ function GetMaxValues(isSingle, key, push)
     local ped = PlayerPedId()
     for k, v in pairs(pedCategories) do
         if v.type == "hair" then
-            maxModelValues[k].item = GetNumberOfPedDrawableVariations(ped, v.id) - 1
+            local hairQnt = GetNumberOfPedDrawableVariations(ped, v.id) - 1
+            if hairQnt < 70 then
+                hairQnt = 75
+            end
+            maxModelValues[k].item = hairQnt
             maxModelValues[k].texture = 45
         end
 
