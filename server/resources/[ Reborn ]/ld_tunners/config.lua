@@ -100,13 +100,14 @@ Config.Locations = {
         illegalMechanic = false,
         permission = nil,
         coords = {
-            vector3(142.83,-3034.22,7.04),
-            vector3(127.22,-3024.02,6.58)
+            vector3(835.4,-983.77,26.0),
+            vector3(835.51,-975.3,26.0),
+            vector3(835.06,-967.17,26.01)
         },
-        showBlip = true,
+        showBlip = false,
         blipSprite = 446,
         blipColor = 4,
-        blipCoords = vector3(142.83,-3034.22,7.04),
+        blipCoords = vector3(827.41,-984.23,26.16),
     },
     
     ["Bennys Workshop Ilegal"] = {
@@ -115,7 +116,7 @@ Config.Locations = {
         coords = {
             vector3(-222.97,-1329.2,30.9)
         },
-        showBlip = true,
+        showBlip = false,
         blipSprite = 446,
         blipColor = 4,
         blipCoords = vector3(-222.97,-1329.2,30.9),
