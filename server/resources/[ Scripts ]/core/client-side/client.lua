@@ -333,8 +333,8 @@ CreateThread(function()
 				SetGameplayCamRelativeHeading(h-hf)
 			end
 
-			local set = p + recoil
-			SetGameplayCamRelativePitch(set,0.8)
+			local set = p + recoil - 0.2
+			SetGameplayCamRelativePitch(set,1.0)
 		end
 	end
 end)
