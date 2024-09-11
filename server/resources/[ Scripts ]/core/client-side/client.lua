@@ -162,42 +162,24 @@ end)
 -- WEAPONS DAMAGE
 -----------------------------------------------------------------------------------------------------------------------------------------
 local weaponsDamage = {
-	['WEAPON_PISTOL50'] = 0.6,
-	['WEAPON_REVOLVER'] = 0.4,
-	['WEAPON_PISTOL'] = 0.8,
-	['WEAPON_PISTOL_MK2'] = 0.6,
 	['WEAPON_UNARMED'] = 0.1,
-	['WEAPON_COMBATPISTOL'] = 0.8,
 	['WEAPON_FLASHLIGHT'] = 0.1,
 	['WEAPON_NIGHTSTICK'] = 0.1,
-	['WEAPON_HATCHET'] = 0.1,
-	['WEAPON_KNIFE'] = 0.1,
-	['WEAPON_BAT'] = 0.1,
-	['WEAPON_BATTLEAXE'] = 0.1,
-	['WEAPON_BOTTLE'] = 0.1,
-	['WEAPON_CROWBAR'] = 0.1,
-	['WEAPON_DAGGER'] = 0.1,
+	['WEAPON_HATCHET'] = 0.6,
+	['WEAPON_KNIFE'] = 0.7,
+	['WEAPON_BAT'] = 0.3,
+	['WEAPON_BATTLEAXE'] = 0.5,
+	['WEAPON_BOTTLE'] = 0.3,
+	['WEAPON_CROWBAR'] = 0.3,
+	['WEAPON_DAGGER'] = 0.2,
 	['WEAPON_GOLFCLUB'] = 0.1,
-	['WEAPON_HAMMER'] = 0.1,
+	['WEAPON_HAMMER'] = 0.2,
 	['WEAPON_MACHETE'] = 0.1,
 	['WEAPON_POOLCUE'] = 0.1,
-	['WEAPON_STONE_HATCHET'] = 0.1,
-	['WEAPON_SWITCHBLADE'] = 0.1,
-	['WEAPON_WRENCH'] = 0.1,
-	['WEAPON_KNUCKLE'] = 0.1,
-	['WEAPON_COMPACTRIFLE'] = 0.4,
-	['WEAPON_HEAVYPISTOL'] = 0.6,
-	['WEAPON_MACHINEPISTOL'] = 0.7,
-	['WEAPON_MICROSMG'] = 0.7,
-	['WEAPON_MINISMG'] = 0.7,
-	['WEAPON_SNSPISTOL'] = 0.6,
-	['WEAPON_SNSPISTOL_MK2'] = 0.6,
-	['WEAPON_VINTAGEPISTOL'] = 0.6,
-	['WEAPON_CARBINERIFLE'] = 0.6,
-	['WEAPON_ASSAULTRIFLE'] = 0.6,
-	['WEAPON_ASSAULTRIFLE_MK2'] = 0.6,
-	['WEAPON_ASSAULTSMG'] = 0.7,
-	['WEAPON_GUSENBERG'] = 0.7,
+	['WEAPON_STONE_HATCHET'] = 0.2,
+	['WEAPON_SWITCHBLADE'] = 0.2,
+	['WEAPON_WRENCH'] = 0.3,
+	['WEAPON_KNUCKLE'] = 0.3,
 	['WEAPON_SAWNOFFSHOTGUN'] = 1.3,
 	['WEAPON_PUMPSHOTGUN'] = 2.0,
 }
@@ -333,8 +315,8 @@ CreateThread(function()
 				SetGameplayCamRelativeHeading(h-hf)
 			end
 
-			local set = p + recoil
-			SetGameplayCamRelativePitch(set,0.8)
+			local set = p + recoil - 0.2
+			SetGameplayCamRelativePitch(set,1.0)
 		end
 	end
 end)

@@ -649,7 +649,7 @@ CreateThread(function()
 	if Config.base == "creative" then
 		prepare("will/set_arrest","UPDATE "..Config.vehicleDB.." SET arrest = @arrest, time = @time WHERE plate = @plate")
 		prepare("will/get_arrested_vehs","SELECT * FROM "..Config.vehicleDB.." WHERE arrest > 0")
-        prepare("will/get_homeuser","SELECT * FROM vrp_homes WHERE user_id = @user_id AND home = @home")
+        prepare("will/get_homeuser","SELECT * FROM will_homes WHERE owner = @user_id AND name = @home")
         prepare("will/rem_srv_data","DELETE FROM vrp_srv_data WHERE dkey = @dkey")
         prepare("will/set_srvdata","REPLACE INTO vrp_srv_data(dkey,dvalue) VALUES(@key,@value)")
     elseif Config.base == "summerz" then
