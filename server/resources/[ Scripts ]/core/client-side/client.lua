@@ -32,7 +32,7 @@ local blips = {
 	{ -525.26,-1211.19,18.19,361,4,"Posto de Gasolina",0.4 },
 	{ -70.96,-1762.21,29.54,361,4,"Posto de Gasolina",0.4 },
 	{ -434.09,-348.49,34.92,80,35,"Hospital",0.5 },
-	{ -1077.14,-845.3,4.89,60,4,"Departamento Policial",0.6 },
+	{ -1077.14,-845.3,4.89,60,4,"Departamento Policial",0.7 },
 	{ 25.68,-1346.6,29.5,52,36,"Loja de Departamento",0.5 },
 	{ 2556.47,382.05,108.63,52,36,"Loja de Departamento",0.5 },
 	{ 1163.55,-323.02,69.21,52,36,"Loja de Departamento",0.5 },
